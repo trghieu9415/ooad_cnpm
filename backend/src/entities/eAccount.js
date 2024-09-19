@@ -26,11 +26,14 @@ const getAccountById = async (id) => {
 
 const createAccount = async (username, password) => {
 	try {
-		if (isUsernameExisted(username)) {
+		if (await isUsernameExisted(username)) {
 			return createResData(409, { message: 'Username already exists' })
 		}
     const hashedPassword = await hashPassword(password)
-    const account = await Account.create({ username, hashedPassword })
+    const account = await Account.create({
+      username,
+      password: hashedPassword
+    })
     return createResData(201, account)
   } catch (error) {
     return createResData(500, { error:	error.message }) 
@@ -77,7 +80,7 @@ const getHandledAccountByInfo = async (username, password) => {
       where: { username: username },
       include: [{
         model: Member,
-        attributes: ['member_id']
+        attributes: ['id']
       }],
     })
     if (!account) {
@@ -109,13 +112,13 @@ const isUsernameExisted = async (username) => {
     const counted = await Account.count({
       where: { username: username },
     })
-    return counted ? true : false
+    return counted === 0 ? false : true
   } catch (error) {
     throw error
   }
 }
 
-export default {
+module.exports = {
   getAllAccounts,
   getAccountById,
 	getHandledAccountByInfo,

@@ -1,7 +1,6 @@
 // src/models/Member.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Account = require('./Account'); // Quan hệ với Account
 
 const Member = sequelize.define('Member', {
   id: {
@@ -31,6 +30,7 @@ const Member = sequelize.define('Member', {
   role: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: 'Member',
   },
   biography: {
     type: DataTypes.TEXT,
@@ -39,7 +39,5 @@ const Member = sequelize.define('Member', {
   tableName: 'members',
   timestamps: false,
 });
-
-Member.belongsTo(Account, { foreignKey: 'account_id' });
 
 module.exports = Member;

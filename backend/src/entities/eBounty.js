@@ -87,7 +87,7 @@ const deleteBounty = async (id) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllBounties,
   getBountyById,
 	getCurrentBountyByQuestionId,

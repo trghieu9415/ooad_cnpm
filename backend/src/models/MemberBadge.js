@@ -1,8 +1,7 @@
 // src/models/MemberBadge.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Member = require('./Member');
-const Badge = require('./Badge');
+
 
 const MemberBadge = sequelize.define('MemberBadge', {
   id: {
@@ -22,8 +21,5 @@ const MemberBadge = sequelize.define('MemberBadge', {
   tableName: 'member_badges',
   timestamps: false,
 });
-
-MemberBadge.belongsTo(Member, { foreignKey: 'member_id' });
-MemberBadge.belongsTo(Badge, { foreignKey: 'badge_id' });
 
 module.exports = MemberBadge;

@@ -65,7 +65,7 @@ const deleteBadge = async (id) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllBadges,
   getBadgeById,
   createBadge,

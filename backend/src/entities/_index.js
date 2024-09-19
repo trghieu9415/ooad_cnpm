@@ -1,13 +1,13 @@
-import Account from "./eAccount";
-import Answer from "./eAnswer";
-import Badge from "./eBadge";
-import Comment from "./eComment";
-import Member from "./eMember";
-import Photo from "./ePhoto";
-import Question from "./eQuestion";
-import Tag from "./eTag";
+const Account = require("./eAccount")
+const Answer = require("./eAnswer")
+const Badge = require("./eBadge")
+const Comment = require("./eComment")
+const Member = require("./eMember")
+const Photo = require("./ePhoto")
+const Question = require("./eQuestion")
+const Tag = require("./eTag")
 
-export default {
+module.exports = {
 	Account,
 	Answer,
 	Badge,

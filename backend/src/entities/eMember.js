@@ -30,19 +30,17 @@ const getMemberById = async (id) => {
   }
 }
 
-const createMember = async (account_id, name, email, phone, reputation, biography) => {
+const createMember = async (account_id, name, email, phone, biography) => {
 	try {
-		if (isEmailExisted(email)) {
+		if (await isEmailExisted(email)) {
 			return createResData(409, { message: 'Email already exists' })
-		} else if (isPhoneExisted(phone)) {
+		} else if (await isPhoneExisted(phone)) {
 			return createResData(409, { message: 'Phone already exists' })
 		}
     const newMember = await Member.create({
-      account_id, name, email, phone,
-      reputation, role: 'Member', biography
+      account_id, name, email, phone, biography
     });
-		newMember.badges = []
-    return createResData(201, getMemberById(newMember.id).data);
+    return createResData(201, newMember);
   } catch (error) {
     return createResData(500, { error: error.message });
   }
@@ -103,7 +101,7 @@ const isPhoneExisted = async (phone) => {
     const counted = await Member.count({
       where: { phone: phone },
     })
-    return counted ? true : false
+    return counted === 0 ? false : true
   } catch (error) {
     throw error
   } 
@@ -114,7 +112,7 @@ const isEmailExisted = async (email) => {
     const counted = await Member.count({
       where: { email: email },
     })
-    return counted ? true : false
+    return counted === 0 ? false : true
   } catch (error) {
     throw error
   } 
@@ -145,7 +143,7 @@ const setReputationById = async (id, reputation) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllMembers,
   getMemberById,
   createMember,

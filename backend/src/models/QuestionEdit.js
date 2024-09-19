@@ -1,7 +1,6 @@
 // src/models/QuestionEdit.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Question = require('./Question');
 
 const QuestionEdit = sequelize.define('QuestionEdit', {
   id: {
@@ -27,7 +26,5 @@ const QuestionEdit = sequelize.define('QuestionEdit', {
   tableName: 'question_edits',
   timestamps: false,
 });
-
-QuestionEdit.belongsTo(Question, { foreignKey: 'question_id' });
 
 module.exports = QuestionEdit;

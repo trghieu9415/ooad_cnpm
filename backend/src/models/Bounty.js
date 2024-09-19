@@ -1,7 +1,6 @@
 // src/models/Bounty.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Question = require('./Question');
 
 const Bounty = sequelize.define('Bounty', {
   id: {
@@ -30,7 +29,5 @@ const Bounty = sequelize.define('Bounty', {
   tableName: 'bounties',
   timestamps: false,
 });
-
-Bounty.belongsTo(Question, { foreignKey: 'question_id' });
 
 module.exports = Bounty;

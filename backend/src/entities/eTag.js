@@ -65,7 +65,7 @@ const deleteTag = async (id) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllTags,
   getTagById,
   createTag,

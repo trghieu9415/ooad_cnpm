@@ -1,7 +1,6 @@
 // src/models/Notification.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Member = require('./Member');
 
 const Notification = sequelize.define('Notification', {
   id: {
@@ -30,7 +29,5 @@ const Notification = sequelize.define('Notification', {
   tableName: 'notifications',
   timestamps: false,
 });
-
-Notification.belongsTo(Member, { foreignKey: 'member_id' });
 
 module.exports = Notification;

@@ -1,8 +1,6 @@
 // src/models/AnswerFlag.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Member = require('./Member');
-const Answer = require('./Answer');
 
 const AnswerFlag = sequelize.define('AnswerFlag', {
   id: {
@@ -22,8 +20,5 @@ const AnswerFlag = sequelize.define('AnswerFlag', {
   tableName: 'answer_flags',
   timestamps: false,
 });
-
-AnswerFlag.belongsTo(Member, { foreignKey: 'member_id' });
-AnswerFlag.belongsTo(Answer, { foreignKey: 'answer_id' });
 
 module.exports = AnswerFlag;

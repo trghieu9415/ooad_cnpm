@@ -118,7 +118,7 @@ const downvote = async (id, member_id) => {
   
 }
 
-export default {
+module.exports =  {
 	getAllAnswers,
   getAnswerById,
   createAnswer,

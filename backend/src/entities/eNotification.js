@@ -92,7 +92,7 @@ const deleteNotification = async (id) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllNotifications,
   getNotificationById,
   createNotification,

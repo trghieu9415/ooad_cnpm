@@ -1,9 +1,6 @@
 // src/models/MemberVote.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Member = require('./Member');
-const Answer = require('./Answer');
-const Question = require('./Question');
 
 const MemberVote = sequelize.define('MemberVote', {
   id: {
@@ -33,9 +30,5 @@ const MemberVote = sequelize.define('MemberVote', {
   tableName: 'member_votes',
   timestamps: false,
 });
-
-MemberVote.belongsTo(Member, { foreignKey: 'member_id' });
-MemberVote.belongsTo(Answer, { foreignKey: 'answer_id' });
-MemberVote.belongsTo(Question, { foreignKey: 'question_id' });
 
 module.exports = MemberVote;

@@ -83,7 +83,7 @@ const getFlagById = async (id) => {
   }
 };
 
-export default {
+module.exports =  {
 	getAllComments,
   getCommentById,
   createComment,

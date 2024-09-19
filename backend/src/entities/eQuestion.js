@@ -163,7 +163,7 @@ const vote = async (id, member_id, type) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllQuestions,
   getQuestionById,
   createQuestion,

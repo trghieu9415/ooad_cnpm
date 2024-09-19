@@ -1,8 +1,6 @@
 // src/models/Answer.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Question = require('./Question');
-const Member = require('./Member');
 
 const Answer = sequelize.define('Answer', {
   id: {
@@ -35,8 +33,5 @@ const Answer = sequelize.define('Answer', {
   tableName: 'answers',
   timestamps: false,
 });
-
-Answer.belongsTo(Question, { foreignKey: 'question_id' });
-Answer.belongsTo(Member, { foreignKey: 'member_id' });
 
 module.exports = Answer;

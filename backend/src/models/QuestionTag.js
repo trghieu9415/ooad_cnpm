@@ -1,8 +1,6 @@
 // src/models/QuestionTag.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Question = require('./Question');
-const Tag = require('./Tag');
 
 const QuestionTag = sequelize.define('QuestionTag', {
   id: {
@@ -22,8 +20,5 @@ const QuestionTag = sequelize.define('QuestionTag', {
   tableName: 'question_tags',
   timestamps: false,
 });
-
-QuestionTag.belongsTo(Question, { foreignKey: 'question_id' });
-QuestionTag.belongsTo(Tag, { foreignKey: 'tag_id' });
 
 module.exports = QuestionTag;

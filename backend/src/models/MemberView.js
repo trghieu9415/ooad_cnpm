@@ -1,8 +1,6 @@
 // src/models/MemberView.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('@configs/database');
-const Member = require('./Member');
-const Question = require('./Question');
 
 const MemberView = sequelize.define('MemberView', {
   id: {
@@ -30,8 +28,5 @@ const MemberView = sequelize.define('MemberView', {
   tableName: 'member_views',
   timestamps: false,
 });
-
-MemberView.belongsTo(Member, { foreignKey: 'member_id' });
-MemberView.belongsTo(Question, { foreignKey: 'question_id' });
 
 module.exports = MemberView;

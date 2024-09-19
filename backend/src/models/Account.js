@@ -19,6 +19,7 @@ const Account = sequelize.define('Account', {
   status: {
     type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: 'Active',
   },
   registration_time: {
     type: DataTypes.DATE,

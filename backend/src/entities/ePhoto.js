@@ -63,7 +63,7 @@ const deletePhoto = async (id) => {
   }
 }
 
-export default {
+module.exports =  {
 	getAllPhotos,
   getPhotoById,
   createPhoto,
