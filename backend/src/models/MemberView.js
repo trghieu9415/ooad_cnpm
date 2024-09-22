@@ -16,13 +16,14 @@ const MemberView = sequelize.define('MemberView', {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  flagged: {
+  saved: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
   viewing_time: {
     type: DataTypes.DATE,
     allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
 }, {
   tableName: 'member_views',

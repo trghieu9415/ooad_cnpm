@@ -7,7 +7,7 @@ const getAllAccounts = async () => {
     const accounts = await Account.findAll()
     return createResData(200, accounts)
   } catch (error) {
-    return createResData(500, { error: error.message })
+    return createResData(500, error)
   }
 }
 
@@ -20,7 +20,7 @@ const getAccountById = async (id) => {
 			return createResData(404, { message: 'Account not found' });
 		}
   } catch (error) {
-    return createResData(500, { error: error.message })
+    return createResData(500, error)
   }
 }
 
@@ -36,27 +36,38 @@ const createAccount = async (username, password) => {
     })
     return createResData(201, account)
   } catch (error) {
-    return createResData(500, { error:	error.message }) 
+    return createResData(500, error) 
   }
 }
 
-const updateAccount = async (id, username, password, status) => {
-	try {
-    const hashedPassword = await hashPassword(password)
-    const [rows, updatedAccounts] = await Account.update(
-      { username, hashedPassword, status },
-      {
-        where: { id },
-				returning: true
-      }
-    )
-    if (rows) {
-      return createResData(200, updatedAccounts)
-    } else {
-			return createResData(404, 'Account not found')
+const changePassword = async (id, currentPassword, newPassword) => {
+  try {
+    const account = await Account.findByPk(id)
+    if (!account) {
+      return createResData(404, { message: 'Account not found' });
     }
+    const isPasswordCorrect = await comparePassword(currentPassword, account.dataValues.password);
+    if (!isPasswordCorrect) {
+      return createResData(401, { message: 'Current password is incorrect' });
+    }
+    const hashedPassword = await hashPassword(newPassword);
+    await account.update({ password: hashedPassword });
+    return createResData(200, { message: 'Password changed successfully' });
   } catch (error) {
-		return createResData(500, { error: error.message })
+    return createResData(500, error);
+  }
+}
+
+const changeState = async (id, state) => {
+  try {
+    const account = await Account.findByPk(id)
+    if (!account) {
+      return createResData(404, { message: 'Account not found' });
+    }
+    await account.update({ state });
+    return createResData(200, { message: 'State changed successfully' });
+  } catch (error) {
+    return createResData(500, error);
   }
 }
 
@@ -65,12 +76,12 @@ const deleteAccount = async (id) => {
 	try {
     const deleted = await Account.destroy({ where: { id: id } });
     if (deleted) {
-			return createResData(204, 'Account deleted')
+			return createResData(204, { message: 'Account deleted'} )
     } else {
-			return createResData(404, 'Account not found')
+			return createResData(404, { message: 'Account not found'} )
     }
   } catch (error) {
-		return createResData(500, { error: error.message })
+		return createResData(500, error)
   }
 }
 
@@ -85,13 +96,13 @@ const getHandledAccountByInfo = async (username, password) => {
     })
     if (!account) {
       return createResData(401, { message: 'Invalid username' })
-    } else if (comparePassword(password, account.password)) {
+    } else if (comparePassword(password, account.dataValues.password)) {
       return handleAccountStatus(account)
     } else {
       return createResData(401, { message: 'Invalid password' })
     }
   } catch (error) {
-    return createResData(500, { error: error.message })
+    return createResData(500, error)
   }
 }
 
@@ -123,6 +134,7 @@ module.exports = {
   getAccountById,
 	getHandledAccountByInfo,
 	createAccount,
-  updateAccount,
+  changePassword,
+  changeState,
   deleteAccount
 }

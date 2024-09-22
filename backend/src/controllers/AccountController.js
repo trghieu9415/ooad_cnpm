@@ -6,14 +6,14 @@ const login = async (req, res) => {
 	try {
 		const result = await Account.getHandledAccountByInfo(username, password);
 		if (result.success) {
-			const account_id  = result.data.account
+			const account_id  = result.data.id
 			const member_id  = result.data.Member.id
-			const token = generateToken(member_id, account_id)
+			const token = generateToken(account_id, member_id)
 			res.setHeader('Authorization', `Bearer ${token}`);
 		}
 		res.status(result.status).json(result.data);
 	} catch (err) {
-		res.status(500).json({ error: err.message })
+		res.status(500).json(err)
 	}
 }
 
@@ -32,18 +32,25 @@ const register = async (req, res) => {
 				accout_info: accountResult.data,
 				member_info: memberResult.data
 			}
-			const token = generateToken(memberResult.data.id, accountResult.data.id)
+			const token = generateToken(accountResult.data.id, memberResult.data.id)
 			res.setHeader('Authorization', `Bearer ${token}`);
 			res.status(200).json(data);
 		} catch (err) {
-			res.status(500).json({ error: err.message })
+			res.status(500).json(err)
 		}
 }
 
 const logout = async (req, res) => {}
 
 const changePassword = async (req, res) => {
-	const { currentPassword, newPassword } = req.body
+	const { current_password, new_password } = req.body
+	const account_id = req.account_id
+	try {
+		const result = await Account.changePassword(account_id, current_password, new_password)
+		res.status(result.status).json(result.data)
+	} catch (err) {
+		res.status(500).json(err)
+	}
 }
 
 const forgotPassword = async (req, res) => {}

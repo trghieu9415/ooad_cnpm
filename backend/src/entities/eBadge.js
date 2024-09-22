@@ -6,7 +6,7 @@ const getAllBadges = async () => {
     const badges = await Badge.findAll();
 		return createResData(200, badges);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -29,9 +29,9 @@ const createBadge = async (name, description) => {
       name,
       description,
     });
-    return createResData(201, getBadgeById(newBadge.id).data);
+    return createResData(201, (await getBadgeById(newBadge.dataValues.id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -45,9 +45,9 @@ const updateBadge = async (id, name, description) => {
       name,
 			description
     });
-    return createResData(201, getBadgeById(id).data);
+    return createResData(201, (await getBadgeById(id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -56,12 +56,12 @@ const deleteBadge = async (id) => {
 	try {
     const deleted = await Badge.destroy({ where: { id: id } });
     if (deleted) {
-			return createResData(204, 'Badge deleted')
+			return createResData(204, { message: 'Badge deleted' })
     } else {
-			return createResData(404, 'Badge not found')
+			return createResData(404, { message: 'Badge not found' })
     }
   } catch (error) {
-		return createResData(500, { error: error.message })
+		return createResData(500, error)
   }
 }
 

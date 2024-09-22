@@ -17,7 +17,7 @@ const getAllNotifications = async () => {
     const notifications = await Notification.findAll();
 		return createResData(200, notifications);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -56,9 +56,9 @@ const createNotification = async (member_id, content) => {
 			member_id,
       content,
     });
-    return createResData(201, getNotificationById(newNotification.id).data);
+    return createResData(201, (await getNotificationById(newNotification.dataValues.id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -72,9 +72,9 @@ const updateNotification = async (id, content, read) => {
       content,
 			read
     });
-    return createResData(201, getNotificationById(id).data);
+    return createResData(201, (await getNotificationById(id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -88,7 +88,7 @@ const deleteNotification = async (id) => {
 			return createResData(404, 'Notification not found')
     }
   } catch (error) {
-		return createResData(500, { error: error.message })
+		return createResData(500, error)
   }
 }
 

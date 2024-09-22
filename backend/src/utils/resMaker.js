@@ -1,5 +1,9 @@
 const createResData = (status, data) => {
-    return { status, success: status - 200 < 100, data };
+    const success = status < 300 && status >= 200;
+    if (!success) {
+        console.log(data)
+    }
+    return { status, success: success, data };
 }
 
 module.exports =  createResData

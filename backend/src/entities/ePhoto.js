@@ -6,7 +6,7 @@ const getAllPhotos = async () => {
     const photos = await Photo.findAll();
 		return createResData(200, photos);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -28,13 +28,13 @@ const createPhoto = async (question_id, answer_id, path, related_type) => {
     const newPhoto = await Photo.create({
       question_id, answer_id, path, related_type
     });
-    return createResData(201, getPhotoById(newPhoto.id).data);
+    return createResData(201, (await getPhotoById(newPhoto.dataValues.id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
-const updatePhoto = async (path) => {
+const updatePhoto = async (id, path) => {
   try {
 		const photo = await Photo.findByPk(id)
 		if (!photo) {
@@ -43,9 +43,9 @@ const updatePhoto = async (path) => {
     await photo.update({
       path
     });
-    return createResData(201, getPhotoById(id).data);
+    return createResData(201, (await getPhotoById(id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -59,7 +59,7 @@ const deletePhoto = async (id) => {
 			return createResData(404, 'Photo not found')
     }
   } catch (error) {
-		return createResData(500, { error: error.message })
+		return createResData(500, error)
   }
 }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2024 at 08:08 AM
+-- Generation Time: Sep 22, 2024 at 11:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -40,16 +40,17 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `status`, `registration_time`) VALUES
-('382104eb-c024-44e9-9247-b26bae4c6234', 'larsenrebecca', 'lk#4TqrFzR', 'Active', '2024-09-10 01:50:50'),
-('6c46c93e-6578-46fb-b14f-81806d18eddf', 'leekelly', '!jr_ZohJ%7', 'Active', '2024-09-13 06:02:11'),
-('762b818c-1936-4ffb-ae79-aea7bdbdad69', 'anelson', 'ZS)8D+u_$H', 'Active', '2024-09-11 09:53:47'),
-('7cb0af33-557c-47c5-9d4a-f5da47fefb85', 'rushleslie', '$SghQZxXZ1', 'Active', '2024-09-10 18:32:55'),
-('8322d1be-1178-4cee-9285-72324a4c4aad', 'brian94', 'fc_0Mqo1%A', 'Active', '2024-09-12 04:32:23'),
-('bccbbe3f-cca9-48b7-a1d3-1ccd65768f70', 'dlevine', '!cX+L(2d@8', 'Active', '2024-09-13 05:35:19'),
-('c81125cb-8bce-4e5b-a764-d16a71569f2b', 'robert97', '&4xWo7VbG^', 'Active', '2024-09-04 14:35:37'),
-('d9fe1f8d-7199-43f6-9ebb-7ee9b9f74b48', 'bdeleon', 'W96Ptqff*k', 'Active', '2024-09-12 02:18:10'),
-('db802872-5044-427c-b078-2b9e67de3f92', 'robinhamilton', 'N%vG@1mb(3', 'Active', '2024-09-03 18:02:15'),
-('e01bdd86-27e9-4b6c-a9ca-961699c20de8', 'carterkimberly', 'Z%4McIinc9', 'Active', '2024-09-02 01:16:19');
+('06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'tester', '$2b$10$dH0uuV3WXkAl2LaUbS9PnebW7.m7L9TzYDFEXzt4h8sW.x6u7LFdm', 'Active', '2024-09-19 17:33:40'),
+('382104eb-c024-44e9-9247-b26bae4c6234', 'larsenrebecca', '$2b$10$wSbXWySdlGhH3PmyYJ2dvenbEN5I60L02F2t9YlaeZBRwrKZT4f/m', 'Active', '2024-09-10 01:50:50'),
+('6c46c93e-6578-46fb-b14f-81806d18eddf', 'leekelly', '$2b$10$O3eRfoHJWRTXkA22m5/08eqY0V7EsBAjLdFzhUHljJurF4pEL0OZW', 'Active', '2024-09-13 06:02:11'),
+('762b818c-1936-4ffb-ae79-aea7bdbdad69', 'anelson', '$2b$10$jYNdqnAEt2OuvXCF6Go5mulIswobA/XVxYgeoUf9.bDYPLdCWulbG', 'Active', '2024-09-11 09:53:47'),
+('7cb0af33-557c-47c5-9d4a-f5da47fefb85', 'rushleslie', '$2b$10$iTgv5vhwiMFIasbX52C4XOG1r6reAdMGDvRjRRErdDROOdHC2ESaC', 'Active', '2024-09-10 18:32:55'),
+('8322d1be-1178-4cee-9285-72324a4c4aad', 'brian94', '$2b$10$xonNzRFn/7xLrA4/UkabGeRAjVQ71nGc9NzBqPGChmq.kd4CYc4bm', 'Active', '2024-09-12 04:32:23'),
+('bccbbe3f-cca9-48b7-a1d3-1ccd65768f70', 'dlevine', '$2b$10$kSVHR3JmDDdAstdyuwFUIuRJTPkbliqDKM6.nZy4PyOS5DZcKNKE.', 'Active', '2024-09-13 05:35:19'),
+('c81125cb-8bce-4e5b-a764-d16a71569f2b', 'robert97', '$2b$10$jliQGPgksFQJuPDlCv8S0eHIRU/WHUudY/YeLhhyeQbhX8ZlecMqm', 'Active', '2024-09-04 14:35:37'),
+('d9fe1f8d-7199-43f6-9ebb-7ee9b9f74b48', 'bdeleon', '$2b$10$6WkcT0dkSSg.PkiM3s73Ge8cxAhdvGjk9JdfQEioHDwQh.ITdyPji', 'Active', '2024-09-12 02:18:10'),
+('db802872-5044-427c-b078-2b9e67de3f92', 'robinhamilton', '$2b$10$QkxVWcsCwVYzN/Ad2AnJp.I45.CNwIqtk5gXw6xupD/7WhQgALSsy', 'Active', '2024-09-03 18:02:15'),
+('e01bdd86-27e9-4b6c-a9ca-961699c20de8', 'carterkimberly', '$2b$10$xBOOol2mJ/ImdgbJb10wgO9IhksWYtr.rJOlSu00phPm0dq6ekqRe', 'Active', '2024-09-02 01:16:19');
 
 -- --------------------------------------------------------
 
@@ -81,18 +82,6 @@ INSERT INTO `answers` (`id`, `question_id`, `member_id`, `answer_text`, `accepte
 ('ae50613b-7035-48ea-96c2-e3152981a2cd', '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', '8828c302-0aba-4809-a2f8-1bfd1355615f', 'All court case talk method camera manage. Attorney especially maybe ahead only. Tell model include so career eat voice. Mission factor parent like.', 0, '2024-09-05 06:54:15'),
 ('c98a13cf-e990-4db9-afbf-cbc901e55cc6', '05dcb34c-3c80-4a6a-afdd-30e567d9eb07', 'ea225474-f66e-4f45-ba88-c13b9eb447a4', 'Enter let lot any see couple school. Major event amount rather sea appear through. Student real often medical.\nPretty others compare pull. Party these watch government but last group.', 0, '2024-09-08 19:37:50'),
 ('e992ec24-99aa-458b-8a5d-f5b97135667b', '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', 'ea225474-f66e-4f45-ba88-c13b9eb447a4', 'Around trouble should until remember safe force. Since even our theory available poor worker. Believe parent actually maintain water.', 0, '2024-09-10 00:08:58');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `answer_flags`
---
-
-CREATE TABLE `answer_flags` (
-  `id` varchar(36) NOT NULL,
-  `member_id` varchar(36) NOT NULL,
-  `answer_id` varchar(36) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -169,18 +158,6 @@ INSERT INTO `comments` (`id`, `member_id`, `question_id`, `comment_text`, `creat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comment_flags`
---
-
-CREATE TABLE `comment_flags` (
-  `id` varchar(36) NOT NULL,
-  `member_id` varchar(36) NOT NULL,
-  `comment_id` varchar(36) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `members`
 --
 
@@ -207,6 +184,7 @@ INSERT INTO `members` (`id`, `account_id`, `name`, `email`, `phone`, `reputation
 ('30888fac-e79e-4a4c-8ebd-acaa3c14b8df', 'bccbbe3f-cca9-48b7-a1d3-1ccd65768f70', 'Ryan King', 'wendyanderson@example.org', '0717703680', 14, 'Member', ''),
 ('4cabe711-6362-462d-85f5-d82668fdb89a', 'd9fe1f8d-7199-43f6-9ebb-7ee9b9f74b48', 'Melissa Key', 'taylormcdaniel@example.net', '0176674974', 1000, 'Moderator', ''),
 ('6df50635-ea39-4f4f-b291-5278b7b9a418', 'e01bdd86-27e9-4b6c-a9ca-961699c20de8', 'Jeanette Castaneda', 'kdelgado@example.com', '0316904207', 5000, 'Admin', ''),
+('83fa14c7-70ae-4a4b-977e-bffa18ddf36f', '06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'HE HE HE', 'ief@igp.cls', '0223112330', 0, 'Member', '0'),
 ('8828c302-0aba-4809-a2f8-1bfd1355615f', '382104eb-c024-44e9-9247-b26bae4c6234', 'Elizabeth Anderson', 'nallen@example.net', '0820936822', 11, 'Member', ''),
 ('aa920c7b-0c41-4a76-a0ba-e3f93a80006d', 'db802872-5044-427c-b078-2b9e67de3f92', 'Deborah Martinez', 'zsimpson@example.org', '0984170916', 86, 'Member', ''),
 ('ea225474-f66e-4f45-ba88-c13b9eb447a4', '8322d1be-1178-4cee-9285-72324a4c4aad', 'Mary Johnson', 'sextonmichael@example.net', '0489707817', 26, 'Member', '');
@@ -242,6 +220,21 @@ INSERT INTO `member_badges` (`id`, `member_id`, `badge_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `member_flags`
+--
+
+CREATE TABLE `member_flags` (
+  `id` varchar(36) NOT NULL,
+  `member_id` varchar(36) NOT NULL,
+  `comment_id` varchar(36) NOT NULL,
+  `answer_id` varchar(36) DEFAULT NULL,
+  `question_id` varchar(36) DEFAULT NULL,
+  `related_type` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `member_views`
 --
 
@@ -249,7 +242,7 @@ CREATE TABLE `member_views` (
   `id` varchar(36) NOT NULL,
   `member_id` varchar(36) NOT NULL,
   `question_id` varchar(36) NOT NULL,
-  `flagged` tinyint(1) DEFAULT NULL,
+  `saved` tinyint(1) DEFAULT NULL,
   `viewing_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -257,7 +250,7 @@ CREATE TABLE `member_views` (
 -- Dumping data for table `member_views`
 --
 
-INSERT INTO `member_views` (`id`, `member_id`, `question_id`, `flagged`, `viewing_time`) VALUES
+INSERT INTO `member_views` (`id`, `member_id`, `question_id`, `saved`, `viewing_time`) VALUES
 ('28579bb3-b192-44c9-8260-943d34571ba2', 'aa920c7b-0c41-4a76-a0ba-e3f93a80006d', '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', 0, '2024-09-11 17:42:08'),
 ('5622b46f-89d4-41f2-95f9-c1027098f67b', 'ea225474-f66e-4f45-ba88-c13b9eb447a4', 'b63ec63e-921a-402f-88b6-108dfb374495', 0, '2024-09-02 18:13:49'),
 ('7b9a556b-52f4-4b8e-8f2f-2edfc63333ac', '05c433a0-07c6-43aa-9153-c4f01a636217', '8cb2b022-ae8f-4be4-a0aa-d0578b2c3723', 0, '2024-09-12 23:33:01'),
@@ -475,14 +468,6 @@ ALTER TABLE `answers`
   ADD KEY `member_id` (`member_id`);
 
 --
--- Indexes for table `answer_flags`
---
-ALTER TABLE `answer_flags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `answer_id` (`answer_id`);
-
---
 -- Indexes for table `badges`
 --
 ALTER TABLE `badges`
@@ -504,14 +489,6 @@ ALTER TABLE `comments`
   ADD KEY `question_id` (`question_id`);
 
 --
--- Indexes for table `comment_flags`
---
-ALTER TABLE `comment_flags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `member_id` (`member_id`),
-  ADD KEY `comment_id` (`comment_id`);
-
---
 -- Indexes for table `members`
 --
 ALTER TABLE `members`
@@ -525,6 +502,16 @@ ALTER TABLE `member_badges`
   ADD PRIMARY KEY (`id`),
   ADD KEY `member_id` (`member_id`),
   ADD KEY `badge_id` (`badge_id`);
+
+--
+-- Indexes for table `member_flags`
+--
+ALTER TABLE `member_flags`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `member_id` (`member_id`),
+  ADD KEY `comment_id` (`comment_id`),
+  ADD KEY `member_flags_ibfk_3` (`answer_id`),
+  ADD KEY `member_flags_ibfk_4` (`question_id`);
 
 --
 -- Indexes for table `member_views`
@@ -610,13 +597,6 @@ ALTER TABLE `answers`
   ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`);
 
 --
--- Constraints for table `answer_flags`
---
-ALTER TABLE `answer_flags`
-  ADD CONSTRAINT `answer_flags_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`),
-  ADD CONSTRAINT `answer_flags_ibfk_2` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`id`);
-
---
 -- Constraints for table `bounties`
 --
 ALTER TABLE `bounties`
@@ -630,13 +610,6 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`);
 
 --
--- Constraints for table `comment_flags`
---
-ALTER TABLE `comment_flags`
-  ADD CONSTRAINT `comment_flags_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`),
-  ADD CONSTRAINT `comment_flags_ibfk_2` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`);
-
---
 -- Constraints for table `members`
 --
 ALTER TABLE `members`
@@ -648,6 +621,15 @@ ALTER TABLE `members`
 ALTER TABLE `member_badges`
   ADD CONSTRAINT `member_badges_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`),
   ADD CONSTRAINT `member_badges_ibfk_2` FOREIGN KEY (`badge_id`) REFERENCES `badges` (`id`);
+
+--
+-- Constraints for table `member_flags`
+--
+ALTER TABLE `member_flags`
+  ADD CONSTRAINT `member_flags_ibfk_1` FOREIGN KEY (`member_id`) REFERENCES `members` (`id`),
+  ADD CONSTRAINT `member_flags_ibfk_2` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`id`),
+  ADD CONSTRAINT `member_flags_ibfk_3` FOREIGN KEY (`answer_id`) REFERENCES `answers` (`id`),
+  ADD CONSTRAINT `member_flags_ibfk_4` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`);
 
 --
 -- Constraints for table `member_views`

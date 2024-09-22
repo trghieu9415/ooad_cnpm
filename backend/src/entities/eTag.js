@@ -6,7 +6,7 @@ const getAllTags = async () => {
     const tags = await Tag.findAll();
 		return createResData(200, tags);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -29,9 +29,9 @@ const createTag = async (name, description) => {
       name,
       description,
     });
-    return createResData(201, getTagById(newTag.id).data);
+    return createResData(201, (await getTagById(newTag.dataValues.id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -45,9 +45,9 @@ const updateTag = async (id, name, description) => {
       name,
 			description
     });
-    return createResData(201, getTagById(id).data);
+    return createResData(201, (await getTagById(id)).data);
   } catch (error) {
-    return createResData(500, { error: error.message });
+    return createResData(500, error);
   }
 };
 
@@ -61,7 +61,7 @@ const deleteTag = async (id) => {
 			return createResData(404, 'Tag not found')
     }
   } catch (error) {
-		return createResData(500, { error: error.message })
+		return createResData(500, error)
   }
 }
 

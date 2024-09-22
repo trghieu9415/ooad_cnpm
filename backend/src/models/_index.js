@@ -13,9 +13,8 @@ const MemberView = require('./MemberView')
 const QuestionTag = require('./QuestionTag')
 const Answer = require('./Answer')
 const MemberVote = require('./MemberVote')
-const AnswerFlag = require('./AnswerFlag')
 const Comment = require('./Comment')
-const CommentFlag = require('./CommentFlag')
+const MemberFlag = require('./MemberFlag')
 const Photo = require('./Photo')
 const Notification = require('./Notification')
 const Bounty = require('./Bounty')
@@ -60,10 +59,9 @@ MemberView.belongsTo(Question, { foreignKey: 'question_id' });
 Member.hasMany(Notification, { foreignKey: 'member_id' });
 Notification.belongsTo(Member, { foreignKey: 'member_id' });
 
-
 module.exports = {
   SystemAdministratorAccount, Account, Member, Badge, MemberBadge,
-  Tag, Question, MemberView, QuestionTag, Answer, MemberVote, AnswerFlag,
-  Comment, CommentFlag, Photo, Notification, Bounty, QuestionEdit
+  Tag, Question, MemberView, QuestionTag, Answer, MemberVote,
+  Comment, MemberFlag, Photo, Notification, Bounty, QuestionEdit
 };
   
