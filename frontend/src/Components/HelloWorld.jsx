@@ -1,3 +1,3 @@
 export default function HelloWorld() {
-  return <div>HelloWorld</div>
+  return <div className="text-xl font-bold ">HelloWorld</div>
 }
