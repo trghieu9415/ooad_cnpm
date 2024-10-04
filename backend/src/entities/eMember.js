@@ -2,54 +2,64 @@ const { Member, Badge, Account, MemberView, MemberFlag, MemberVote } = require('
 const createResData = require('@utils/resMaker')
 
 const getAllMembers = async () => {
-	try {
-		const members = await Member.findAll({
-      include: [{
-        model: Account,
-        attributes: ['username'],
-      },{
-        model: Badge,
-        attributes: ['id', 'name', 'description'],
-        required: false,
-      }],
+  try {
+    const members = await Member.findAll({
+      include: [
+        {
+          model: Account,
+          attributes: ['username']
+        },
+        {
+          model: Badge,
+          attributes: ['id', 'name', 'description'],
+          required: false
+        }
+      ]
     })
-		return createResData(200, members)
-	} catch (error) {
-		return createResData(500, error)
-	}
+    return createResData(200, members)
+  } catch (error) {
+    return createResData(500, error)
+  }
 }
 
 const getMemberById = async (id) => {
-	try {
+  try {
     const member = await Member.findByPk(id, {
-      include: [{
-        model: Account,
-        attributes: ['username'],
-      }, {
-        model: Badge,
-        attributes: ['id', 'name', 'description'],
-        required: false,
-      }],
+      include: [
+        {
+          model: Account,
+          attributes: ['username']
+        },
+        {
+          model: Badge,
+          attributes: ['id', 'name', 'description'],
+          required: false
+        }
+      ]
     })
-		if (member) {
+    if (member) {
       return createResData(200, member)
-		} else {
-			return createResData(404, { message: 'Member not found' })
-		}
+    } else {
+      return createResData(404, { message: 'Member not found' })
+    }
   } catch (error) {
     return createResData(500, error)
   }
 }
 
 const createMember = async (account_id, name, email, phone, biography) => {
-	try {
-		if (await isEmailExisted(email)) {
-			return createResData(409, { message: 'Email already exists' })
-		} else if (await isPhoneExisted(phone)) {
-			return createResData(409, { message: 'Phone already exists' })
-		}
+  try {
+    if (await isEmailExisted(email)) {
+      return createResData(409, { message: 'Email already exists' })
+    } else if (await isPhoneExisted(phone)) {
+      return createResData(409, { message: 'Phone already exists' })
+    }
     const newMember = await Member.create({
-      account_id, name, email, phone, biography
+      account_id,
+      name,
+      email,
+      phone,
+      biography
     })
     return createResData(201, (await getMemberById(newMember.dataValues.id)).data)
   } catch (error) {
@@ -58,7 +68,7 @@ const createMember = async (account_id, name, email, phone, biography) => {
 }
 
 const updateMember = async (id, name, email, phone, reputation, role, biography) => {
-	try {
+  try {
     const member = await Member.findByPk(id)
     if (!member) {
       return createResData(404, { message: 'Member not found' })
@@ -69,8 +79,12 @@ const updateMember = async (id, name, email, phone, reputation, role, biography)
       return createResData(409, { message: 'Phone already exists' })
     }
     await member.update({
-      name, email, phone,
-      reputation, role, biography
+      name,
+      email,
+      phone,
+      reputation,
+      role,
+      biography
     })
     return createResData(200, (await getMemberById(id)).data)
   } catch (error) {
@@ -80,50 +94,50 @@ const updateMember = async (id, name, email, phone, reputation, role, biography)
 
 // CHỈ SỬ DỤNG HÀM NÀY KHI CHẮC CHẮN CÓ THỂ XÓA MÀ KHÔNG ẢNH HƯỞNG ĐẾN BẢNG KHÁC!!!
 const deleteMember = async (id) => {
-	try {
+  try {
     const deleted = await Member.destroy({ where: { id: id } })
     if (deleted) {
-			return createResData(204, 'Member deleted')
+      return createResData(204, 'Member deleted')
     } else {
-			return createResData(404, 'Member not found')
+      return createResData(404, 'Member not found')
     }
   } catch (error) {
-		return createResData(500, error)
+    return createResData(500, error)
   }
 }
 
 const isPhoneExisted = async (phone) => {
-	try {
+  try {
     const counted = await Member.count({
-      where: { phone: phone },
+      where: { phone: phone }
     })
     return counted === 0 ? false : true
   } catch (error) {
     throw error
-  } 
+  }
 }
 
 const isEmailExisted = async (email) => {
-	try {
+  try {
     const counted = await Member.count({
-      where: { email: email },
+      where: { email: email }
     })
     return counted === 0 ? false : true
   } catch (error) {
     throw error
-  } 
+  }
 }
 
 const getReputationById = async (id) => {
   try {
     const returnObj = await Member.findOne({
       where: { id: id },
-      attributes: ['reputation'],
+      attributes: ['reputation']
     })
     return returnObj.dataValues.reputation
   } catch (error) {
     throw error
-  } 
+  }
 }
 
 const setReputationById = async (id, reputation) => {
@@ -190,8 +204,7 @@ const flag = async (id, related_id, related_type, flag_type) => {
 
     if (!existingFlag && flag_type) {
       await MemberFlag.create(createData)
-    }
-    else if (existingFlag && !flag_type) {
+    } else if (existingFlag && !flag_type) {
       await MemberFlag.destroy({ where: whereClause })
     }
   } catch (error) {
@@ -216,7 +229,6 @@ const viewQuestion = async (id, question_id) => {
   }
 }
 
-
 const saveQuestion = async (id, question_id, type) => {
   try {
     const memberView = await MemberView.findOne({
@@ -235,9 +247,8 @@ const saveQuestion = async (id, question_id, type) => {
   }
 }
 
-
-module.exports =  {
-	getAllMembers,
+module.exports = {
+  getAllMembers,
   getMemberById,
   createMember,
   updateMember,

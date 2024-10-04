@@ -1,11 +1,11 @@
-const express = require('express');
-const { Member } = require("@controllers/_index")
-const authenticateAccount = require("@middlewares/authMiddleware")
+const express = require('express')
+const { Member } = require('@controllers/_index')
+const authenticateAccount = require('@middlewares/authMiddleware')
 
-const router = express.Router();
+const router = express.Router()
 
-const multer = require('multer');
-const upload = multer();
+const multer = require('multer')
+const upload = multer()
 
 const setTypeisQuestion = (req, res, next) => {
   req.related_type = 'Question'
@@ -31,9 +31,5 @@ router.post('/flag/comment/:comment_id', authenticateAccount, setTypeisComment, 
 router.post('/flag/answer/:answer_id', authenticateAccount, setTypeisAnswer, Member.flag)
 router.post('/vote/question/:question_id', authenticateAccount, setTypeisAnswer, Member.flag)
 router.post('/vote/answer/:answer_id', authenticateAccount, setTypeisAnswer, Member.flag)
-
-
-
-
 
 module.exports = router

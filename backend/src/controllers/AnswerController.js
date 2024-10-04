@@ -1,4 +1,4 @@
-const { Answer } = require("@entities/_index")
+const { Answer } = require('@entities/_index')
 
 const getAnswerById = async (req, res) => {
   const id = req.params.id
@@ -31,5 +31,5 @@ module.exports = {
   getAnswerById,
   getAnswerByQuestion,
   createAnswer,
-  setCorrectAnswer,
+  setCorrectAnswer
 }

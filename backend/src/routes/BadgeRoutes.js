@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require('express')
 const { Badge } = require('@controllers/_index')
 
-const router = express.Router();
+const router = express.Router()
 
-const multer = require('multer');
-const upload = multer();
+const multer = require('multer')
+const upload = multer()
 
 router.get('/:id', Badge.getBadgeById)
 router.get('/', Badge.getBadges)

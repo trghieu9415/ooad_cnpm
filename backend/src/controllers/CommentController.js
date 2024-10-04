@@ -1,4 +1,4 @@
-const { Comment } = require("@entities/_index")
+const { Comment } = require('@entities/_index')
 
 const getComments = async (req, res) => {
   try {
@@ -44,5 +44,5 @@ module.exports = {
   getComments,
   getCommentById,
   getCommentByQuestion,
-  createComment,
+  createComment
 }
