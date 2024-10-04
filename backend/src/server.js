@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json()); // Xử lý dữ liệu JSON từ body request
-app.use("/api", routes); // Sử dụng các routes trong thư mục routes
+app.use("/", routes); // Sử dụng các routes trong thư mục routes
 
 
 app.get("/", (req, res) => {

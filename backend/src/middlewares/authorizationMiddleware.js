@@ -1,4 +1,4 @@
-const { getReputationById } = require('@entities/Member');
+const { getReputationById } = require("@entities/eMember");
 
 const authorize = async (requiredReputation) => {
 	return (req, res, next) => {
