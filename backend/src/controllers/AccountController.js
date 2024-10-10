@@ -19,7 +19,7 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { username, password, name, email, phone, biography } = req.body
-  try {
+  try { 
     const accountResult = await Account.createAccount(username, password)
     if (!accountResult.success) {
       return res.status(accountResult.status).json(accountResult.data)

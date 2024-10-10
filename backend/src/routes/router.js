@@ -6,7 +6,7 @@ const authenticateAccount = require('@middlewares/authMiddleware.js')
 
 const router = express.Router()
 
-// Middleware để thay đổi req.body trước khi asdxử lý request
+// Middleware để thay đổi req.body trước khi xử lý request
 const hahaha = (req, res, next) => {
   req.body = {
     username: 'tester',

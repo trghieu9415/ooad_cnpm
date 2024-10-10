@@ -1,5 +1,6 @@
 const { Member, Badge, Account, MemberView, MemberFlag, MemberVote } = require('@models/_index')
 const createResData = require('@utils/resMaker')
+const { Op } = require('sequelize');
 
 const getAllMembers = async () => {
   try {
@@ -72,11 +73,9 @@ const updateMember = async (id, name, email, phone, biography) => {
     if (!member) {
       return createResData(404, { message: 'Member not found' })
     }
-
-    if (member.email !== email && isEmailExisted(email)) {
+    if (await isEmailExisted(email, id)) {
       return createResData(409, { message: 'Email already exists' })
-    }
-    if (member.phone !== phone && isPhoneExisted(phone)) {
+    } else if (await isPhoneExisted(phone, id)) {
       return createResData(409, { message: 'Phone already exists' })
     }
     await member.update({
@@ -111,10 +110,10 @@ const deleteMember = async (id) => {
   }
 }
 
-const isPhoneExisted = async (phone) => {
+const isPhoneExisted = async (phone, exceptionId = null) => {
   try {
     const counted = await Member.count({
-      where: { phone: phone }
+      where: { phone: phone, id: { [Op.ne]: exceptionId} }
     })
     return counted === 0 ? false : true
   } catch (error) {
@@ -122,10 +121,10 @@ const isPhoneExisted = async (phone) => {
   }
 }
 
-const isEmailExisted = async (email) => {
+const isEmailExisted = async (email, exceptionId = null) => {
   try {
     const counted = await Member.count({
-      where: { email: email }
+      where: { email: email, id: { [Op.ne]: exceptionId} }
     })
     return counted === 0 ? false : true
   } catch (error) {

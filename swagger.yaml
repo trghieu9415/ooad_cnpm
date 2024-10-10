@@ -1,0 +1,606 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  description: API documentation for the application
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+    description: Local server
+
+paths:
+  /account/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+        '400':
+          description: Bad request
+
+  /account/register:
+    post:
+      summary: User registration
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: User registered
+        '400':
+          description: Bad request
+
+  /account/logout:
+    get:
+      summary: User logout
+      responses:
+        '200':
+          description: Successful logout
+
+  /account/changepassword:
+    put:
+      summary: Change user password
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: Password changed
+        '400':
+          description: Bad request
+
+  /account/forgotpassword:
+    post:
+      summary: Forgot password
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Password reset link sent
+        '400':
+          description: Bad request
+
+  /answer/{id}:
+    get:
+      summary: Get answer by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Answer found
+        '404':
+          description: Answer not found
+
+  /answer/question/{question_id}/create:
+    post:
+      summary: Create an answer for a question
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Answer created
+        '400':
+          description: Bad request
+
+  /answer/question/{question_id}:
+    get:
+      summary: Get answers by question ID
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Answers found
+        '404':
+          description: Answers not found
+
+  /answer/{id}/correct:
+    put:
+      summary: Mark answer as correct
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Answer marked as correct
+        '400':
+          description: Bad request
+
+  /badge/{id}:
+    get:
+      summary: Get badge by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Badge found
+        '404':
+          description: Badge not found
+
+  /badge:
+    get:
+      summary: Get all badges
+      responses:
+        '200':
+          description: Badges found
+
+  /badge/create:
+    post:
+      summary: Create a new badge
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Badge created
+        '400':
+          description: Bad request
+
+  /badge/update/{badge_id}:
+    put:
+      summary: Update a badge
+      parameters:
+        - name: badge_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Badge updated
+        '400':
+          description: Bad request
+
+  /comment/{id}:
+    get:
+      summary: Get comment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment found
+        '404':
+          description: Comment not found
+
+  /comment/questions/{question_id}:
+    get:
+      summary: Get comments by question ID
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comments found
+        '404':
+          description: Comments not found
+
+  /comment/questions/{question_id}/create:
+    post:
+      summary: Create a comment for a question
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Comment created
+        '400':
+          description: Bad request
+
+  /member/self:
+    get:
+      summary: Get current member info
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Member info found
+
+  /member/all:
+    get:
+      summary: Get all members
+      responses:
+        '200':
+          description: Members found
+
+  /member/{id}:
+    get:
+      summary: Get member by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Member found
+        '404':
+          description: Member not found
+
+  /member/update:
+    put:
+      summary: Update member info
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Member info updated
+        '400':
+          description: Bad request
+
+  /member/save/{question_id}:
+    post:
+      summary: Save question to member profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question saved
+
+  /member/flag/question/{question_id}:
+    post:
+      summary: Flag a question
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Question flagged
+        '400':
+          description: Bad request
+
+  /member/flag/comment/{comment_id}:
+    post:
+      summary: Flag a comment
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: comment_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Comment flagged
+        '400':
+          description: Bad request
+
+  /member/flag/answer/{answer_id}:
+    post:
+      summary: Flag an answer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: answer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Answer flagged
+        '400':
+          description: Bad request
+
+  /member/vote/question/{question_id}:
+    post:
+      summary: Vote on a question
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Voted successfully on question
+        '400':
+          description: Bad request
+
+  /member/vote/answer/{answer_id}:
+    post:
+      summary: Vote on an answer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: answer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Voted successfully on answer
+        '400':
+          description: Bad request
+  /question:
+    get:
+      summary: Get all questions
+      responses:
+        '200':
+          description: Questions found
+
+  /question/{id}:
+    get:
+      summary: Get question by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Question found
+        '404':
+          description: Question not found
+
+  /question/member/{member_id}:
+    get:
+      summary: Get questions by member ID
+      parameters:
+        - name: member_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Questions found
+
+  /question/create:
+    post:
+      summary: Create a new question
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Question created
+        '400':
+          description: Bad request
+  /tag/{id}:
+    get:
+      summary: Get tag by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tag found
+        '404':
+          description: Tag not found
+
+  /tag:
+    get:
+      summary: Get all tags
+      responses:
+        '200':
+          description: Tags found
+
+  /tag/create:
+    post:
+      summary: Create a new tag
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Tag created
+        '400':
+          description: Bad request
+
+  /tag/update/{tag_id}:
+    put:
+      summary: Update a tag
+      parameters:
+        - name: tag_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Tag updated
+        '400':
+          description: Bad request
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -18,7 +18,7 @@ const setTypeisAnswer = (req, res, next) => {
   next()
 }
 
-router.get('/self', authenticateAccount, Member.getCurrentMember)
+router.get('/self', authenticateAccount, Member.getCurrentMember) 
 router.get('/all', Member.getAllMember)
 router.get('/:id', Member.getMemberById)
 router.put('/update', authenticateAccount, Member.updateMember)
@@ -26,7 +26,8 @@ router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
 router.post('/flag/question/:question_id', authenticateAccount, setTypeisQuestion, Member.flag)
 router.post('/flag/comment/:comment_id', authenticateAccount, setTypeisComment, Member.flag)
 router.post('/flag/answer/:answer_id', authenticateAccount, setTypeisAnswer, Member.flag)
-router.post('/vote/question/:question_id', authenticateAccount, setTypeisAnswer, Member.flag)
-router.post('/vote/answer/:answer_id', authenticateAccount, setTypeisAnswer, Member.flag)
+router.post('/vote/question/:question_id', authenticateAccount, setTypeisAnswer, Member.vote)
+router.post('/vote/answer/:answer_id', authenticateAccount, setTypeisAnswer, Member.vote)
+
 
 module.exports = router

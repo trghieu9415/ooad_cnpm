@@ -9,5 +9,5 @@ router.post('/register', Account.register)
 router.get('/logout', Account.logout)
 router.put('/changepassword', authenticateAccount, Account.changePassword)
 router.post('/forgotpassword', Account.forgotPassword)
-router.post('verify-email', authenticateAccount, Account.verifyEmail)
+router.post('/verify-email', authenticateAccount, Account.verifyEmail)
 module.exports = router
