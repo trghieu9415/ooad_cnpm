@@ -11,7 +11,7 @@ const getComments = async (req, res) => {
 
 const getCommentById = async (req, res) => {
   try {
-    const comment_id = req.params.comment_id
+    const comment_id = req.params.id
     const result = await Comment.getCommentById(comment_id)
     res.status(result.status).json(result.data)
   } catch (err) {

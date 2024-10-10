@@ -98,11 +98,15 @@ const getHandledAccountByInfo = async (username, password) => {
     })
     if (!account) {
       return createResData(401, { message: 'Invalid username' })
-    } else if (comparePassword(password, account.dataValues.password)) {
-      return handleAccountStatus(account)
-    } else {
+    }
+    if (!password) {
+      return createResData(401, { message: 'Password is required' })
+    }
+    const isPasswordMatch = await comparePassword(password, account.dataValues.password)
+    if (!isPasswordMatch) {
       return createResData(401, { message: 'Invalid password' })
     }
+    return handleAccountStatus(account)
   } catch (error) {
     return createResData(500, error)
   }

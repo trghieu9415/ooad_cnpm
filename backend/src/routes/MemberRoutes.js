@@ -4,9 +4,6 @@ const authenticateAccount = require('@middlewares/authMiddleware')
 
 const router = express.Router()
 
-const multer = require('multer')
-const upload = multer()
-
 const setTypeisQuestion = (req, res, next) => {
   req.related_type = 'Question'
   next()
@@ -24,7 +21,7 @@ const setTypeisAnswer = (req, res, next) => {
 router.get('/self', authenticateAccount, Member.getCurrentMember)
 router.get('/all', Member.getAllMember)
 router.get('/:id', Member.getMemberById)
-router.put('/update', upload.none(), Member.updateMember)
+router.put('/update', Member.updateMember)
 router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
 router.post('/flag/question/:question_id', authenticateAccount, setTypeisQuestion, Member.flag)
 router.post('/flag/comment/:comment_id', authenticateAccount, setTypeisComment, Member.flag)
