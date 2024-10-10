@@ -1,0 +1,1067 @@
+openapi: 3.0.3
+info:
+  title: Stackoverflow - Account API
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:5000
+tags:
+  - name: account
+    description: Everything about your Account
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: answer
+    description: Operations related to Answers
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: bagde
+    description: Operations related to Badge
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: comment
+    description: Operations related to Comment
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: member
+    description: Operations related to Members
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /account/login:
+    post:
+      tags:
+        - account
+      summary: Log in to your account
+      description: Login to your account and receive a token in the Authorization header.
+      operationId: login
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTQxNTYzLCJleHAiOjE3MjkxMTAzNjN9.3HvGMFzKrKxpXw0LIkAKqM4LR0ZNLl9d6rSXIVtVf_M'
+      requestBody:
+        description: User credentials
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: 'tester'
+                password:
+                  type: string
+                  example: '12345678'
+              required:
+                - username
+                - password
+        required: true
+      responses:
+        '200':
+          description: Successful login with token in the Authorization header
+          headers:
+            Authorization:
+              description: JWT token for accessing protected routes
+              schema:
+                type: string
+                example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00ZmQ4LThkZGQtYm...
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '06b01d99-d0d5-4a34-86e4-89e13fa45e4f'
+                  username:
+                    type: string
+                    example: 'tester'
+                  password:
+                    type: string
+                    example: '$2b$10$dH0uuV3WXkAl2LaUbS9PnebW7.m7L9TzYDFEXzt4h8sW.x6u7LFdm'
+                  status:
+                    type: string
+                    example: 'active'
+                  registration_time:
+                    type: string
+                    format: date-time
+                    example: 2024-09-19T17:33:40.000Z
+                  Member:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+        '401':
+          description: Invalid username
+        '500':
+          description: Internal server error
+
+  /account/register:
+    post:
+      summary: Register a new account and member
+      description: Registers a new account and creates associated member information.
+      tags:
+        - account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: testuser
+                password:
+                  type: string
+                  example: TestPassword123!
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: johndoe@example.com
+                phone:
+                  type: string
+                  example: 1234567890
+                biography:
+                  type: string
+                  example: I am a software developer.
+              required:
+                - username
+                - password
+                - name
+                - email
+                - phone
+      responses:
+        '200':
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accout_info:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: cd186b10-7a07-456a-90da-d5e655369e48
+                      status:
+                        type: string
+                        example: Active
+                      registration_time:
+                        type: string
+                        format: date-time
+                        example: 2024-10-10T03:46:43.153Z
+                      username:
+                        type: string
+                        example: testuser
+                      password:
+                        type: string
+                        example: $2b$10$8tJzeqap5zv4hh36hp5iU.f.sjGOCsuu/p05L6W5IBIz9yyQ8gerK
+                  member_info:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: fb329d01-dd6e-4ee8-927e-2cdc1b373664
+                      account_id:
+                        type: string
+                        example: cd186b10-7a07-456a-90da-d5e655369e48
+                      name:
+                        type: string
+                        example: John Doe
+                      email:
+                        type: string
+                        example: johndoe@example.com
+                      phone:
+                        type: string
+                        example: 1234567890
+                      reputation:
+                        type: integer
+                        example: 0
+                      role:
+                        type: string
+                        example: Member
+                      biography:
+                        type: string
+                        example: I am a software developer.
+                      Account:
+                        type: object
+                        properties:
+                          username:
+                            type: string
+                            example: testuser
+                      Badges:
+                        type: array
+                        items:
+                          type: string
+                        example: []
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error
+
+  /account/changepassword:
+    post:
+      tags:
+        - account
+      summary: Change the password of an account
+      description: Change the current password to a new password
+      operationId: changePassword
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTQxNjI3LCJleHAiOjE3MjkxMTA0Mjd9.BtnNuRirDadvmUisMLRspFuuaYf0btx66RPBDfIKjvw'
+      requestBody:
+        required: true
+        description: Input data to change the password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  example: '12345678'
+                new_password:
+                  type: string
+                  example: '12345678910'
+              required:
+                - current_password
+                - new _password
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Password changed successfully.'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Current password and new password are required.'
+        '401':
+          description: Current password is incorrect
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Current password is incorrect.'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Internal server error'
+
+  /answer/{id}:
+    get:
+      tags:
+        - answer
+      summary: Get answer by ID
+      description: Retrieve an answer using its unique ID.
+      operationId: getAnswerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the answer.
+          schema:
+            type: string
+            example: '9bf43411-77f8-49b2-beca-d8a27e728fa8'
+      responses:
+        '200':
+          description: Successful retrieval of the answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '9bf43411-77f8-49b2-beca-d8a27e728fa8'
+                  question_id:
+                    type: string
+                    example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                  member_id:
+                    type: string
+                    example: '11de0d38-be69-4fc2-8346-8cd266ee5cad'
+                  answer_text:
+                    type: string
+                    example: 'History sport social mouth discover decision. Item off assume simply. His which blue gas keep democratic.'
+                  accepted:
+                    type: boolean
+                    example: false
+                  creation_time:
+                    type: string
+                    format: date-time
+                    example: '2024-09-05T05:39:21.000Z'
+                  voteCount:
+                    type: integer
+                    example: 0
+                  flagCount:
+                    type: integer
+                    example: 0
+        '404':
+          description: Answer not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Answer not found'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'An error occurred'
+
+  /answer/question/{question_id}/create:
+    post:
+      tags:
+        - answer
+      summary: Create an answer
+      description: Adds a new answer to a specified question.
+      operationId: createAnswer
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: The unique identifier of the question.
+          schema:
+            type: string
+            example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTQxODk1LCJleHAiOjE3MjkxMTA2OTV9.iFDhLnHc3DPjh9veVxbrnu1s0ZtAu-ib_oVBbgDJyyc'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer_text:
+                  type: string
+                  example: 'Yes, exactly.'
+                accepted:
+                  type: boolean
+                  example: false
+      responses:
+        '201':
+          description: Answer created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '1481e7f9-978c-4bb0-a136-97923009d723'
+                  question_id:
+                    type: string
+                    example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                  member_id:
+                    type: string
+                    example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                  answer_text:
+                    type: string
+                    example: 'Yes, exactly.'
+                  accepted:
+                    type: boolean
+                    example: false
+                  creation_time:
+                    type: string
+                    format: date-time
+                    example: 2024-10-10T06:32:54.000Z
+                  voteCount:
+                    type: integer
+                    example: 0
+                  flagCount:
+                    type: integer
+                    example: 0
+        '400':
+          description: Bad Request - Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'answer_text is required.'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error creating answer'
+                  error:
+                    type: object
+                    additionalProperties: true
+
+  /answer/question/{question_id}:
+    get:
+      tags:
+        - answer
+      summary: Get answers for a specific question
+      description: Retrieve a list of answers for a specified question by its ID.
+      operationId: getAnswersByQuestionId
+      parameters:
+        - name: question_id
+          in: path
+          required: true
+          description: The unique identifier of the question.
+          schema:
+            type: string
+            example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+      responses:
+        '200':
+          description: A list of answers for the specified question
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '1481e7f9-978c-4bb0-a136-97923009d723'
+                    question_id:
+                      type: string
+                      example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                    member_id:
+                      type: string
+                      example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                    answer_text:
+                      type: string
+                      example: 'Yes, exactly'
+                    accepted:
+                      type: boolean
+                      example: false
+                    creation_time:
+                      type: string
+                      format: date-time
+                      example: '2024-10-10T06:32:54.000Z'
+                    voteCount:
+                      type: integer
+                      example: 0
+                    flagCount:
+                      type: integer
+                      example: 0
+        '404':
+          description: No answers found for the specified question
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'No answers found for question_id: 05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving answers'
+                  error:
+                    type: object
+                    additionalProperties: true
+
+  /answer/{id}/correct:
+    put:
+      tags:
+        - answer
+      summary: Mark an answer as the correct answer
+      description: Sets the answer with the specified ID as the correct answer for the question.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the answer to mark as correct
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authentication
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiYzgxMTI1Y2ItOGJjZS00ZTViLWE3NjQtZDE2YTcxNTY5ZjJiIiwibWVtYmVyX2lkIjoiMDVjNDMzYTAtMDdjNi00M2FhLTkxNTMtYzRmMDFhNjM2MjE3IiwiaWF0IjoxNzI4NTQyNTYxLCJleHAiOjE3MjkxMTEzNjF9.pjdhq5U9Br0_ItEH-89bN2vtIENMb2O7zXyM2Th56Ss
+      responses:
+        200:
+          description: Successfully marked as the correct answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Correct answer updated
+
+  /comment/{id}:
+    get:
+      tags:
+        - comment
+      summary: 'Get comment by ID'
+      description: 'Fetch a comment using its ID.'
+      parameters:
+        - in: path
+          name: id
+          example: '0c7b0b98-3a46-4e60-8516-fb7aa3f5b424'
+          required: true
+          schema:
+            type: string
+          description: 'ID of the comment'
+      responses:
+        '200':
+          description: 'Successful response with comment data'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '0c7b0b98-3a46-4e60-8516-fb7aa3f5b424'
+                  member_id:
+                    type: string
+                    example: '02103e79-208d-4f03-a04e-3ecc76ef0108'
+                  question_id:
+                    type: string
+                    example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                  comment_text:
+                    type: string
+                    example: 'Small you city. Population great left here skin determine then.'
+                  creation_time:
+                    type: string
+                    format: date-time
+                    example: '2024-09-01T11:12:19.000Z'
+                  flagCount:
+                    type: integer
+                    example: 0
+        '404':
+          description: 'Comment not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Comment not found'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Internal server error'
+                  error:
+                    type: string
+                    example: 'Detailed error message'
+
+  /comment/question/{question_id}:
+    get:
+      summary: 'Get comments by question ID'
+      description: 'Fetch all comments associated with a specific question using the question ID.'
+      tags:
+        - comment
+      parameters:
+        - in: path
+          name: question_id
+          example: '399a6007-3641-47a8-ac9e-22bcae3a30b8'
+          required: true
+          schema:
+            type: string
+          description: 'ID of the question to get comments for'
+      responses:
+        '200':
+          description: 'Successful response with a list of comments'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '060802df-4f19-4959-8f0b-123b556e214d'
+                    member_id:
+                      type: string
+                      example: '30888fac-e79e-4a4c-8ebd-acaa3c14b8df'
+                    question_id:
+                      type: string
+                      example: '399a6007-3641-47a8-ac9e-22bcae3a30b8'
+                    comment_text:
+                      type: string
+                      example: 'Seat pattern add officer cost music assume little. Wait notice become its outside lead. Soldier tend machine budget gas.'
+                    creation_time:
+                      type: string
+                      format: date-time
+                      example: '2024-09-03T15:58:37.000Z'
+                    flagCount:
+                      type: integer
+                      example: 0
+        '404':
+          description: 'No comments found for the given question ID'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'No comments found'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Internal server error'
+                  error:
+                    type: string
+                    example: 'Detailed error message'
+
+  /comment/question/{question_id}/create:
+    post:
+      summary: 'Create a new comment for a question'
+      description: 'Allows a member to create a new comment for a specific question.'
+      tags:
+        - comment
+      parameters:
+        - in: path
+          name: question_id
+          example: '399a6007-3641-47a8-ac9e-22bcae3a30b8'
+          required: true
+          schema:
+            type: string
+          description: 'ID of the question for which the comment is being created'
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTQ0MDU3LCJleHAiOjE3MjkxMTI4NTd9.meKmGnYikCraYcyoQuKqX0Mz15jvcK67DNImDW3VY18'
+          description: 'JWT token for authorization'
+      requestBody:
+        description: 'Comment data that needs to be created'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                member_id:
+                  type: string
+                  example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                comment_text:
+                  type: string
+                  example: 'What are u doing ?'
+      responses:
+        '201':
+          description: 'Comment created successfully'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 'ff6428a4-423b-4452-8170-34a9abf3600a'
+                  member_id:
+                    type: string
+                    example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                  question_id:
+                    type: string
+                    example: '399a6007-3641-47a8-ac9e-22bcae3a30b8'
+                  comment_text:
+                    type: string
+                    example: 'What are u doing ?'
+                  creation_time:
+                    type: string
+                    format: date-time
+                    example: '2024-10-10T07:12:39.000Z'
+                  flagCount:
+                    type: integer
+                    example: 0
+        '500':
+          description: 'Error creating comment'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error creating comment'
+                  error:
+                    type: string
+                    example: 'Detailed error message'
+
+  /member/self:
+    get:
+      summary: 'Retrieve self member information'
+      description: 'Fetches details of the authenticated member based on the token provided in the request header.'
+      tags:
+        - member
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTQ1MTM2LCJleHAiOjE3MjkxMTM5MzZ9.zmK2SqgJx6dC1ByD39ekseLvWjfbOBFAE7YGMuOs1sk'
+          description: 'JWT token for authentication'
+      responses:
+        '200':
+          description: 'Member information retrieved successfully'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                  account_id:
+                    type: string
+                    example: '06b01d99-d0d5-4a34-86e4-89e13fa45e4f'
+                  name:
+                    type: string
+                    example: 'HE HE HE'
+                  email:
+                    type: string
+                    example: 'ief@igp.cls'
+                  phone:
+                    type: string
+                    example: '0223112330'
+                  reputation:
+                    type: integer
+                    example: 0
+                  role:
+                    type: string
+                    example: 'Member'
+                  biography:
+                    type: string
+                    example: '0'
+                  Account:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: 'tester'
+                  Badges:
+                    type: array
+                    items:
+                      type: object
+                    example: []
+        '401':
+          description: 'Unauthorized - Invalid or missing token'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized - Invalid or missing token'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving member information'
+
+  /member/all:
+    get:
+      summary: 'Retrieve all members'
+      description: 'Fetches the details of all members including their badges.'
+      tags:
+        - member
+      responses:
+        '200':
+          description: 'List of all members'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '02103e79-208d-4f03-a04e-3ecc76ef0108'
+                    account_id:
+                      type: string
+                      example: '7cb0af33-557c-47c5-9d4a-f5da47fefb85'
+                    name:
+                      type: string
+                      example: 'Rebecca Wood'
+                    email:
+                      type: string
+                      example: 'cford@example.net'
+                    phone:
+                      type: string
+                      example: '0621685414'
+                    reputation:
+                      type: integer
+                      example: 45
+                    role:
+                      type: string
+                      example: 'Member'
+                    biography:
+                      type: string
+                      example: ''
+                    Account:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                          example: 'rushleslie'
+                    Badges:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 'ccf554b6-8d5b-4467-b29d-96d5a914566b'
+                          name:
+                            type: string
+                            example: 'Người Đóng Góp Mới'
+                          description:
+                            type: string
+                            example: 'Đạt được ít nhất 1 điểm uy tín (reputation) và đã đăng ít nhất 1 câu hỏi hoặc 1 câu trả lời.'
+                          MemberBadge:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                example: '04dd3c04-2520-4f97-90bb-689d08a19725'
+                              member_id:
+                                type: string
+                                example: '02103e79-208d-4f03-a04e-3ecc76ef0108'
+                              badge_id:
+                                type: string
+                                example: 'ccf554b6-8d5b-4467-b29d-96d5a914566b'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving members'
+
+  /member/update:
+    put:
+      summary: Update member information
+      description: Update the details of a member by ID. Requires authentication via token in the header.
+      tags:
+        - member
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTU4MDUxLCJleHAiOjE3MjkxMjY4NTF9.ivVumIejwU776kGUXtsqW5iUtoChY-dANLg8ieB_-cI'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'Donald Ziz'
+                email:
+                  type: string
+                  example: 'ief@igp.cls'
+                phone:
+                  type: string
+                  example: '0223112330'
+                biography:
+                  type: string
+                  example: '0'
+      responses:
+        '200':
+          description: Member updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '83fa14c7-70ae-4a4b-977e-bffa18ddf36f'
+                  account_id:
+                    type: string
+                    example: '06b01d99-d0d5-4a34-86e4-89e13fa45e4f'
+                  name:
+                    type: string
+                    example: 'Donald Ziz'
+                  email:
+                    type: string
+                    example: 'ief@igp.cls'
+                  phone:
+                    type: string
+                    example: '0223112330'
+                  reputation:
+                    type: integer
+                    example: 0
+                  role:
+                    type: string
+                    example: 'Member'
+                  biography:
+                    type: string
+                    example: '0'
+                  Account:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: 'tester'
+                  Badges:
+                    type: array
+                    items:
+                      type: object
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Member not found
+        '500':
+          description: Internal server error
+
+  /member/save/{memberId}:
+    post:
+      tags:
+        - member
+      summary: Save member's question
+      description: Save a question for the member specified by ID.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer token for authorization.
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NTU4MDUxLCJleHAiOjE3MjkxMjY4NTF9.ivVumIejwU776kGUXtsqW5iUtoChY-dANLg8ieB_-cI'
+        - in: path
+          name: memberId
+          required: true
+          schema:
+            type: string
+            example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+          description: The ID of the member for whom the question is being saved.
+      responses:
+        '200':
+          description: Question saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Save question successful'
+        '400':
+          description: Invalid member ID
+        '401':
+          description: Unauthorized
+        '404':
+          description: Member not found
+        '500':
+          description: Internal server error
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
