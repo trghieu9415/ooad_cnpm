@@ -3,7 +3,6 @@ const { Badge } = require('@controllers/_index')
 
 const router = express.Router()
 
-
 router.get('/:id', Badge.getBadgeById)
 router.get('/', Badge.getBadges)
 router.post('/create', Badge.createBadge)

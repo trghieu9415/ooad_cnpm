@@ -67,7 +67,6 @@ const createMember = async (account_id, name, email, phone, biography) => {
     return createResData(500, error)
   }
 }
-
 const updateMember = async (id, name, email, phone, biography) => {
   try {
     const member = await Member.findByPk(id)
@@ -85,9 +84,15 @@ const updateMember = async (id, name, email, phone, biography) => {
       phone,
       biography
     })
-    return createResData(200, (await getMemberById(id)).data)
+
+    const updatedMember = await getMemberById(id)
+    if (!updatedMember) {
+      return createResData(500, { message: 'Error retrieving updated member' })
+    }
+
+    return createResData(200, updatedMember.data)
   } catch (error) {
-    return createResData(500, error)
+    return createResData(500, { message: 'An error occurred during the update process', error: error.message })
   }
 }
 

@@ -103,6 +103,7 @@ const getHandledAccountByInfo = async (username, password) => {
     } else {
       return createResData(401, { message: 'Invalid password' })
     }
+    return handleAccountStatus(account)
   } catch (error) {
     return createResData(500, error)
   }

@@ -4,7 +4,6 @@ const authenticateAccount = require('@middlewares/authMiddleware')
 
 const router = express.Router()
 
-
 const setTypeisQuestion = (req, res, next) => {
   req.related_type = 'Question'
   next()
