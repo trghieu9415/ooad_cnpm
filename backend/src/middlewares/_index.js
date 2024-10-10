@@ -1,8 +1,8 @@
-const authenticateAccount = require('@middlewares/authMiddleware');
-const authorize = require('@middlewares/authorizationMiddleware');
-const corsMiddleware = require('@middlewares/corsMiddleware');
-const errorHandler = require('@middlewares/errorHandlerMiddleware');
-const { validateAccountInfo, validateRegistration } = require('@middlewares/validationMiddleware');
+const authenticateAccount = require('@middlewares/authMiddleware')
+const authorize = require('@middlewares/authorizationMiddleware')
+const corsMiddleware = require('@middlewares/corsMiddleware')
+const errorHandler = require('@middlewares/errorHandlerMiddleware')
+const { validateAccountInfo, validateRegistration } = require('@middlewares/validationMiddleware')
 
 module.exports = {
   authenticateAccount,
@@ -10,5 +10,5 @@ module.exports = {
   corsMiddleware,
   errorHandler,
   validateAccountInfo,
-  validateRegistration,
-};
+  validateRegistration
+}

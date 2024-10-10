@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
     "baseUrl": "./",
     "paths": {
       "@root/*": ["src/*"],

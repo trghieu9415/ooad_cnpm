@@ -1,4 +1,4 @@
-const { Badge } = require("@entities/_index")
+const { Badge } = require('@entities/_index')
 
 const getBadges = async (req, res) => {
   try {
@@ -44,5 +44,5 @@ module.exports = {
   getBadges,
   getBadgeById,
   createBadge,
-  updateBadge,
+  updateBadge
 }

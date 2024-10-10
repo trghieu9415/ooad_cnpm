@@ -1,4 +1,4 @@
-const { Member } = require("@entities/_index")
+const { Member } = require('@entities/_index')
 
 const getCurrentMember = async (req, res) => {
   try {

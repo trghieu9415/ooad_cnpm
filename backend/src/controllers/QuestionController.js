@@ -1,4 +1,4 @@
-const { Question } = require("@entities/_index")
+const { Question } = require('@entities/_index')
 
 const getQuestionById = async (req, res) => {
   try {
@@ -61,5 +61,5 @@ module.exports = {
   addQuestionEdit,
   closeQuestion,
   getQuestionsByMember,
-  getQuestionsByTag,
+  getQuestionsByTag
 }

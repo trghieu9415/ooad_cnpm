@@ -1,4 +1,4 @@
-const { Tag } = require("@entities/_index")
+const { Tag } = require('@entities/_index')
 
 const getTags = async (req, res) => {
   try {
@@ -44,5 +44,5 @@ module.exports = {
   getTags,
   getTagById,
   createTag,
-  updateTag,
+  updateTag
 }
