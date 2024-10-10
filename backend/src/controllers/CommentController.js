@@ -31,7 +31,9 @@ const getCommentByQuestion = async (req, res) => {
 
 const createComment = async (req, res) => {
   const member_id = req.member_id
-  const { question_id, content_text } = req.body
+  const { question_id } = req.params
+  const { content_text } = req.body
+
   try {
     const result = await Comment.createComment(question_id, member_id, content_text)
     res.status(result.status).json(result.data)

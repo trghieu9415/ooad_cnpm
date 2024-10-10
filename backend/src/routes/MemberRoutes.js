@@ -21,7 +21,7 @@ const setTypeisAnswer = (req, res, next) => {
 router.get('/self', authenticateAccount, Member.getCurrentMember)
 router.get('/all', Member.getAllMember)
 router.get('/:id', Member.getMemberById)
-router.put('/update', Member.updateMember)
+router.put('/update', authenticateAccount, Member.updateMember)
 router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
 router.post('/flag/question/:question_id', authenticateAccount, setTypeisQuestion, Member.flag)
 router.post('/flag/comment/:comment_id', authenticateAccount, setTypeisComment, Member.flag)

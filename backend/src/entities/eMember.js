@@ -66,29 +66,34 @@ const createMember = async (account_id, name, email, phone, biography) => {
     return createResData(500, error)
   }
 }
-
-const updateMember = async (id, name, email, phone, reputation, role, biography) => {
+const updateMember = async (id, name, email, phone, biography) => {
   try {
     const member = await Member.findByPk(id)
     if (!member) {
       return createResData(404, { message: 'Member not found' })
     }
-    if (isEmailExisted(email)) {
+
+    if (member.email !== email && isEmailExisted(email)) {
       return createResData(409, { message: 'Email already exists' })
-    } else if (isPhoneExisted(phone)) {
+    }
+    if (member.phone !== phone && isPhoneExisted(phone)) {
       return createResData(409, { message: 'Phone already exists' })
     }
     await member.update({
       name,
       email,
       phone,
-      reputation,
-      role,
       biography
     })
-    return createResData(200, (await getMemberById(id)).data)
+
+    const updatedMember = await getMemberById(id)
+    if (!updatedMember) {
+      return createResData(500, { message: 'Error retrieving updated member' })
+    }
+
+    return createResData(200, updatedMember.data)
   } catch (error) {
-    return createResData(500, error)
+    return createResData(500, { message: 'An error occurred during the update process', error: error.message })
   }
 }
 
