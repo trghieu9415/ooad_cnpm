@@ -15,10 +15,12 @@ const MemberVote = sequelize.define(
       allowNull: false
     },
     answer_id: {
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      allowNull: true
     },
     question_id: {
-      type: DataTypes.UUID
+      type: DataTypes.UUID,
+      allowNull: true
     },
     related_type: {
       type: DataTypes.STRING,

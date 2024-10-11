@@ -26,7 +26,7 @@ router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
 router.post('/flag/question/:id', authenticateAccount, setTypeisQuestion, Member.flag)
 router.post('/flag/comment/:id', authenticateAccount, setTypeisComment, Member.flag)
 router.post('/flag/answer/:id', authenticateAccount, setTypeisAnswer, Member.flag)
-router.post('/vote/question/:id', authenticateAccount, setTypeisAnswer, Member.vote)
+router.post('/vote/question/:id', authenticateAccount, setTypeisQuestion, Member.vote)
 router.post('/vote/answer/:id', authenticateAccount, setTypeisAnswer, Member.vote)
 
 

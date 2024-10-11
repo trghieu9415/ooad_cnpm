@@ -16,15 +16,15 @@ const MemberFlag = sequelize.define(
     },
     comment_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: true
     },
     answer_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: true
     },
     question_id: {
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: true
     },
     related_type: {
       type: DataTypes.STRING,

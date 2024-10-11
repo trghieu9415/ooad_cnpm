@@ -162,6 +162,10 @@ const vote = async (id, related_id, related_type, vote_type) => {
     let whereClause = { member_id: id }
     let createData = { member_id: id, vote_type: vote_type, related_type: related_type }
 
+    if (typeof vote_type === 'undefined') {
+      return createResData(400, { error: 'Vote type required' });
+    }
+
     if (related_type === 'Question') {
       whereClause.question_id = related_id
       createData.question_id = related_id
@@ -176,11 +180,12 @@ const vote = async (id, related_id, related_type, vote_type) => {
 
     if (!existingVote) {
       await MemberVote.create(createData)
-    } else if (existingVote.dataValues.vote_type === 'Unvote') {
+    } else if (vote_type === 'Unvote') {
       await MemberVote.destroy({ where: whereClause })
     } else if (existingVote.dataValues.vote_type !== vote_type) {
       await existingVote.update({ vote_type: vote_type })
     }
+    return createResData(200, { message: "vote/unvote successfully" })
   } catch (error) {
     throw error
   }
@@ -190,6 +195,9 @@ const flag = async (id, related_id, related_type, flag_type) => {
   try {
     let whereClause = { member_id: id }
     let createData = { member_id: id, related_type: related_type }
+    if (typeof flag_type === 'undefined') {
+      return createResData(400, { error: 'Flag type required' });
+    }
 
     if (related_type === 'Question') {
       whereClause.question_id = related_id
@@ -211,6 +219,7 @@ const flag = async (id, related_id, related_type, flag_type) => {
     } else if (existingFlag && !flag_type) {
       await MemberFlag.destroy({ where: whereClause })
     }
+    return createResData(200, { message: "flag/unflag successfully" })
   } catch (error) {
     throw error
   }
