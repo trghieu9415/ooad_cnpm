@@ -1,17 +1,8 @@
-import { useState } from 'react'
-import './App.css'
-import Home from './pages/Home/Home'
-import { Route, BrowserRouter, Routes } from 'react-router-dom'
-import RouteElement from './RouteElement'
+import useRouteElement from './useRouteElement'
 
 function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <RouteElement />
-      </BrowserRouter>
-    </>
-  )
+  const routeElement = useRouteElement()
+  return <div>{routeElement}</div>
 }
 
 export default App
