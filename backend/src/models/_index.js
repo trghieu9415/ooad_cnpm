@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-const config = require('@configs/database');
+const Sequelize = require('sequelize')
+const config = require('@configs/database')
 
 // Import các mô hình từ các file riêng biệt
 const SystemAdministratorAccount = require('./SystemAdministratorAccount')
@@ -20,48 +20,61 @@ const Notification = require('./Notification')
 const Bounty = require('./Bounty')
 const QuestionEdit = require('./QuestionEdit')
 
-Account.hasOne(Member, { foreignKey: 'account_id' });
-Member.belongsTo(Account, { foreignKey: 'account_id' });
+Account.hasOne(Member, { foreignKey: 'account_id' })
+Member.belongsTo(Account, { foreignKey: 'account_id' })
 
-Member.hasMany(Question, { foreignKey: 'member_id' });
-Question.belongsTo(Member, { foreignKey: 'member_id' });
+Member.hasMany(Question, { foreignKey: 'member_id' })
+Question.belongsTo(Member, { foreignKey: 'member_id' })
 
-Question.belongsToMany(Tag, { through: QuestionTag, foreignKey: 'question_id' });
-Tag.belongsToMany(Question, { through: QuestionTag, foreignKey: 'tag_id' });
+Question.belongsToMany(Tag, { through: QuestionTag, foreignKey: 'question_id' })
+Tag.belongsToMany(Question, { through: QuestionTag, foreignKey: 'tag_id' })
 
-Question.hasMany(Answer, { foreignKey: 'question_id' });
-Answer.belongsTo(Question, { foreignKey: 'question_id' });
+Question.hasMany(Answer, { foreignKey: 'question_id' })
+Answer.belongsTo(Question, { foreignKey: 'question_id' })
 
-Answer.hasMany(MemberVote, { foreignKey: 'answer_id' });
-MemberVote.belongsTo(Answer, { foreignKey: 'answer_id' });
+Answer.hasMany(MemberVote, { foreignKey: 'answer_id' })
+MemberVote.belongsTo(Answer, { foreignKey: 'answer_id' })
 
-Question.hasMany(MemberVote, { foreignKey: 'question_id' });
-MemberVote.belongsTo(Question, { foreignKey: 'question_id' });
+Question.hasMany(MemberVote, { foreignKey: 'question_id' })
+MemberVote.belongsTo(Question, { foreignKey: 'question_id' })
 
-Member.hasMany(MemberVote, { foreignKey: 'member_id' });
-MemberVote.belongsTo(Member, { foreignKey: 'member_id' });
+Member.hasMany(MemberVote, { foreignKey: 'member_id' })
+MemberVote.belongsTo(Member, { foreignKey: 'member_id' })
 
-Member.belongsToMany(Badge, { through: MemberBadge, foreignKey: 'member_id' });
-Badge.belongsToMany(Member, { through: MemberBadge, foreignKey: 'badge_id' });
+Member.belongsToMany(Badge, { through: MemberBadge, foreignKey: 'member_id' })
+Badge.belongsToMany(Member, { through: MemberBadge, foreignKey: 'badge_id' })
 
-Question.hasMany(Photo, { foreignKey: 'question_id' });
-Photo.belongsTo(Question, { foreignKey: 'question_id' });
+Question.hasMany(Photo, { foreignKey: 'question_id' })
+Photo.belongsTo(Question, { foreignKey: 'question_id' })
 
-Answer.hasMany(Photo, { foreignKey: 'answer_id' });
-Photo.belongsTo(Answer, { foreignKey: 'answer_id' });
+Answer.hasMany(Photo, { foreignKey: 'answer_id' })
+Photo.belongsTo(Answer, { foreignKey: 'answer_id' })
 
-Member.hasMany(MemberView, { foreignKey: 'member_id' });
-MemberView.belongsTo(Member, { foreignKey: 'member_id' });
+Member.hasMany(MemberView, { foreignKey: 'member_id' })
+MemberView.belongsTo(Member, { foreignKey: 'member_id' })
 
-Question.hasMany(MemberView, { foreignKey: 'question_id' });
-MemberView.belongsTo(Question, { foreignKey: 'question_id' });
+Question.hasMany(MemberView, { foreignKey: 'question_id' })
+MemberView.belongsTo(Question, { foreignKey: 'question_id' })
 
-Member.hasMany(Notification, { foreignKey: 'member_id' });
-Notification.belongsTo(Member, { foreignKey: 'member_id' });
+Member.hasMany(Notification, { foreignKey: 'member_id' })
+Notification.belongsTo(Member, { foreignKey: 'member_id' })
 
 module.exports = {
-  SystemAdministratorAccount, Account, Member, Badge, MemberBadge,
-  Tag, Question, MemberView, QuestionTag, Answer, MemberVote,
-  Comment, MemberFlag, Photo, Notification, Bounty, QuestionEdit
-};
-  
+  SystemAdministratorAccount,
+  Account,
+  Member,
+  Badge,
+  MemberBadge,
+  Tag,
+  Question,
+  MemberView,
+  QuestionTag,
+  Answer,
+  MemberVote,
+  Comment,
+  MemberFlag,
+  Photo,
+  Notification,
+  Bounty,
+  QuestionEdit
+}

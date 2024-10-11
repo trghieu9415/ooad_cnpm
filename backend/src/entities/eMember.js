@@ -1,129 +1,147 @@
 const { Member, Badge, Account, MemberView, MemberFlag, MemberVote } = require('@models/_index')
 const createResData = require('@utils/resMaker')
+const { Op } = require('sequelize');
 
 const getAllMembers = async () => {
-	try {
-		const members = await Member.findAll({
-      include: [{
-        model: Account,
-        attributes: ['username'],
-      },{
-        model: Badge,
-        attributes: ['id', 'name', 'description'],
-        required: false,
-      }],
+  try {
+    const members = await Member.findAll({
+      include: [
+        {
+          model: Account,
+          attributes: ['username']
+        },
+        {
+          model: Badge,
+          attributes: ['id', 'name', 'description'],
+          required: false
+        }
+      ]
     })
-		return createResData(200, members)
-	} catch (error) {
-		return createResData(500, error)
-	}
+    return createResData(200, members)
+  } catch (error) {
+    return createResData(500, error)
+  }
 }
 
 const getMemberById = async (id) => {
-	try {
+  try {
     const member = await Member.findByPk(id, {
-      include: [{
-        model: Account,
-        attributes: ['username'],
-      }, {
-        model: Badge,
-        attributes: ['id', 'name', 'description'],
-        required: false,
-      }],
+      include: [
+        {
+          model: Account,
+          attributes: ['username']
+        },
+        {
+          model: Badge,
+          attributes: ['id', 'name', 'description'],
+          required: false
+        }
+      ]
     })
-		if (member) {
+    if (member) {
       return createResData(200, member)
-		} else {
-			return createResData(404, { message: 'Member not found' })
-		}
+    } else {
+      return createResData(404, { message: 'Member not found' })
+    }
   } catch (error) {
     return createResData(500, error)
   }
 }
 
 const createMember = async (account_id, name, email, phone, biography) => {
-	try {
-		if (await isEmailExisted(email)) {
-			return createResData(409, { message: 'Email already exists' })
-		} else if (await isPhoneExisted(phone)) {
-			return createResData(409, { message: 'Phone already exists' })
-		}
+  try {
+    if (await isEmailExisted(email)) {
+      return createResData(409, { message: 'Email already exists' })
+    } else if (await isPhoneExisted(phone)) {
+      return createResData(409, { message: 'Phone already exists' })
+    }
     const newMember = await Member.create({
-      account_id, name, email, phone, biography
+      account_id,
+      name,
+      email,
+      phone,
+      biography
     })
     return createResData(201, (await getMemberById(newMember.dataValues.id)).data)
   } catch (error) {
     return createResData(500, error)
   }
 }
-
-const updateMember = async (id, name, email, phone, reputation, role, biography) => {
-	try {
+const updateMember = async (id, name, email, phone, biography) => {
+  try {
     const member = await Member.findByPk(id)
     if (!member) {
       return createResData(404, { message: 'Member not found' })
     }
-    if (isEmailExisted(email)) {
+    if (await isEmailExisted(email, id)) {
       return createResData(409, { message: 'Email already exists' })
-    } else if (isPhoneExisted(phone)) {
+    } else if (await isPhoneExisted(phone, id)) {
       return createResData(409, { message: 'Phone already exists' })
     }
     await member.update({
-      name, email, phone,
-      reputation, role, biography
+      name,
+      email,
+      phone,
+      biography
     })
-    return createResData(200, (await getMemberById(id)).data)
+
+    const updatedMember = await getMemberById(id)
+    if (!updatedMember) {
+      return createResData(500, { message: 'Error retrieving updated member' })
+    }
+
+    return createResData(200, updatedMember.data)
   } catch (error) {
-    return createResData(500, error)
+    return createResData(500, { message: 'An error occurred during the update process', error: error.message })
   }
 }
 
 // CHỈ SỬ DỤNG HÀM NÀY KHI CHẮC CHẮN CÓ THỂ XÓA MÀ KHÔNG ẢNH HƯỞNG ĐẾN BẢNG KHÁC!!!
 const deleteMember = async (id) => {
-	try {
+  try {
     const deleted = await Member.destroy({ where: { id: id } })
     if (deleted) {
-			return createResData(204, 'Member deleted')
+      return createResData(204, 'Member deleted')
     } else {
-			return createResData(404, 'Member not found')
+      return createResData(404, 'Member not found')
     }
   } catch (error) {
-		return createResData(500, error)
+    return createResData(500, error)
   }
 }
 
-const isPhoneExisted = async (phone) => {
-	try {
+const isPhoneExisted = async (phone, exceptionId = null) => {
+  try {
     const counted = await Member.count({
-      where: { phone: phone },
+      where: { phone: phone, id: { [Op.ne]: exceptionId} }
     })
     return counted === 0 ? false : true
   } catch (error) {
     throw error
-  } 
+  }
 }
 
-const isEmailExisted = async (email) => {
-	try {
+const isEmailExisted = async (email, exceptionId = null) => {
+  try {
     const counted = await Member.count({
-      where: { email: email },
+      where: { email: email, id: { [Op.ne]: exceptionId} }
     })
     return counted === 0 ? false : true
   } catch (error) {
     throw error
-  } 
+  }
 }
 
 const getReputationById = async (id) => {
   try {
     const returnObj = await Member.findOne({
       where: { id: id },
-      attributes: ['reputation'],
+      attributes: ['reputation']
     })
     return returnObj.dataValues.reputation
   } catch (error) {
     throw error
-  } 
+  }
 }
 
 const setReputationById = async (id, reputation) => {
@@ -144,6 +162,10 @@ const vote = async (id, related_id, related_type, vote_type) => {
     let whereClause = { member_id: id }
     let createData = { member_id: id, vote_type: vote_type, related_type: related_type }
 
+    if (typeof vote_type === 'undefined') {
+      return createResData(400, { error: 'Vote type required' });
+    }
+
     if (related_type === 'Question') {
       whereClause.question_id = related_id
       createData.question_id = related_id
@@ -158,11 +180,12 @@ const vote = async (id, related_id, related_type, vote_type) => {
 
     if (!existingVote) {
       await MemberVote.create(createData)
-    } else if (existingVote.dataValues.vote_type === 'Unvote') {
+    } else if (vote_type === 'Unvote') {
       await MemberVote.destroy({ where: whereClause })
     } else if (existingVote.dataValues.vote_type !== vote_type) {
       await existingVote.update({ vote_type: vote_type })
     }
+    return createResData(200, { message: "vote/unvote successfully" })
   } catch (error) {
     throw error
   }
@@ -172,6 +195,9 @@ const flag = async (id, related_id, related_type, flag_type) => {
   try {
     let whereClause = { member_id: id }
     let createData = { member_id: id, related_type: related_type }
+    if (typeof flag_type === 'undefined') {
+      return createResData(400, { error: 'Flag type required' });
+    }
 
     if (related_type === 'Question') {
       whereClause.question_id = related_id
@@ -190,10 +216,10 @@ const flag = async (id, related_id, related_type, flag_type) => {
 
     if (!existingFlag && flag_type) {
       await MemberFlag.create(createData)
-    }
-    else if (existingFlag && !flag_type) {
+    } else if (existingFlag && !flag_type) {
       await MemberFlag.destroy({ where: whereClause })
     }
+    return createResData(200, { message: "flag/unflag successfully" })
   } catch (error) {
     throw error
   }
@@ -216,7 +242,6 @@ const viewQuestion = async (id, question_id) => {
   }
 }
 
-
 const saveQuestion = async (id, question_id, type) => {
   try {
     const memberView = await MemberView.findOne({
@@ -235,9 +260,8 @@ const saveQuestion = async (id, question_id, type) => {
   }
 }
 
-
-module.exports =  {
-	getAllMembers,
+module.exports = {
+  getAllMembers,
   getMemberById,
   createMember,
   updateMember,

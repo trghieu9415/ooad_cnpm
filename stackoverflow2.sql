@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2024 at 11:59 AM
+-- Generation Time: Oct 11, 2024 at 03:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -40,7 +40,7 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `username`, `password`, `status`, `registration_time`) VALUES
-('06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'tester', '$2b$10$dH0uuV3WXkAl2LaUbS9PnebW7.m7L9TzYDFEXzt4h8sW.x6u7LFdm', 'Active', '2024-09-19 17:33:40'),
+('06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'tester', '$2b$10$41be0MI7WjkdDrWcuBDecu485IvSs3X1XwlbPuNRq1FWRpnwYg.Xa', 'Active', '2024-09-19 17:33:40'),
 ('382104eb-c024-44e9-9247-b26bae4c6234', 'larsenrebecca', '$2b$10$wSbXWySdlGhH3PmyYJ2dvenbEN5I60L02F2t9YlaeZBRwrKZT4f/m', 'Active', '2024-09-10 01:50:50'),
 ('6c46c93e-6578-46fb-b14f-81806d18eddf', 'leekelly', '$2b$10$O3eRfoHJWRTXkA22m5/08eqY0V7EsBAjLdFzhUHljJurF4pEL0OZW', 'Active', '2024-09-13 06:02:11'),
 ('762b818c-1936-4ffb-ae79-aea7bdbdad69', 'anelson', '$2b$10$jYNdqnAEt2OuvXCF6Go5mulIswobA/XVxYgeoUf9.bDYPLdCWulbG', 'Active', '2024-09-11 09:53:47'),
@@ -80,6 +80,7 @@ INSERT INTO `answers` (`id`, `question_id`, `member_id`, `answer_text`, `accepte
 ('9bf43411-77f8-49b2-beca-d8a27e728fa8', '05dcb34c-3c80-4a6a-afdd-30e567d9eb07', '11de0d38-be69-4fc2-8346-8cd266ee5cad', 'History sport social mouth discover decision. Item off assume simply. His which blue gas keep democratic.', 0, '2024-09-05 05:39:21'),
 ('acbda258-1756-4dfe-9dda-c89de851e438', '05dcb34c-3c80-4a6a-afdd-30e567d9eb07', '6df50635-ea39-4f4f-b291-5278b7b9a418', 'Wall skill think research teacher. Life close step serious operation. Member parent opportunity we nature.', 0, '2024-09-05 19:11:10'),
 ('ae50613b-7035-48ea-96c2-e3152981a2cd', '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', '8828c302-0aba-4809-a2f8-1bfd1355615f', 'All court case talk method camera manage. Attorney especially maybe ahead only. Tell model include so career eat voice. Mission factor parent like.', 0, '2024-09-05 06:54:15'),
+('c213548b-239e-4a82-993c-62cd0f17c490', '05dcb34c-3c80-4a6a-afdd-30e567d9eb07', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', 'Câu trả lời này dành cho những người không có khả năng nhìn thấy máy bay bay dưới lòng đất', 0, '2024-09-22 12:11:55'),
 ('c98a13cf-e990-4db9-afbf-cbc901e55cc6', '05dcb34c-3c80-4a6a-afdd-30e567d9eb07', 'ea225474-f66e-4f45-ba88-c13b9eb447a4', 'Enter let lot any see couple school. Major event amount rather sea appear through. Student real often medical.\nPretty others compare pull. Party these watch government but last group.', 0, '2024-09-08 19:37:50'),
 ('e992ec24-99aa-458b-8a5d-f5b97135667b', '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', 'ea225474-f66e-4f45-ba88-c13b9eb447a4', 'Around trouble should until remember safe force. Since even our theory available poor worker. Believe parent actually maintain water.', 0, '2024-09-10 00:08:58');
 
@@ -184,7 +185,7 @@ INSERT INTO `members` (`id`, `account_id`, `name`, `email`, `phone`, `reputation
 ('30888fac-e79e-4a4c-8ebd-acaa3c14b8df', 'bccbbe3f-cca9-48b7-a1d3-1ccd65768f70', 'Ryan King', 'wendyanderson@example.org', '0717703680', 14, 'Member', ''),
 ('4cabe711-6362-462d-85f5-d82668fdb89a', 'd9fe1f8d-7199-43f6-9ebb-7ee9b9f74b48', 'Melissa Key', 'taylormcdaniel@example.net', '0176674974', 1000, 'Moderator', ''),
 ('6df50635-ea39-4f4f-b291-5278b7b9a418', 'e01bdd86-27e9-4b6c-a9ca-961699c20de8', 'Jeanette Castaneda', 'kdelgado@example.com', '0316904207', 5000, 'Admin', ''),
-('83fa14c7-70ae-4a4b-977e-bffa18ddf36f', '06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'HE HE HE', 'ief@igp.cls', '0223112330', 0, 'Member', '0'),
+('83fa14c7-70ae-4a4b-977e-bffa18ddf36f', '06b01d99-d0d5-4a34-86e4-89e13fa45e4f', 'Quách Thiếu Gia', 'zxc@cxz.xzc', '0399182331', 0, 'Member', 'Đây là chiến binh mạnh nhất lịch sử'),
 ('8828c302-0aba-4809-a2f8-1bfd1355615f', '382104eb-c024-44e9-9247-b26bae4c6234', 'Elizabeth Anderson', 'nallen@example.net', '0820936822', 11, 'Member', ''),
 ('aa920c7b-0c41-4a76-a0ba-e3f93a80006d', 'db802872-5044-427c-b078-2b9e67de3f92', 'Deborah Martinez', 'zsimpson@example.org', '0984170916', 86, 'Member', ''),
 ('ea225474-f66e-4f45-ba88-c13b9eb447a4', '8322d1be-1178-4cee-9285-72324a4c4aad', 'Mary Johnson', 'sextonmichael@example.net', '0489707817', 26, 'Member', '');
@@ -226,11 +227,20 @@ INSERT INTO `member_badges` (`id`, `member_id`, `badge_id`) VALUES
 CREATE TABLE `member_flags` (
   `id` varchar(36) NOT NULL,
   `member_id` varchar(36) NOT NULL,
-  `comment_id` varchar(36) NOT NULL,
+  `comment_id` varchar(36) DEFAULT NULL,
   `answer_id` varchar(36) DEFAULT NULL,
   `question_id` varchar(36) DEFAULT NULL,
   `related_type` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `member_flags`
+--
+
+INSERT INTO `member_flags` (`id`, `member_id`, `comment_id`, `answer_id`, `question_id`, `related_type`) VALUES
+('d098d0dd-123b-4a88-bf9f-7c2221714a83', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', '0c7b0b98-3a46-4e60-8516-fb7aa3f5b424', NULL, NULL, 'Comment'),
+('ef2fcdd7-f374-46e1-a112-2313b0b87028', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', NULL, '1714bf5a-8816-4627-b891-b232293bc054', NULL, 'Answer'),
+('f7fbf2ad-2e66-4150-b1a1-fb4514e31176', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', NULL, NULL, '2a224cae-cb0d-4434-92a6-901c97c85710', 'Question');
 
 -- --------------------------------------------------------
 
@@ -276,6 +286,14 @@ CREATE TABLE `member_votes` (
   `related_type` varchar(50) NOT NULL,
   `vote_type` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `member_votes`
+--
+
+INSERT INTO `member_votes` (`id`, `member_id`, `answer_id`, `question_id`, `related_type`, `vote_type`) VALUES
+('02aa691f-5701-40c1-b8c5-6c7f07970e32', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', '1714bf5a-8816-4627-b891-b232293bc054', NULL, 'Answer', 'Upvote'),
+('0e07c3e4-c9c0-4e08-b691-c7bb98a8613e', '83fa14c7-70ae-4a4b-977e-bffa18ddf36f', NULL, '61ccbefb-5a4f-4daf-b845-54371f8e9e8f', 'Question', 'Upvote');
 
 -- --------------------------------------------------------
 

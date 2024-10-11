@@ -9,91 +9,91 @@
  * - Nhận được danh hiệu
  */
 
-const { Notification } = require('@models/_index');
-const createResData = require('@utils/resMaker');
+const { Notification } = require('@models/_index')
+const createResData = require('@utils/resMaker')
 
 const getAllNotifications = async () => {
   try {
-    const notifications = await Notification.findAll();
-		return createResData(200, notifications);
+    const notifications = await Notification.findAll()
+    return createResData(200, notifications)
   } catch (error) {
-    return createResData(500, error);
+    return createResData(500, error)
   }
-};
+}
 
 const getNotificationById = async (id) => {
   try {
-    const notification = await Notification.findByPk(id);
+    const notification = await Notification.findByPk(id)
     if (notification) {
-      return createResData(200, notification);
+      return createResData(200, notification)
     } else {
-      return createResData(404, { message: 'Notification not found' });
+      return createResData(404, { message: 'Notification not found' })
     }
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}
 
 const getMemberNotification = async (member_id) => {
   try {
     const notification = await Notification.findAll({
-			where: { member_id },
-      order: [['creation_time', 'DESC']],
-		});
+      where: { member_id },
+      order: [['creation_time', 'DESC']]
+    })
     if (notification) {
-      return createResData(200, notification);
+      return createResData(200, notification)
     } else {
-      return createResData(404, { message: 'Notification not found' });
+      return createResData(404, { message: 'Notification not found' })
     }
   } catch (error) {
-    throw error;
+    throw error
   }
-};
+}
 
 const createNotification = async (member_id, content) => {
   try {
     const newNotification = await Notification.create({
-			member_id,
-      content,
-    });
-    return createResData(201, (await getNotificationById(newNotification.dataValues.id)).data);
+      member_id,
+      content
+    })
+    return createResData(201, (await getNotificationById(newNotification.dataValues.id)).data)
   } catch (error) {
-    return createResData(500, error);
-  }
-};
-
-const updateNotification = async (id, content, read) => {
-  try {
-		const notification = await Notification.findByPk(id)
-		if (!notification) {
-      return createResData(404, { message: 'Notification not found' });
-    }
-    await notification.update({
-      content,
-			read
-    });
-    return createResData(201, (await getNotificationById(id)).data);
-  } catch (error) {
-    return createResData(500, error);
-  }
-};
-
-// CHỈ SỬ DỤNG HÀM NÀY KHI CHẮC CHẮN CÓ THỂ XÓA MÀ KHÔNG ẢNH HƯỞNG ĐẾN BẢNG KHÁC!!!
-const deleteNotification = async (id) => {
-	try {
-    const deleted = await Notification.destroy({ where: { id: id } });
-    if (deleted) {
-			return createResData(204, 'Notification deleted')
-    } else {
-			return createResData(404, 'Notification not found')
-    }
-  } catch (error) {
-		return createResData(500, error)
+    return createResData(500, error)
   }
 }
 
-module.exports =  {
-	getAllNotifications,
+const updateNotification = async (id, content, read) => {
+  try {
+    const notification = await Notification.findByPk(id)
+    if (!notification) {
+      return createResData(404, { message: 'Notification not found' })
+    }
+    await notification.update({
+      content,
+      read
+    })
+    return createResData(201, (await getNotificationById(id)).data)
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
+// CHỈ SỬ DỤNG HÀM NÀY KHI CHẮC CHẮN CÓ THỂ XÓA MÀ KHÔNG ẢNH HƯỞNG ĐẾN BẢNG KHÁC!!!
+const deleteNotification = async (id) => {
+  try {
+    const deleted = await Notification.destroy({ where: { id: id } })
+    if (deleted) {
+      return createResData(204, 'Notification deleted')
+    } else {
+      return createResData(404, 'Notification not found')
+    }
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
+module.exports = {
+  getAllNotifications,
   getNotificationById,
   createNotification,
   updateNotification,

@@ -1,4 +1,4 @@
-const { Notification } = require("@entities/_index")
+const { Notification } = require('@entities/_index')
 
 const createNotification = async (req, res) => {}
 
