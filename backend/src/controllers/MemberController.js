@@ -44,7 +44,8 @@ const vote = async (req, res) => {
   try {
     const member_id = req.member_id
     const related_type = req.related_type
-    const { related_id, vote_type } = req.body
+    const related_id = req.params.id
+    const { vote_type } = req.body
     const voteResult = await Member.vote(member_id, related_id, related_type, vote_type)
     res.status(voteResult.status).json(voteResult.data)
   } catch (err) {
@@ -56,7 +57,8 @@ const flag = async (req, res) => {
   try {
     const member_id = req.member_id
     const related_type = req.related_type
-    const { related_id, flag_type } = req.body
+    const related_id = req.params.id
+    const { flag_type } = req.body
     const flagResult = await Member.flag(member_id, related_id, related_type, flag_type)
     res.status(flagResult.status).json(flagResult.data)
   } catch (err) {
@@ -67,7 +69,8 @@ const flag = async (req, res) => {
 const saveQuestion = async (req, res) => {
   try {
     const member_id = req.member_id
-    const question_id = req.params.body
+    const question_id = req.params.question_id
+    
     const result = await Member.saveQuestion(member_id, question_id, true)
     res.status(result.status).json(result.data)
   } catch (err) {
