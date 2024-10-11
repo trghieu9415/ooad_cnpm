@@ -16,8 +16,8 @@ const Login = () => {
         <h1 className='text-center text-2xl font-bold mb-6'>Login</h1>
         <form className='space-y-4'>
           <input
-            type='email'
-            placeholder='Email'
+            type='text'
+            placeholder='Username'
             required
             className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
           />
