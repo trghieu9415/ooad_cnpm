@@ -17,29 +17,29 @@ const Login = () => {
         <form className='space-y-4'>
           <input
             type='text'
-            placeholder='Username'
+            placeholder='Tên đăng nhập'
             required
             className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
           />
           <input
             type='password'
-            placeholder='Password'
+            placeholder='Mật khẩu'
             required
             className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
           />
           <button type='submit' className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition'>
-            Log in
+            Đăng nhập
           </button>
           <div className='text-center'>
             <a href='#' className='text-sm text-blue-500 hover:underline'>
-              Forgot password?
+              Quên mật khẩu?
             </a>
           </div>
           <div className='text-center'>
             <p className='text-sm'>
-              Dont have an account?
+              Bạn chưa có tài khoản?
               <Link className='text-blue-500 hover:underline' to='/register'>
-                Sign in
+                Đăng ký
               </Link>
             </p>
           </div>

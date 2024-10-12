@@ -20,19 +20,20 @@ export default function Register() {
         {/* Left section: Community description */}
         <div className='w-1/2 flex items-center justify-center'>
           <div>
-            <h1 className='text-lg font-bold mb-4'>Join the Stack Overflow community</h1>
+            <h1 className='text-lg font-bold mb-4'>Tham gia cộng đồng Stack Overflow</h1>
             <ul className='list-disc pl-5 mb-5 space-y-2 text-gray-700 text-sm'>
-              <li>Get unstuck — ask a question</li>
-              <li>Unlock new privileges like voting and commenting</li>
-              <li>Save your favorite tags, filters, and jobs</li>
-              <li>Earn reputation and badges</li>
-              <li>Collaborate and share knowledge with a private group</li>
+              <li>Thoát khỏi bế tắc — đặt câu hỏi</li>
+              <li>Mở khóa các đặc quyền mới như bình chọn và bình luận</li>
+              <li>Lưu các thẻ, bộ lọc và công việc yêu thích của bạn</li>
+              <li>Kiếm điểm danh tiếng và huy hiệu</li>
+              <li>Cộng tác và chia sẻ kiến thức với một nhóm riêng tư</li>
             </ul>
             <p className='text-xs text-gray-500'>
-              Collaborate and share knowledge with a private group for up to 50 users.
+              Cộng tác và chia sẻ kiến thức với một nhóm riêng tư lên đến 50 người dùng.
             </p>
           </div>
         </div>
+
         {/* Right section: Form */}
         <div className='max-w-7xl bg-white rounded-lg p-7 mb-3'>
           <div className='flex justify-center mb-2'>
@@ -48,12 +49,12 @@ export default function Register() {
             <div className='text-2xl'>
               <div className='mt-6'>
                 <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='display-name'>
-                  Username
+                  Tên đăng nhập
                 </label>
                 <input
                   className='border border-gray-300 rounded-lg p-2 w-full text-sm'
                   type='text'
-                  placeholder='Your username'
+                  placeholder='Tên đăng nhập'
                   {...register('username', rules.username)}
                 />
                 <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
@@ -65,46 +66,46 @@ export default function Register() {
                 <input
                   className='border border-gray-300 rounded-lg p-2 w-full text-sm'
                   type='email'
-                  placeholder='you@example.com'
+                  placeholder='Email'
                   {...register('email', rules.email)}
                 />
                 <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.email?.message}</div>
               </div>
               <div>
                 <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='phone'>
-                  Phone
+                  Số điện thoại
                 </label>
                 <input
                   className='border border-gray-300 rounded-lg p-2 w-full text-sm'
                   type='phone'
                   id='phone'
-                  placeholder='Your phone number'
+                  placeholder='Số điện thoại'
                   {...register('phone', rules.phone)}
                 />
                 <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.phone?.message}</div>
               </div>
               <div>
                 <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='password'>
-                  Password
+                  Mật khẩu
                 </label>
                 <input
                   className='border border-gray-300 rounded-lg p-2 w-full text-sm'
                   type='password'
                   id='password'
-                  placeholder='Create a password'
+                  placeholder='Mật khẩu'
                   {...register('password', rules.password)}
                 />
                 <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.password?.message}</div>
               </div>
               <div>
                 <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='password'>
-                  Confirm password
+                  Xác nhận mật khẩu
                 </label>
                 <input
                   className='border border-gray-300 rounded-lg p-2 w-full text-sm'
                   type='password'
                   id='confirm_password'
-                  placeholder='Confirm a password'
+                  placeholder='Xác nhận mật khẩu'
                   {...register('confirm_password', rules.confirm_password)}
                 />
                 <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.confirm_password?.message}</div>
@@ -113,29 +114,33 @@ export default function Register() {
                 className='w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-sm'
                 type='submit'
               >
-                Sign up
+                Đăng ký
               </button>
             </div>
           </form>
           <p className='mt-4 text-gray-700 text-xs text-center'>
-            By clicking Sign up, you agree to our
+            Bằng cách nhấn vào Đăng ký, bạn đồng ý với
             <a href='#' className='text-blue-500 hover:underline'>
-              terms of service
+              {' '}
+              điều khoản dịch vụ
             </a>
             ,
             <a href='#' className='text-blue-500 hover:underline'>
-              privacy policy
+              {' '}
+              chính sách bảo mật
             </a>
-            , and
+            , và
             <a href='#' className='text-blue-500 hover:underline'>
-              cookie policy
+              {' '}
+              chính sách cookie
             </a>
             .
           </p>
+
           <p className='mt-3 text-center text-gray-700 text-xs'>
-            Already have an account?{' '}
+            Bạn đã có tài khoản?{' '}
             <Link className='text-blue-500 hover:underline' to='/login'>
-              Sign in
+              Đăng nhập
             </Link>
           </p>
         </div>
