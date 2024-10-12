@@ -1,8 +1,11 @@
 const { Question } = require('@entities/_index')
+const logger = require('@root/utils/logger')
 
 const getQuestionById = async (req, res) => {
   try {
-    const id = req.params.question_id
+    const id = req.params.id
+
+    // console.error('ID:', id)
     const result = await Question.getQuestionById(id)
     res.status(result.status).json(result.data)
   } catch (error) {
