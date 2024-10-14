@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
-import { omit } from 'lodash'
+import { escape, omit } from 'lodash'
+import Input from '../../Components/Input'
 export default function Register() {
   const navigate = useNavigate() // Khởi tạo navigate
 
@@ -35,7 +36,7 @@ export default function Register() {
   })
 
   return (
-    <div className='bg-gray-100 flex items-center justify-center h-screen'>
+    <div className='bg-gray-100 flex items-center justify-center min-h-screen'>
       <div className='flex justify-between'>
         {/* Left section: Community description */}
         <div className='w-1/2 flex items-center justify-center'>
@@ -55,7 +56,7 @@ export default function Register() {
         </div>
 
         {/* Right section: Form */}
-        <div className='max-w-7xl bg-white rounded-lg p-7 mb-3'>
+        <div className='max-w-7xl bg-white rounded-lg px-7 py-4 mb-3 mb-0'>
           <div className='flex justify-center mb-2'>
             <svg aria-hidden='true' className='native svg-icon iconGlyphMd' width='32' height='37' viewBox='0 0 32 37'>
               <path fill='#BCBBBB' d='M26 33v-9h4v13H0V24h4v9z'></path>
@@ -67,81 +68,66 @@ export default function Register() {
           </div>
           <form className='rounded' onSubmit={onSubmit} noValidate>
             <div className='text-2xl'>
-              <div className='mt-6'>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='display-name'>
-                  Họ và tên
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='text'
-                  placeholder='Họ và tên'
-                  {...register('name', rules.name)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
-              </div>
-              <div className=''>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='display-name'>
-                  Tên đăng nhập
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='text'
-                  placeholder='Tên đăng nhập'
-                  {...register('username', rules.username)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
-              </div>
-              <div className=''>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='email'>
-                  Email
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='email'
-                  placeholder='Email'
-                  {...register('email', rules.email)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.email?.message}</div>
-              </div>
-              <div>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='phone'>
-                  Số điện thoại
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='phone'
-                  id='phone'
-                  placeholder='Số điện thoại'
-                  {...register('phone', rules.phone)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.phone?.message}</div>
-              </div>
-              <div>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='password'>
-                  Mật khẩu
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='password'
-                  id='password'
-                  placeholder='Mật khẩu'
-                  {...register('password', rules.password)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.password?.message}</div>
-              </div>
-              <div>
-                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='password'>
-                  Xác nhận mật khẩu
-                </label>
-                <input
-                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
-                  type='password'
-                  id='confirm_password'
-                  placeholder='Xác nhận mật khẩu'
-                  {...register('confirm_password', rules.confirm_password)}
-                />
-                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.confirm_password?.message}</div>
-              </div>
+              <Input
+                className='mt-3'
+                titleLabel='Họ và tên'
+                type='text'
+                placeholder='Họ và tên'
+                register={register}
+                name='name'
+                rules={rules.name}
+                errorsMessgae={errors.name?.message}
+              />
+              <Input
+                className=''
+                titleLabel='Tên đăng nhập'
+                type='text'
+                placeholder='Tên đăng nhập'
+                register={register}
+                name='username'
+                rules={rules.username}
+                errorsMessgae={errors.username?.message}
+              />
+              <Input
+                className=''
+                titleLabel='Email'
+                type='email'
+                placeholder='Email'
+                register={register}
+                name='email'
+                rules={rules.email}
+                errorsMessgae={errors.email?.message}
+              />
+              <Input
+                className=''
+                titleLabel='Số điện thoại'
+                type='text'
+                placeholder='Số điện thoại'
+                register={register}
+                name='phone'
+                rules={rules.phone}
+                errorsMessgae={errors.phone?.message}
+              />
+              <Input
+                className=''
+                titleLabel='Mật khẩu'
+                type='password'
+                placeholder='Mật khẩu'
+                register={register}
+                name='password'
+                rules={rules.password}
+                errorsMessgae={errors.password?.message}
+              />
+              <Input
+                className=''
+                titleLabel='Xác nhận mật khẩu'
+                type='password'
+                placeholder='Xác nhận mật khẩu'
+                register={register}
+                name='confirm_password'
+                rules={rules.confirm_password}
+                errorsMessgae={errors.confirm_password?.message}
+              />
               <button
                 className='w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-sm'
                 type='submit'
