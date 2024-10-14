@@ -39,6 +39,11 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+  - name: question
+    description: Operations related to Members
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
 paths:
   /account/login:
     post:
@@ -1054,6 +1059,423 @@ paths:
           description: Member not found
         '500':
           description: Internal server error
+
+  /member/flag/question/{id}:
+    post:
+      tags:
+        - member
+      summary: Flag or unflag a question
+      description: Flags or unflags a question based on the flag_type provided.
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjExMjcyLCJleHAiOjE3MjkxODAwNzJ9.G3WsQCBGu2NTLJ3zEawC-z6cohMGlJiVk1aH36fPJ44'
+          description: JWT token for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: '28ce457b-6a98-4f55-9011-578e6c679fe7'
+          description: The ID of the question to flag/unflag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flag_type:
+                  type: boolean
+                  description: Set to `true` to flag, `false` to unflag
+              required:
+                - flag_type
+            example:
+              flag_type: true
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'flag/unflag successfully'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /member/flag/comment/{id}:
+    post:
+      tags:
+        - member
+      summary: Flag or unflag a comment
+      description: Flags or unflags a comment based on the flag_type provided.
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjExMjcyLCJleHAiOjE3MjkxODAwNzJ9.G3WsQCBGu2NTLJ3zEawC-z6cohMGlJiVk1aH36fPJ44'
+          description: JWT token for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: '060802df-4f19-4959-8f0b-123b556e214d'
+          description: The ID of the comment to flag/unflag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flag_type:
+                  type: boolean
+                  description: Set to `true` to flag, `false` to unflag
+              required:
+                - flag_type
+            example:
+              flag_type: true
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'flag/unflag successfully'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /member/flag/answer/{id}:
+    post:
+      tags:
+        - member
+      summary: Flag or unflag an answer
+      description: Flags or unflags an answer based on the flag_type provided.
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyMzE5LCJleHAiOjE3MjkxODExMTl9.eZXVVA0vHMJAxyep1TFRJ4eqZdhBhox5AZNufCA2KtI'
+          description: JWT token for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: '1481e7f9-978c-4bb0-a136-97923009d723'
+          description: The ID of the answer to flag/unflag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                flag_type:
+                  type: boolean
+                  description: Set to `true` to flag, `false` to unflag
+              required:
+                - flag_type
+            example:
+              flag_type: true
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'flag/unflag successfully'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /member/vote/question/{id}:
+    post:
+      tags:
+        - member
+      summary: Vote or unvote a question
+      description: Cast a vote (upvote/downvote) or remove a vote for a question.
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyNTAwLCJleHAiOjE3MjkxODEzMDB9.qNaBPrs6PyqxUE-HFk-q4BcT9rD0MmaSGPdOQIh1kEk
+          description: JWT token for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: '28ce457b-6a98-4f55-9011-578e6c679fe7'
+          description: The ID of the question to vote/unvote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vote_type:
+                  type: string
+                  description: The type of vote, either 'Upvote' or 'Downvote' or 'Unvote'
+                  enum: [Upvote, Downvote, Unvote]
+              required:
+                - vote_type
+            example:
+              vote_type: 'Upvote'
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'vote/unvote successfully'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /member/vote/answer/{id}:
+    post:
+      tags:
+        - member
+      summary: Vote or unvote an answer
+      description: Cast a vote (upvote/downvote) or remove a vote for an answer.
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyNTAwLCJleHAiOjE3MjkxODEzMDB9.qNaBPrs6PyqxUE-HFk-q4BcT9rD0MmaSGPdOQIh1kEk
+          description: JWT token for authentication
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: 9bf43411-77f8-49b2-beca-d8a27e728fa8
+          description: The ID of the answer to vote/unvote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vote_type:
+                  type: string
+                  description: The type of vote, either 'Upvote' or 'Downvote' or 'Unvote'
+                  enum: [Upvote, Downvote, Unvote]
+              required:
+                - vote_type
+            example:
+              vote_type: 'Upvote'
+      responses:
+        '200':
+          description: Success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'vote/unvote successfully'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /question/:
+    get:
+      tags:
+        - question
+      summary: Get a list of questions
+      description: Retrieve all questions along with their associated tags, view count, vote count, and flag count.
+      responses:
+        '200':
+          description: A list of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                    member_id:
+                      type: string
+                      example: '05c433a0-07c6-43aa-9153-c4f01a636217'
+                    title:
+                      type: string
+                      example: 'Education right news dream base can anything.'
+                    question_text:
+                      type: string
+                      example: "Effort fight power turn. Age others paper yourself option trade. Painting window attack.\nTeacher particularly quite choose open. Group each stock wide whether employee. Your economy every whether."
+                    creation_time:
+                      type: string
+                      format: date-time
+                      example: '2024-09-09T23:38:03.000Z'
+                    update_time:
+                      type: string
+                      format: date-time
+                      nullable: true
+                      example: null
+                    status:
+                      type: string
+                      example: 'Open'
+                    closing_remark:
+                      type: string
+                      nullable: true
+                      example: null
+                    Tags:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 'a9d4f188-a1a6-41b6-8e75-76bfb8bbca61'
+                          name:
+                            type: string
+                            example: 'Python'
+                          description:
+                            type: string
+                            example: 'Thảo luận về ngôn ngữ Python, bao gồm lập trình cơ bản, web, khoa học dữ liệu, và AI.'
+                          QuestionTag:
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                                example: '23fdb39b-fb6d-49eb-9341-3b89b598517d'
+                              question_id:
+                                type: string
+                                example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                              tag_id:
+                                type: string
+                                example: 'a9d4f188-a1a6-41b6-8e75-76bfb8bbca61'
+                    viewCount:
+                      type: integer
+                      example: 2
+                    voteCount:
+                      type: integer
+                      example: 0
+                    flagCount:
+                      type: integer
+                      example: 0
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /question/{id}:
+    get:
+      tags:
+        - question
+      summary: Get a specific question by its ID
+      description: Retrieve a question by its ID along with its associated tags, view count, vote count, and flag count.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the question
+          schema:
+            type: string
+            example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+      responses:
+        '200':
+          description: The requested question
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                  member_id:
+                    type: string
+                    example: '05c433a0-07c6-43aa-9153-c4f01a636217'
+                  title:
+                    type: string
+                    example: 'Education right news dream base can anything.'
+                  question_text:
+                    type: string
+                    example: "Effort fight power turn. Age others paper yourself option trade. Painting window attack.\nTeacher particularly quite choose open. Group each stock wide whether employee. Your economy every whether."
+                  creation_time:
+                    type: string
+                    format: date-time
+                    example: '2024-09-09T23:38:03.000Z'
+                  update_time:
+                    type: string
+                    format: date-time
+                    nullable: true
+                    example: null
+                  status:
+                    type: string
+                    example: 'Open'
+                  closing_remark:
+                    type: string
+                    nullable: true
+                    example: null
+                  Tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 'a9d4f188-a1a6-41b6-8e75-76bfb8bbca61'
+                        name:
+                          type: string
+                          example: 'Python'
+                        description:
+                          type: string
+                          example: 'Thảo luận về ngôn ngữ Python, bao gồm lập trình cơ bản, web, khoa học dữ liệu, và AI.'
+                        QuestionTag:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: '23fdb39b-fb6d-49eb-9341-3b89b598517d'
+                            question_id:
+                              type: string
+                              example: '05dcb34c-3c80-4a6a-afdd-30e567d9eb07'
+                            tag_id:
+                              type: string
+                              example: 'a9d4f188-a1a6-41b6-8e75-76bfb8bbca61'
+                  viewCount:
+                    type: integer
+                    example: 2
+                  voteCount:
+                    type: integer
+                    example: 0
+                  flagCount:
+                    type: integer
+                    example: 0
+        '401':
+          description: Unauthorized - Invalid or missing token
 
 components:
   securitySchemes:
