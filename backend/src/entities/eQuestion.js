@@ -112,7 +112,7 @@ const getQuestionByTag = async (tag_id) => {
         model: Tag,
         where: { id: tag_id },
         attributes: ['id', 'name', 'description'],
-        required: false
+        required: true
       }
     })
     const questionsWithTags = await Promise.all(
@@ -137,7 +137,7 @@ const getQuestionByMember = async (member_id) => {
       include: {
         model: Tag,
         attributes: ['id', 'name', 'description'],
-        required: false
+        required: true
       }
     })
     const questionsWithTags = await Promise.all(

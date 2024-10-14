@@ -162,6 +162,7 @@ const vote = async (id, related_id, related_type, vote_type) => {
     let whereClause = { member_id: id }
     let createData = { member_id: id, vote_type: vote_type, related_type: related_type }
 
+    //Yêu cầu vote_type phải thuộc 1 trong 3 loại Upvote/Downvote/Unvote
     if (typeof vote_type === 'undefined') {
       return createResData(400, { error: 'Vote type required' });
     }
@@ -195,6 +196,8 @@ const flag = async (id, related_id, related_type, flag_type) => {
   try {
     let whereClause = { member_id: id }
     let createData = { member_id: id, related_type: related_type }
+
+    //Yêu cầu flag_type là boolean
     if (typeof flag_type === 'undefined') {
       return createResData(400, { error: 'Flag type required' });
     }
