@@ -48,6 +48,7 @@ export default [
           jsxSingleQuote: true
         }
       ],
+      'react/prop-types': 'off',
       'no-unused-vars': 'off', // Vô hiệu hóa no-unused-vars
       'unused-imports/no-unused-imports': 'warn', // Cảnh báo import không sử dụng
       'unused-imports/no-unused-vars': [
