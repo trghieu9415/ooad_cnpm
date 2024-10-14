@@ -33,9 +33,9 @@ const Login = () => {
     })
   })
   return (
-    <div className='bg-gray-100 flex items-center justify-center h-screen'>
-      <div className='w-full max-w-xs bg-white p-6 rounded-lg shadow-lg'>
-        <div className='flex justify-center mb-2'>
+    <div className='flex h-screen items-center justify-center bg-gray-100'>
+      <div className='w-full max-w-xs rounded-lg bg-white p-6 shadow-lg'>
+        <div className='mb-2 flex justify-center'>
           <svg aria-hidden='true' className='native svg-icon iconGlyphMd' width='32' height='37' viewBox='0 0 32 37'>
             <path fill='#BCBBBB' d='M26 33v-9h4v13H0V24h4v9z'></path>
             <path
@@ -44,13 +44,13 @@ const Login = () => {
             ></path>
           </svg>
         </div>
-        <h1 className='text-center text-2xl font-bold mb-6'>Login</h1>
+        <h1 className='mb-6 text-center text-2xl font-bold'>Login</h1>
         <form className='rounded' onSubmit={onSubmit} noValidate>
           <div>
             <input
               type='text'
               placeholder='Tên đăng nhập'
-              className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
+              className='w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none'
               {...register('username', rules.username)}
             />
             <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
@@ -59,23 +59,23 @@ const Login = () => {
             <input
               type='password'
               placeholder='Mật khẩu'
-              className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
+              className='w-full rounded border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none'
               {...register('password', rules.password)}
             />
             <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.password?.message}</div>
           </div>
           <button
             type='submit'
-            className='mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition'
+            className='mt-2 w-full rounded bg-blue-500 py-2 text-white transition hover:bg-blue-600'
           >
             Đăng nhập
           </button>
-          <div className='text-center mt-2'>
+          <div className='mt-2 text-center'>
             <a href='#' className='text-sm text-blue-500 hover:underline'>
               Quên mật khẩu?
             </a>
           </div>
-          <div className='text-center mt-2'>
+          <div className='mt-2 text-center'>
             <p className='text-sm'>
               Bạn chưa có tài khoản?
               <Link className='text-blue-500 hover:underline' to='/register'>

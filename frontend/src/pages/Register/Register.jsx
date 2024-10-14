@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
-import { escape, omit } from 'lodash'
+import { omit } from 'lodash'
 import Input from '../../Components/Input'
 export default function Register() {
   const navigate = useNavigate() // Khởi tạo navigate
@@ -36,13 +36,13 @@ export default function Register() {
   })
 
   return (
-    <div className='bg-gray-100 flex items-center justify-center min-h-screen'>
+    <div className='flex min-h-screen items-center justify-center bg-gray-100'>
       <div className='flex justify-between'>
         {/* Left section: Community description */}
-        <div className='w-1/2 flex items-center justify-center'>
+        <div className='flex w-1/2 items-center justify-center'>
           <div>
-            <h1 className='text-lg font-bold mb-4'>Tham gia cộng đồng Stack Overflow</h1>
-            <ul className='list-disc pl-5 mb-5 space-y-2 text-gray-700 text-sm'>
+            <h1 className='mb-4 text-lg font-bold'>Tham gia cộng đồng Stack Overflow</h1>
+            <ul className='mb-5 list-disc space-y-2 pl-5 text-sm text-gray-700'>
               <li>Thoát khỏi bế tắc — đặt câu hỏi</li>
               <li>Mở khóa các đặc quyền mới như bình chọn và bình luận</li>
               <li>Lưu các thẻ, bộ lọc và công việc yêu thích của bạn</li>
@@ -56,8 +56,8 @@ export default function Register() {
         </div>
 
         {/* Right section: Form */}
-        <div className='max-w-7xl bg-white rounded-lg px-7 py-4 mb-3 mb-0'>
-          <div className='flex justify-center mb-2'>
+        <div className='mb-0 max-w-7xl rounded-lg bg-white px-7 py-4'>
+          <div className='mb-2 flex justify-center'>
             <svg aria-hidden='true' className='native svg-icon iconGlyphMd' width='32' height='37' viewBox='0 0 32 37'>
               <path fill='#BCBBBB' d='M26 33v-9h4v13H0V24h4v9z'></path>
               <path
@@ -129,14 +129,14 @@ export default function Register() {
                 errorsMessgae={errors.confirm_password?.message}
               />
               <button
-                className='w-full bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition duration-300 text-sm'
+                className='w-full rounded-lg bg-blue-500 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-blue-600'
                 type='submit'
               >
                 Đăng ký
               </button>
             </div>
           </form>
-          <p className='mt-4 text-gray-700 text-xs text-center'>
+          <p className='mt-4 text-center text-xs text-gray-700'>
             Bằng cách nhấn vào Đăng ký, bạn đồng ý với
             <a href='#' className='text-blue-500 hover:underline'>
               {' '}
@@ -155,7 +155,7 @@ export default function Register() {
             .
           </p>
 
-          <p className='mt-3 text-center text-gray-700 text-xs'>
+          <p className='mt-3 text-center text-xs text-gray-700'>
             Bạn đã có tài khoản?{' '}
             <Link className='text-blue-500 hover:underline' to='/login'>
               Đăng nhập
