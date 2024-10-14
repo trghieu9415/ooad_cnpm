@@ -1,18 +1,38 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
-
+import { omit } from 'lodash'
 export default function Register() {
+  const navigate = useNavigate() // Khởi tạo navigate
+
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors }
   } = useForm({})
-
   const rules = getRules(getValues)
-  const onSubmit = handleSubmit((data) => {})
-  console.log(errors)
+
+  const registerAccountMutation = useMutation({
+    mutationFn: (body) => registerAccount(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    const body = omit(data, ['confirm_password'])
+
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        console.log(data)
+        alert('Đăng ký thành công. Vui lòng đăng nhập.')
+        navigate('/login')
+      },
+      onError: (error) => {
+        console.error(error)
+      }
+    })
+  })
 
   return (
     <div className='bg-gray-100 flex items-center justify-center h-screen'>
@@ -48,6 +68,18 @@ export default function Register() {
           <form className='rounded' onSubmit={onSubmit} noValidate>
             <div className='text-2xl'>
               <div className='mt-6'>
+                <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='display-name'>
+                  Họ và tên
+                </label>
+                <input
+                  className='border border-gray-300 rounded-lg p-2 w-full text-sm'
+                  type='text'
+                  placeholder='Họ và tên'
+                  {...register('name', rules.name)}
+                />
+                <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
+              </div>
+              <div className=''>
                 <label className='block text-gray-700 font-semibold mb-1 text-sm' htmlFor='display-name'>
                   Tên đăng nhập
                 </label>

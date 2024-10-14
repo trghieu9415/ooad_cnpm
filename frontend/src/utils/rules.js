@@ -1,4 +1,10 @@
 export const getRules = (getValues) => ({
+  name: {
+    required: {
+      value: true,
+      message: 'Vui lòng nhập họ và tên'
+    }
+  },
   username: {
     required: {
       value: true,
@@ -56,5 +62,20 @@ export const getRules = (getValues) => ({
       typeof getValues === 'function'
         ? (value) => value === getValues('password') || 'Nhập lại password không khớp'
         : undefined
+  }
+})
+
+export const getRulesLogin = () => ({
+  username: {
+    required: {
+      value: true,
+      message: 'Vui lòng nhập username'
+    }
+  },
+  password: {
+    required: {
+      value: true,
+      message: 'Vui lòng nhập mật khẩu'
+    }
   }
 })

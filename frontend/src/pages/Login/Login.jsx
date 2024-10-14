@@ -1,6 +1,37 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { getRulesLogin } from '../../utils/rules'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { loginAccount } from '../../apis/auth.api'
 
 const Login = () => {
+  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({})
+  const rules = getRulesLogin()
+
+  const registerAccountMutation = useMutation({
+    mutationFn: (body) => loginAccount(body)
+  })
+
+  const onSubmit = handleSubmit((data) => {
+    const body = data
+    console.log(data)
+
+    registerAccountMutation.mutate(body, {
+      onSuccess: (data) => {
+        console.log(data)
+        alert('Đăng nhập thành công !')
+        navigate('/')
+      },
+      onError: (error) => {
+        console.error(error)
+      }
+    })
+  })
   return (
     <div className='bg-gray-100 flex items-center justify-center h-screen'>
       <div className='w-full max-w-xs bg-white p-6 rounded-lg shadow-lg'>
@@ -14,31 +45,41 @@ const Login = () => {
           </svg>
         </div>
         <h1 className='text-center text-2xl font-bold mb-6'>Login</h1>
-        <form className='space-y-4'>
-          <input
-            type='text'
-            placeholder='Tên đăng nhập'
-            required
-            className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
-          />
-          <input
-            type='password'
-            placeholder='Mật khẩu'
-            required
-            className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
-          />
-          <button type='submit' className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition'>
+        <form className='rounded' onSubmit={onSubmit} noValidate>
+          <div>
+            <input
+              type='text'
+              placeholder='Tên đăng nhập'
+              className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
+              {...register('username', rules.username)}
+            />
+            <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.username?.message}</div>
+          </div>
+          <div className='mt-2'>
+            <input
+              type='password'
+              placeholder='Mật khẩu'
+              className='w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500'
+              {...register('password', rules.password)}
+            />
+            <div className='mt-1 min-h-[1.25rem] text-sm text-red-500'>{errors.password?.message}</div>
+          </div>
+          <button
+            type='submit'
+            className='mt-2 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition'
+          >
             Đăng nhập
           </button>
-          <div className='text-center'>
+          <div className='text-center mt-2'>
             <a href='#' className='text-sm text-blue-500 hover:underline'>
               Quên mật khẩu?
             </a>
           </div>
-          <div className='text-center'>
+          <div className='text-center mt-2'>
             <p className='text-sm'>
               Bạn chưa có tài khoản?
               <Link className='text-blue-500 hover:underline' to='/register'>
+                {' '}
                 Đăng ký
               </Link>
             </p>
