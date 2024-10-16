@@ -24,7 +24,11 @@ const Login = () => {
 
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        console.log(data)
+        const token = data.headers.authorization.split(' ')[1]
+        // console.log(token)
+        if (token) {
+          localStorage.setItem('UserToken', token)
+        }
         alert('Đăng nhập thành công !')
         navigate('/')
       },
@@ -59,7 +63,7 @@ const Login = () => {
             ></path>
           </svg>
         </div>
-        <h1 className='mb-6 text-center text-2xl font-bold'>Login</h1>
+        <h1 className='mb-6 text-center text-2xl font-bold'>Xin chào</h1>
         <form className='rounded' onSubmit={onSubmit} noValidate>
           <div>
             <input
