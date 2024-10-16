@@ -3,13 +3,15 @@ import { getRulesLogin } from '../../utils/rules'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '../../apis/auth.api'
+import { isAxiosUnauthorizedError } from '../../utils/util'
 
 const Login = () => {
   const navigate = useNavigate()
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    setError
   } = useForm({})
   const rules = getRulesLogin()
 
@@ -19,7 +21,6 @@ const Login = () => {
 
   const onSubmit = handleSubmit((data) => {
     const body = data
-    console.log(data)
 
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
@@ -28,7 +29,21 @@ const Login = () => {
         navigate('/')
       },
       onError: (error) => {
-        console.error(error)
+        if (isAxiosUnauthorizedError(error)) {
+          const formError = error.response?.data
+          if (formError?.username) {
+            setError('username', {
+              message: formError.username,
+              type: 'error'
+            })
+          }
+          if (formError?.password) {
+            setError('password', {
+              message: formError.password,
+              type: 'error'
+            })
+          }
+        }
       }
     })
   })

@@ -1,4 +1,7 @@
 const { Account, Member } = require('@entities/_index')
+const { isUsernameExisted } = require('@root/entities/eAccount')
+const { isEmailExisted, isPhoneExisted } = require('@root/entities/eMember')
+const createResData = require('@root/utils/resMaker')
 const generateToken = require('@utils/tokenGenerator')
 
 const login = async (req, res) => {
@@ -19,8 +22,19 @@ const login = async (req, res) => {
 
 const register = async (req, res) => {
   const { username, password, name, email, phone, biography } = req.body
-  try { 
+  try {
+    if (await isUsernameExisted(username)) {
+      return res.status(409).json({ username: 'Tên đăng nhập đã tồn tại' })
+    }
+    if (await isEmailExisted(email)) {
+      return res.status(409).json({ email: 'Email đã tồn tại' })
+      // return createResData(409, { message: 'Email already exists' })
+    } else if (await isPhoneExisted(phone)) {
+      return res.status(409).json({ phone: 'Số điện thoại đã tồn tại' })
+      // return createResData(409, { message: 'Phone already exists' })
+    }
     const accountResult = await Account.createAccount(username, password)
+
     if (!accountResult.success) {
       return res.status(accountResult.status).json(accountResult.data)
     }

@@ -26,9 +26,9 @@ const getAccountById = async (id) => {
 
 const createAccount = async (username, password) => {
   try {
-    if (await isUsernameExisted(username)) {
-      return createResData(409, { message: 'Username already exists' })
-    }
+    // if (await isUsernameExisted(username)) {
+    //   return createResData(409, { message: 'Username already exists' })
+    // }
     const hashedPassword = await hashPassword(password)
     const account = await Account.create({
       username,
@@ -97,13 +97,12 @@ const getHandledAccountByInfo = async (username, password) => {
       ]
     })
     if (!account) {
-      return createResData(401, { message: 'Invalid username' })
+      return createResData(401, { username: 'Tên đăng nhập không chính xác!' })
     } else if (await comparePassword(password, account.dataValues.password)) {
       return handleAccountStatus(account)
     } else {
-      return createResData(401, { message: 'Invalid password' })
+      return createResData(401, { password: 'Mật khẩu không chính xác!' })
     }
-    return handleAccountStatus(account)
   } catch (error) {
     return createResData(500, error)
   }
@@ -139,5 +138,6 @@ module.exports = {
   createAccount,
   changePassword,
   changeState,
-  deleteAccount
+  deleteAccount,
+  isUsernameExisted
 }

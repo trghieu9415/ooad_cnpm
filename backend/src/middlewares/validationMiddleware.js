@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator')
 const validateAccountInfo = [
   body('username')
     .isLength({ min: 8 })
+    .isLength({ max: 25 })
     .withMessage('Username must be at least 8 characters long')
     .matches(/^[a-z][a-z0-9]*$/)
     .withMessage('Username must start with a letter and only contain lowercase letters and numbers'),
