@@ -5,6 +5,7 @@ import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
 import { omit } from 'lodash'
 import Input from '../../Components/Input'
+import { isAxiosErrorConflictError } from '../../utils/util'
 export default function Register() {
   const navigate = useNavigate() // Khởi tạo navigate
 
@@ -12,6 +13,7 @@ export default function Register() {
     register,
     handleSubmit,
     getValues,
+    setError,
     formState: { errors }
   } = useForm({})
   const rules = getRules(getValues)
@@ -30,7 +32,31 @@ export default function Register() {
         navigate('/login')
       },
       onError: (error) => {
-        console.error(error)
+        // console.log(error)
+
+        if (isAxiosErrorConflictError(error)) {
+          // console.log('Conflict errors: ', error.response.data)
+          const formError = error.response?.data
+          console.log(formError)
+          if (formError?.username) {
+            setError('username', {
+              message: formError.username,
+              type: 'error'
+            })
+          }
+          if (formError?.email) {
+            setError('email', {
+              message: formError.email,
+              type: 'error'
+            })
+          }
+          if (formError?.phone) {
+            setError('phone', {
+              message: formError.phone,
+              type: 'error'
+            })
+          }
+        }
       }
     })
   })

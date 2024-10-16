@@ -1,6 +1,6 @@
 const { Member, Badge, Account, MemberView, MemberFlag, MemberVote } = require('@models/_index')
 const createResData = require('@utils/resMaker')
-const { Op } = require('sequelize');
+const { Op } = require('sequelize')
 
 const getAllMembers = async () => {
   try {
@@ -50,11 +50,11 @@ const getMemberById = async (id) => {
 
 const createMember = async (account_id, name, email, phone, biography) => {
   try {
-    if (await isEmailExisted(email)) {
-      return createResData(409, { message: 'Email already exists' })
-    } else if (await isPhoneExisted(phone)) {
-      return createResData(409, { message: 'Phone already exists' })
-    }
+    // if (await isEmailExisted(email)) {
+    //   return createResData(409, { message: 'Email already exists' })
+    // } else if (await isPhoneExisted(phone)) {
+    //   return createResData(409, { message: 'Phone already exists' })
+    // }
     const newMember = await Member.create({
       account_id,
       name,
@@ -113,7 +113,7 @@ const deleteMember = async (id) => {
 const isPhoneExisted = async (phone, exceptionId = null) => {
   try {
     const counted = await Member.count({
-      where: { phone: phone, id: { [Op.ne]: exceptionId} }
+      where: { phone: phone, id: { [Op.ne]: exceptionId } }
     })
     return counted === 0 ? false : true
   } catch (error) {
@@ -124,7 +124,7 @@ const isPhoneExisted = async (phone, exceptionId = null) => {
 const isEmailExisted = async (email, exceptionId = null) => {
   try {
     const counted = await Member.count({
-      where: { email: email, id: { [Op.ne]: exceptionId} }
+      where: { email: email, id: { [Op.ne]: exceptionId } }
     })
     return counted === 0 ? false : true
   } catch (error) {
@@ -164,7 +164,7 @@ const vote = async (id, related_id, related_type, vote_type) => {
 
     //Yêu cầu vote_type phải thuộc 1 trong 3 loại Upvote/Downvote/Unvote
     if (typeof vote_type === 'undefined') {
-      return createResData(400, { error: 'Vote type required' });
+      return createResData(400, { error: 'Vote type required' })
     }
 
     if (related_type === 'Question') {
@@ -186,7 +186,7 @@ const vote = async (id, related_id, related_type, vote_type) => {
     } else if (existingVote.dataValues.vote_type !== vote_type) {
       await existingVote.update({ vote_type: vote_type })
     }
-    return createResData(200, { message: "vote/unvote successfully" })
+    return createResData(200, { message: 'vote/unvote successfully' })
   } catch (error) {
     throw error
   }
@@ -199,7 +199,7 @@ const flag = async (id, related_id, related_type, flag_type) => {
 
     //Yêu cầu flag_type là boolean
     if (typeof flag_type === 'undefined') {
-      return createResData(400, { error: 'Flag type required' });
+      return createResData(400, { error: 'Flag type required' })
     }
 
     if (related_type === 'Question') {
@@ -222,7 +222,7 @@ const flag = async (id, related_id, related_type, flag_type) => {
     } else if (existingFlag && !flag_type) {
       await MemberFlag.destroy({ where: whereClause })
     }
-    return createResData(200, { message: "flag/unflag successfully" })
+    return createResData(200, { message: 'flag/unflag successfully' })
   } catch (error) {
     throw error
   }
@@ -274,5 +274,7 @@ module.exports = {
   vote,
   flag,
   viewQuestion,
-  saveQuestion
+  saveQuestion,
+  isEmailExisted,
+  isPhoneExisted
 }

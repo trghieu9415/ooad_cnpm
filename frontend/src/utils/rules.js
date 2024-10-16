@@ -13,6 +13,10 @@ export const getRules = (getValues) => ({
     minLength: {
       value: 8,
       message: 'Tên đăng nhập phải có ít nhất 8 ký tự'
+    },
+    maxLength: {
+      value: 25,
+      message: 'Tên đăng nhập tối đa 25 ký tự'
     }
   },
   email: {
@@ -41,12 +45,8 @@ export const getRules = (getValues) => ({
       message: 'Vui lòng nhập mật khẩu'
     },
     minLength: {
-      value: 6,
+      value: 8,
       message: 'Mật khẩu phải có ít nhất 8 ký tự'
-    },
-    maxLength: {
-      value: 20,
-      message: 'Mật khẩu không quá 20 ký tự'
     }
   },
   confirm_password: {
@@ -55,12 +55,8 @@ export const getRules = (getValues) => ({
       message: 'Vui lòng nhập lại mật khẩu'
     },
     minLength: {
-      value: 6,
+      value: 8,
       message: 'Mật khẩu phải có ít nhất 8 ký tự'
-    },
-    maxLength: {
-      value: 20,
-      message: 'Mật khẩu không quá 20 ký tự'
     },
     validate:
       typeof getValues === 'function'
@@ -73,7 +69,7 @@ export const getRulesLogin = () => ({
   username: {
     required: {
       value: true,
-      message: 'Vui lòng nhập username'
+      message: 'Vui lòng nhập tên đăng nhập'
     }
   },
   password: {
