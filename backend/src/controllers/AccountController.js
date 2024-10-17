@@ -13,6 +13,7 @@ const login = async (req, res) => {
       const member_id = result.data.Member.id
       const token = generateToken(account_id, member_id)
       res.setHeader('Authorization', `Bearer ${token}`)
+      res.setHeader('Access-Control-Expose-Headers', 'Authorization')
     }
     res.status(result.status).json(result.data)
   } catch (err) {

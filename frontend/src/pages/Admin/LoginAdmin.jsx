@@ -2,10 +2,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getRulesLogin } from '../../utils/rules'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { loginAccount } from '../../apis/auth.api'
+import { loginAccountAdmin } from '../../apis/auth.api'
 import { isAxiosUnauthorizedError } from '../../utils/util'
 
-const Login = () => {
+const LoginAdmin = () => {
   const navigate = useNavigate()
   const {
     register,
@@ -16,7 +16,7 @@ const Login = () => {
   const rules = getRulesLogin()
 
   const registerAccountMutation = useMutation({
-    mutationFn: (body) => loginAccount(body)
+    mutationFn: (body) => loginAccountAdmin(body)
   })
 
   const onSubmit = handleSubmit((data) => {
@@ -24,13 +24,11 @@ const Login = () => {
 
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        const token = data.headers.authorization.split(' ')[1]
-        // console.log(token)
-        if (token) {
-          localStorage.setItem('UserToken', token)
-        }
-        alert('Đăng nhập thành công !')
-        navigate('/')
+        const res = data.data.data
+        const tokenAdmin = res.token.split(' ')[1]
+        localStorage.setItem('token_admin', tokenAdmin)
+        alert(data.data.message)
+        navigate('/admin')
       },
       onError: (error) => {
         if (isAxiosUnauthorizedError(error)) {
@@ -63,7 +61,7 @@ const Login = () => {
             ></path>
           </svg>
         </div>
-        <h1 className='mb-6 text-center text-2xl font-bold'>Xin chào</h1>
+        <h1 className='mb-6 text-center text-2xl font-bold'>Xin chào Admin</h1>
         <form className='rounded' onSubmit={onSubmit} noValidate>
           <div>
             <input
@@ -89,24 +87,10 @@ const Login = () => {
           >
             Đăng nhập
           </button>
-          <div className='mt-2 text-center'>
-            <a href='#' className='text-sm text-blue-500 hover:underline'>
-              Quên mật khẩu?
-            </a>
-          </div>
-          <div className='mt-2 text-center'>
-            <p className='text-sm'>
-              Bạn chưa có tài khoản?
-              <Link className='text-blue-500 hover:underline' to='/register'>
-                {' '}
-                Đăng ký
-              </Link>
-            </p>
-          </div>
         </form>
       </div>
     </div>
   )
 }
 
-export default Login
+export default LoginAdmin
