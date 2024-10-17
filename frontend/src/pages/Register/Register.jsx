@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
 import { omit } from 'lodash'
-import Input from '../../Components/Input'
+import Input from '../../Components/InputLogin'
 import { isAxiosErrorConflictError } from '../../utils/util'
 export default function Register() {
   const navigate = useNavigate() // Khởi tạo navigate
