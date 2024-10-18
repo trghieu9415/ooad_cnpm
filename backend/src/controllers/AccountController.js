@@ -2,7 +2,7 @@ const { Account, Member } = require('@entities/_index')
 const { isUsernameExisted } = require('@root/entities/eAccount')
 const { isEmailExisted, isPhoneExisted } = require('@root/entities/eMember')
 const createResData = require('@root/utils/resMaker')
-const generateToken = require('@utils/tokenGenerator')
+const { generateToken } = require('@utils/tokenGenerator')
 
 const login = async (req, res) => {
   const { username, password } = req.body
