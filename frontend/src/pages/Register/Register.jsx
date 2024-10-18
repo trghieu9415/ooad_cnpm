@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from '../../apis/auth.api'
 import { getRules } from '../../utils/rules'
 import { omit } from 'lodash'
-import Input from '../../Components/InputLogin'
+import InputLogin from '../../Components/InputLogin'
 import { isAxiosErrorConflictError } from '../../utils/util'
 export default function Register() {
   const navigate = useNavigate() // Khởi tạo navigate
@@ -94,7 +94,7 @@ export default function Register() {
           </div>
           <form className='rounded' onSubmit={onSubmit} noValidate>
             <div className='text-2xl'>
-              <Input
+              <InputLogin
                 className='mt-3'
                 titleLabel='Họ và tên'
                 type='text'
@@ -104,7 +104,7 @@ export default function Register() {
                 rules={rules.name}
                 errorsMessgae={errors.name?.message}
               />
-              <Input
+              <InputLogin
                 className=''
                 titleLabel='Tên đăng nhập'
                 type='text'
@@ -114,7 +114,7 @@ export default function Register() {
                 rules={rules.username}
                 errorsMessgae={errors.username?.message}
               />
-              <Input
+              <InputLogin
                 className=''
                 titleLabel='Email'
                 type='email'
@@ -124,7 +124,7 @@ export default function Register() {
                 rules={rules.email}
                 errorsMessgae={errors.email?.message}
               />
-              <Input
+              <InputLogin
                 className=''
                 titleLabel='Số điện thoại'
                 type='text'
@@ -134,7 +134,7 @@ export default function Register() {
                 rules={rules.phone}
                 errorsMessgae={errors.phone?.message}
               />
-              <Input
+              <InputLogin
                 className=''
                 titleLabel='Mật khẩu'
                 type='password'
@@ -144,7 +144,7 @@ export default function Register() {
                 rules={rules.password}
                 errorsMessgae={errors.password?.message}
               />
-              <Input
+              <InputLogin
                 className=''
                 titleLabel='Xác nhận mật khẩu'
                 type='password'

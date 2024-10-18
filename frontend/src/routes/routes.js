@@ -1,11 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react'
 import config from '../config/routePath'
+
 const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
 const AdminHome = lazy(() => import('../pages/Admin/Home'))
 const AdminLogin = lazy(() => import('../pages/Admin/Login'))
+
 const publicRoutes = [
   {
     path: config.routes.register,
@@ -32,5 +33,7 @@ const publicRoutes = [
     layout: null
   }
 ]
+
 const privateRoutes = []
+
 export { publicRoutes, privateRoutes }
