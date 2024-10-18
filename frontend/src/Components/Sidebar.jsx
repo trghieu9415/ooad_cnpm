@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FaHome, FaQuestionCircle, FaBars, FaBookmark, FaUser, FaTags } from 'react-icons/fa'
 
-const Sidebar = () => {
+const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true)
 
   const toggleSidebar = () => {
@@ -18,7 +18,7 @@ const Sidebar = () => {
 
   return (
     <div className='flex'>
-      <div className={`${isOpen ? 'w-60' : 'w-10'} bg-primaryColor h-screen transition-width duration-300 relative`}>
+      <div className={`${isOpen ? 'w-60' : 'w-10'} bg-primaryColor h-screen transition-all duration-300 relative`}>
         <div
           className='absolute top-4 right-[-15px] bg-gray-100 border border-gray-700 rounded-full p-1 cursor-pointer'
           onClick={toggleSidebar}
@@ -40,10 +40,7 @@ const Sidebar = () => {
         </ul>
       </div>
 
-      <div className='flex-1 p-4'>
-        <h1 className='text-2xl font-bold'>Content</h1>
-        <p className='mt-4'>Hello World</p>
-      </div>
+      <div className='flex-1 ml-7 mt-5'>{children}</div>
     </div>
   )
 }

@@ -17,7 +17,7 @@ const Navbar = () => {
       <div className='flex items-center'>
         <NavLink to='/'>
           <img
-            className='w-[120px] h-[36px] object-cover sm:w-[150px] sm:h-[42px]'
+            className='lg:w-[150px] lg:h-[42px] object-cover w-[100px] h-[30px]'
             src='./img/iconStackOverflow.png'
             alt='Stack Overflow Icon'
           />
@@ -48,7 +48,7 @@ const Navbar = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className='w-full'
-            classNameInput='border-none outline-none w-full px-2 py-1'
+            classNameInput='border-none outline-none w-full px-2 pl-1 pr-10'
             iconClear={true}
             onClear={handleClearSearch}
           />
