@@ -2,11 +2,6 @@ import Navbar from '../../Components/Navbar'
 import Sidebar from '../../Components/Sidebar'
 
 const Home = () => {
-  return (
-    <div>
-      <Navbar />
-      <Sidebar />
-    </div>
-  )
+  return <div>a</div>
 }
 export default Home
