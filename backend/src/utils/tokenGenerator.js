@@ -38,9 +38,7 @@ const generateTokenAdmin = (id, username) => {
 //   }
 // }
 
-module.exports = {
-  generateToken
-  // generateTokenAdmin,
-  // generateRefreshToken,
-  // refreshToken
-}
+module.exports = generateToken
+// generateTokenAdmin,
+// generateRefreshToken,
+// refreshToken
