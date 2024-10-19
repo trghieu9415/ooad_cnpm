@@ -6,6 +6,10 @@ const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
 const AdminHome = lazy(() => import('../pages/Admin/Home'))
 const AdminLogin = lazy(() => import('../pages/Admin/Login'))
+const Questions = lazy(() => import('../pages/Questions'))
+const Tags = lazy(() => import('../pages/Tags'))
+const Users = lazy(() => import('../pages/Users'))
+const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
   {
@@ -31,6 +35,22 @@ const publicRoutes = [
     path: config.routes.adminLogin,
     component: AdminLogin,
     layout: null
+  },
+  {
+    path: config.routes.questions,
+    component: Questions
+  },
+  {
+    path: config.routes.tags,
+    component: Tags
+  },
+  {
+    path: config.routes.saves,
+    component: Saves
+  },
+  {
+    path: config.routes.users,
+    component: Users
   }
 ]
 
