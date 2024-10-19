@@ -13,7 +13,7 @@ const Navbar = () => {
   }
 
   return (
-    <header className='flex items-center justify-between px-4 py-2 border-b-2 border-gray-200'>
+    <header className='flex items-center justify-between px-4 py-2 border-b-2 border-gray-200 h-navbar bg-white'>
       <div className='flex items-center'>
         <NavLink to='/'>
           <img
