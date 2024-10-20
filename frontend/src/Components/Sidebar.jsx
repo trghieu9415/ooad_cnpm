@@ -1,10 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate, useResolvedPath } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
 
 const Sidebar = ({ menuItems, onToggle }) => {
   const [isOpen, setIsOpen] = useState(true)
   const [hiddenIcon, setHideIcon] = useState(true)
+
+  const path = useResolvedPath()
+  const navigate = useNavigate()
 
   const toggleSidebar = () => {
     if (window.innerWidth >= 640) {
@@ -34,6 +38,30 @@ const Sidebar = ({ menuItems, onToggle }) => {
     }
   }, [onToggle, isOpen])
 
+  const slugsOfUser = ['all', 'profile', 'questions']
+
+  const handleActive = (currentPath) => {
+    if (currentPath.startsWith('/users/')) {
+      const slug = currentPath.split('/users/')[1]
+
+      if (slug === 'saves') {
+        return '/users/saves'
+      } else if (slugsOfUser.includes(slug)) {
+        return '/users/all'
+      } else {
+        return null
+      }
+    }
+    return currentPath
+  }
+
+  useEffect(() => {
+    const activePath = handleActive(path.pathname)
+    if (activePath === null) {
+      navigate('/unauthorized')
+    }
+  }, [path, navigate])
+
   return (
     <div
       className={`${
@@ -54,10 +82,10 @@ const Sidebar = ({ menuItems, onToggle }) => {
 
       <ul className='mt-4'>
         {menuItems.map((item, index) => (
-          <NavLink key={index} to={item.redirectTo} className={({ isActive }) => (isActive ? 'active' : '')}>
+          <NavLink key={index} to={item.redirectTo}>
             <li
               className={`flex items-center p-2 my-2 rounded-lg cursor-pointer ${
-                window.location.pathname === item.redirectTo ? 'bg-gray-500' : ''
+                handleActive(path.pathname) === item.redirectTo ? 'bg-gray-800' : ''
               } hover:bg-gray-700`}
             >
               <div className='text-white text-lg'>{item.icon}</div>
