@@ -9,7 +9,7 @@ const AdminLogin = lazy(() => import('../pages/Admin/Login'))
 const Questions = lazy(() => import('../pages/Questions'))
 const Tags = lazy(() => import('../pages/Tags'))
 const Users = lazy(() => import('../pages/Users'))
-const Saves = lazy(() => import('../pages/Saves'))
+// const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
   {
@@ -43,10 +43,6 @@ const publicRoutes = [
   {
     path: config.routes.tags,
     component: Tags
-  },
-  {
-    path: config.routes.saves,
-    component: Saves
   },
   {
     path: config.routes.users,
