@@ -1,6 +1,5 @@
 const express = require('express')
 const { AccountAdmin } = require('@controllers/admin/index')
-const authenticateAccount = require('@middlewares/authMiddleware')
 
 const router = express.Router()
 
