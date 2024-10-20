@@ -10,8 +10,8 @@ const DefaultLayout = ({ children }) => {
     { name: 'Home', icon: <FaHome />, redirectTo: '/' },
     { name: 'Questions', icon: <FaQuestionCircle />, redirectTo: '/questions' },
     { name: 'Tags', icon: <FaTags />, redirectTo: '/tags' },
-    { name: 'Saves', icon: <FaBookmark />, redirectTo: '/saves' },
-    { name: 'Users', icon: <FaUser />, redirectTo: '/users' }
+    { name: 'Saves', icon: <FaBookmark />, redirectTo: '/users/saves' },
+    { name: 'Users', icon: <FaUser />, redirectTo: '/users/all' }
   ]
 
   const handleSidebarToggle = (isOpen) => {

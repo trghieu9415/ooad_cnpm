@@ -5,8 +5,8 @@ const routes = {
   admin: '/admin',
   adminLogin: '/admin/login',
   questions: '/questions',
-  saves: '/saves',
-  users: '/users',
+  users: '/users/:slug',
+  userAdjustments: '/users/:slug/:feature',
   tags: '/tags'
 }
 
