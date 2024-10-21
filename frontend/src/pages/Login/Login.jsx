@@ -32,7 +32,7 @@ const Login = () => {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         if (data.status === 200) {
-          const token = data.headers.authorization.split('Bearer ')[0]
+          const token = data.headers.authorization.split(' ')[1]
           if (token) {
             localStorage.setItem('UserToken', token)
           }

@@ -14,18 +14,8 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 
 const publicRoutes = [
   {
-    path: config.routes.register,
-    component: Register,
-    layout: null
-  },
-  {
     path: config.routes.admin,
     component: AdminHome,
-    layout: null
-  },
-  {
-    path: config.routes.login,
-    component: Login,
     layout: null
   },
   {
@@ -46,16 +36,30 @@ const publicRoutes = [
     component: Tags
   },
   {
-    path: config.routes.users,
-    component: Users
-  },
-  {
     path: config.routes.notFound,
     component: NotFound,
     layout: null
   }
 ]
 
-const privateRoutes = []
+const authRoutes = [
+  {
+    path: config.routes.register,
+    component: Register,
+    layout: null
+  },
+  {
+    path: config.routes.login,
+    component: Login,
+    layout: null
+  }
+]
 
-export { publicRoutes, privateRoutes }
+const privateRoutes = [
+  {
+    path: config.routes.users,
+    component: Users
+  }
+]
+
+export { publicRoutes, privateRoutes, authRoutes }
