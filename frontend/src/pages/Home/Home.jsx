@@ -50,7 +50,12 @@ const Home = () => {
       </section>
 
       <section className='text-center'>
-        <button className='px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300'>
+        <button
+          className='px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300'
+          onClick={() => {
+            window.location.href = '/register'
+          }}
+        >
           Sign Up for Free
         </button>
       </section>

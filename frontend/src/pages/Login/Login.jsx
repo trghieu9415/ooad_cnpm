@@ -4,9 +4,15 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '../../apis/auth.api'
 import { isAxiosUnauthorizedError } from '../../utils/util'
+import { useEffect, useRef, useState } from 'react'
+import Toast from '../../Components/Toast'
 
 const Login = () => {
+  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState('')
   const navigate = useNavigate()
+  const timeoutRef = useRef(null)
+
   const {
     register,
     handleSubmit,
@@ -21,16 +27,22 @@ const Login = () => {
 
   const onSubmit = handleSubmit((data) => {
     const body = data
+    setMessage('')
 
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
-        const token = data.headers.authorization.split(' ')[1]
-        // console.log(token)
-        if (token) {
-          localStorage.setItem('UserToken', token)
+        if (data.status === 200) {
+          const token = data.headers.authorization.split('Bearer ')[0]
+          if (token) {
+            localStorage.setItem('UserToken', token)
+          }
+          setMessage('Đăng nhập thành công !')
+          setStatus('success')
+          timeoutRef.current = setTimeout(() => navigate('/'), 3000)
+        } else {
+          setStatus('warning')
+          setMessage('Tài khoản đã bị khoá.')
         }
-        alert('Đăng nhập thành công !')
-        navigate('/')
       },
       onError: (error) => {
         if (isAxiosUnauthorizedError(error)) {
@@ -51,6 +63,15 @@ const Login = () => {
       }
     })
   })
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
   return (
     <div className='flex h-screen items-center justify-center bg-gray-100'>
       <div className='w-full max-w-xs rounded-lg bg-white p-6 shadow-lg'>
@@ -90,11 +111,6 @@ const Login = () => {
             Đăng nhập
           </button>
           <div className='mt-2 text-center'>
-            <a href='#' className='text-sm text-blue-500 hover:underline'>
-              Quên mật khẩu?
-            </a>
-          </div>
-          <div className='mt-2 text-center'>
             <p className='text-sm'>
               Bạn chưa có tài khoản?
               <Link className='text-blue-500 hover:underline' to='/register'>
@@ -105,6 +121,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      {message && <Toast status={status} message={message} />}
     </div>
   )
 }

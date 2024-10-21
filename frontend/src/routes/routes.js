@@ -9,6 +9,7 @@ const AdminLogin = lazy(() => import('../pages/Admin/Login'))
 const Questions = lazy(() => import('../pages/Questions'))
 const Tags = lazy(() => import('../pages/Tags'))
 const Users = lazy(() => import('../pages/Users'))
+const NotFound = lazy(() => import('../pages/NotFound'))
 // const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
@@ -47,6 +48,11 @@ const publicRoutes = [
   {
     path: config.routes.users,
     component: Users
+  },
+  {
+    path: config.routes.notFound,
+    component: NotFound,
+    layout: null
   }
 ]
 

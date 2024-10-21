@@ -7,7 +7,7 @@ import { omit } from 'lodash'
 import InputLogin from '../../Components/InputLogin'
 import { isAxiosErrorConflictError } from '../../utils/util'
 export default function Register() {
-  const navigate = useNavigate() // Khởi tạo navigate
+  const navigate = useNavigate()
 
   const {
     register,
@@ -32,12 +32,8 @@ export default function Register() {
         navigate('/login')
       },
       onError: (error) => {
-        // console.log(error)
-
         if (isAxiosErrorConflictError(error)) {
-          // console.log('Conflict errors: ', error.response.data)
           const formError = error.response?.data
-          console.log(formError)
           if (formError?.username) {
             setError('username', {
               message: formError.username,
@@ -64,7 +60,6 @@ export default function Register() {
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-100'>
       <div className='flex justify-between'>
-        {/* Left section: Community description */}
         <div className='flex w-1/2 items-center justify-center'>
           <div>
             <h1 className='mb-4 text-lg font-bold'>Tham gia cộng đồng Stack Overflow</h1>
@@ -81,7 +76,6 @@ export default function Register() {
           </div>
         </div>
 
-        {/* Right section: Form */}
         <div className='mb-0 max-w-7xl rounded-lg bg-white px-7 py-4'>
           <div className='mb-2 flex justify-center'>
             <svg aria-hidden='true' className='native svg-icon iconGlyphMd' width='32' height='37' viewBox='0 0 32 37'>
@@ -164,21 +158,9 @@ export default function Register() {
           </form>
           <p className='mt-4 text-center text-xs text-gray-700'>
             Bằng cách nhấn vào Đăng ký, bạn đồng ý với
-            <a href='#' className='text-blue-500 hover:underline'>
-              {' '}
-              điều khoản dịch vụ
-            </a>
-            ,
-            <a href='#' className='text-blue-500 hover:underline'>
-              {' '}
-              chính sách bảo mật
-            </a>
-            , và
-            <a href='#' className='text-blue-500 hover:underline'>
-              {' '}
-              chính sách cookie
-            </a>
-            .
+            <span className='cursor-pointer text-blue-500'> điều khoản dịch vụ</span>,
+            <span className='cursor-pointer text-blue-500'> chính sách bảo mật</span>, và
+            <span className='cursor-pointer text-blue-500'> chính sách cookie</span>.
           </p>
 
           <p className='mt-3 text-center text-xs text-gray-700'>

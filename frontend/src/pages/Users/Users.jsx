@@ -26,7 +26,7 @@ const Users = () => {
         // }
         return <Profile />
       default:
-        navigate('/unauthorized')
+        navigate('/not-found')
     }
   }
 
