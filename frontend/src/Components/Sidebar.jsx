@@ -42,7 +42,7 @@ const Sidebar = ({ menuItems, onToggle }) => {
 
   const handleActive = (currentPath) => {
     if (currentPath.startsWith('/users/')) {
-      const slug = currentPath.split('/users/')[1]
+      const slug = currentPath.split('/')[2]
 
       if (slug === 'saves') {
         return '/users/saves'
@@ -58,7 +58,7 @@ const Sidebar = ({ menuItems, onToggle }) => {
   useEffect(() => {
     const activePath = handleActive(path.pathname)
     if (activePath === null) {
-      navigate('/unauthorized')
+      navigate('/not-found')
     }
   }, [path, navigate])
 
