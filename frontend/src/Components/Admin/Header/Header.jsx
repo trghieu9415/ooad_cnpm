@@ -2,7 +2,9 @@
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { HiOutlineMenuAlt2 } from 'react-icons/hi'
 import { IoLogoStackoverflow } from 'react-icons/io5'
+import { IoLogOut } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
+import routes from '../../../config/routePath/routes'
 const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
   return (
     <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
@@ -24,10 +26,14 @@ const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
               </span>
             </Link>
           </div>
-
-          <button className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2' onClick={toggleDarkMode}>
-            {darkMode ? <FaSun /> : <FaMoon />}
-          </button>
+          <div className='flex items-center'>
+            <button className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 mr-2' onClick={toggleDarkMode}>
+              {darkMode ? <FaSun /> : <FaMoon />}
+            </button>
+            <Link to={routes.adminLogin} className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 text-lg'>
+              <IoLogOut />
+            </Link>
+          </div>
         </div>
       </div>
     </nav>
