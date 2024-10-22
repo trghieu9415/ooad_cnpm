@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from '../../apis/auth.api'
+import { registerAccount } from '../../apis/account.api'
 import { getRules } from '../../utils/rules'
 import { omit } from 'lodash'
 import InputLogin from '../../Components/InputLogin'
