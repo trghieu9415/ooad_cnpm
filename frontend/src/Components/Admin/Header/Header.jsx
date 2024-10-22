@@ -1,7 +1,7 @@
 // import React from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { HiOutlineMenuAlt2 } from 'react-icons/hi'
-import { MdSpaceDashboard } from 'react-icons/md'
+import { IoLogoStackoverflow } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
 const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
   return (
@@ -18,7 +18,7 @@ const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
               <HiOutlineMenuAlt2 className='text-2xl' />
             </button>
             <Link className='flex ms-2 md: me-24' to='/'>
-              <MdSpaceDashboard className='h-8 me-3 text-xl text-violet-500' />
+              <IoLogoStackoverflow className='h-8 me-3 text-xl text-orange-400' />
               <span className='self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white'>
                 Stack Overflow Admin
               </span>
