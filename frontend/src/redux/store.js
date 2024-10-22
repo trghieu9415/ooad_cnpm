@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from './slides/userSlide'
+import themeReducer from './slides/themeSlide'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
@@ -11,7 +12,8 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  user: userReducer
+  user: userReducer,
+  theme: themeReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

@@ -10,6 +10,9 @@ const Questions = lazy(() => import('../pages/Questions'))
 const Tags = lazy(() => import('../pages/Tags'))
 const Users = lazy(() => import('../pages/Users'))
 const NotFound = lazy(() => import('../pages/NotFound'))
+const AdminLayout = lazy(() => import('../layouts/AdminLayout'))
+const AdminMember = lazy(() => import('../pages/Admin/Member'))
+const AdminQuestion = lazy(() => import('../pages/Admin/Question'))
 // const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
@@ -19,18 +22,8 @@ const publicRoutes = [
     layout: null
   },
   {
-    path: config.routes.adminHome,
-    component: AdminHome,
-    layout: null
-  },
-  {
     path: config.routes.home,
     component: Home
-  },
-  {
-    path: config.routes.adminLogin,
-    component: AdminLogin,
-    layout: null
   },
   {
     path: config.routes.questions,
@@ -44,7 +37,27 @@ const publicRoutes = [
     path: config.routes.notFound,
     component: NotFound,
     layout: null
-  }
+  },
+  {
+    path: config.routes.adminHome,
+    component: AdminHome,
+    layout: AdminLayout
+  },
+  {
+    path: config.routes.adminLogin,
+    component: AdminLogin,
+    layout: null
+  },
+  {
+    path: config.routes.adminMember,
+    component: AdminMember,
+    layout: AdminLayout
+  },
+  {
+    path: config.routes.adminQuestion,
+    component: AdminQuestion,
+    layout: AdminLayout
+  },
 ]
 
 const authRoutes = [

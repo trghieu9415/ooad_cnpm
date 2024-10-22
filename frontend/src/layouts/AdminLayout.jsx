@@ -1,8 +1,22 @@
+import Header from '../Components/Admin/Header/Header'
+import Sidebar from '../Components/Admin/Sidebar/Sidebar'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleDarkMode } from '../redux/slides/themeSlide'
 const AdminLayout = ({ children }) => {
+  const dispatch = useDispatch()
+  const darkMode = useSelector((state) => state.theme.darkMode)
+
+  const handleToggleDarkMode = () => {
+    dispatch(toggleDarkMode())
+  }
   return (
-    <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
-      {children}
-    </div>
+    <>
+      <div className={`${darkMode ? 'dark' : ''}`}>
+        <Header toggleDarkMode={handleToggleDarkMode} darkMode={darkMode} />
+        <Sidebar />
+        {children}
+      </div>
+    </>
   )
 }
 
