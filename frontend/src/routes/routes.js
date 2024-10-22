@@ -4,8 +4,8 @@ import config from '../config/routePath'
 const Home = lazy(() => import('../pages/Home'))
 const Login = lazy(() => import('../pages/Login'))
 const Register = lazy(() => import('../pages/Register'))
-const AdminHome = lazy(() => import('../pages/Admin/Home'))
-const AdminLogin = lazy(() => import('../pages/Admin/Login'))
+const AdminHome = lazy(() => import('../pages/Admin/Home/HomeAdmin'))
+const AdminLogin = lazy(() => import('../pages/Admin/Login/LoginAdmin'))
 const Questions = lazy(() => import('../pages/Questions'))
 const Tags = lazy(() => import('../pages/Tags'))
 const Users = lazy(() => import('../pages/Users'))
@@ -18,7 +18,7 @@ const publicRoutes = [
     layout: null
   },
   {
-    path: config.routes.admin,
+    path: config.routes.adminHome,
     component: AdminHome,
     layout: null
   },

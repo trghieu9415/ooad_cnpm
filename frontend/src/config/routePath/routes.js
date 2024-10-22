@@ -7,7 +7,8 @@ const routes = {
   questions: '/questions',
   users: '/users/:slug',
   userAdjustments: '/users/:slug/:feature',
-  tags: '/tags'
+  tags: '/tags',
+  adminHome: '/admin/home'
 }
 
 export default routes
