@@ -1,5 +1,3 @@
-import DonutChart from './DonutChart'
-import ShortCuts from './ShortCuts'
 import Users from './Users'
 
 const Profile = () => {
@@ -9,8 +7,6 @@ const Profile = () => {
      dark:bg-gray-700 lg:w-60 xl:w-80 flex flex-col justify-between gap-4'
     >
       <Users />
-      <ShortCuts />
-      <DonutChart />
     </div>
   )
 }
