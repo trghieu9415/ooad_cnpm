@@ -9,6 +9,7 @@ const AdminLogin = lazy(() => import('../pages/Admin/Login/LoginAdmin'))
 const Questions = lazy(() => import('../pages/Questions'))
 const Tags = lazy(() => import('../pages/Tags'))
 const Users = lazy(() => import('../pages/Users'))
+const NotFound = lazy(() => import('../pages/NotFound'))
 // const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
@@ -20,11 +21,6 @@ const publicRoutes = [
   {
     path: config.routes.adminHome,
     component: AdminHome,
-    layout: null
-  },
-  {
-    path: config.routes.login,
-    component: Login,
     layout: null
   },
   {
@@ -45,11 +41,30 @@ const publicRoutes = [
     component: Tags
   },
   {
+    path: config.routes.notFound,
+    component: NotFound,
+    layout: null
+  }
+]
+
+const authRoutes = [
+  {
+    path: config.routes.register,
+    component: Register,
+    layout: null
+  },
+  {
+    path: config.routes.login,
+    component: Login,
+    layout: null
+  }
+]
+
+const privateRoutes = [
+  {
     path: config.routes.users,
     component: Users
   }
 ]
 
-const privateRoutes = []
-
-export { publicRoutes, privateRoutes }
+export { publicRoutes, privateRoutes, authRoutes }

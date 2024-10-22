@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getRulesLogin } from '../../../utils/rules'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
-import { loginAccountAdmin } from '../../../apis/auth.api'
+import { loginAccountAdmin } from '../../../apis/account.api'
 import { isAxiosUnauthorizedError } from '../../../utils/util'
 const LoginAdmin = () => {
   const navigate = useNavigate()
