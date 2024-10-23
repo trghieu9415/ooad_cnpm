@@ -4,21 +4,21 @@ import { MdDashboard } from 'react-icons/md'
 import { RiQuestionAnswerFill } from 'react-icons/ri'
 import { FaPenToSquare } from 'react-icons/fa6'
 import { MdSpatialTracking } from 'react-icons/md'
-
+import routes from '../../../config/routePath/routes'
 const LinkItem = () => {
   let arrayItem = [
     {
-      to: '',
+      to: routes.adminHome,
       icon: MdDashboard,
       name: 'Dashboard'
     },
     {
-      to: '',
+      to: routes.adminMember,
       icon: FaUsersCog,
       name: 'Quản lý người dùng'
     },
     {
-      to: '',
+      to: routes.adminQuestion,
       icon: RiQuestionAnswerFill,
       name: 'Quản lý câu hỏi và câu trả lời'
     },
