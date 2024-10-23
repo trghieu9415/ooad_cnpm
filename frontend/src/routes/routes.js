@@ -57,7 +57,7 @@ const publicRoutes = [
     path: config.routes.adminQuestion,
     component: AdminQuestion,
     layout: AdminLayout
-  },
+  }
 ]
 
 const authRoutes = [
