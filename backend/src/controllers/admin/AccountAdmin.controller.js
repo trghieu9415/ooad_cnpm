@@ -1,5 +1,5 @@
 const SystemAdministratorAccount = require('../../models/admin/SystemAdministratorAccount')
-const { generateTokenAdmin, refreshToken } = require('@root/utils/tokenGenerator')
+const { generateTokenAdmin } = require('@root/utils/tokenGenerator')
 
 const login = async (req, res) => {
   const { username, password } = req.body
@@ -38,19 +38,41 @@ const login = async (req, res) => {
   }
 }
 
-// const handleRefreshToken = async (req, res) => {
-//   const { refreshToken: token } = req.body
+const createAdminAccount = async (req, res) => {
+  const { username, password } = req.body
 
-//   try {
-//     const { accessToken } = refreshToken(token)
-//     return res.json({
-//       message: 'Access token được tạo mới thành công',
-//       accessToken
-//     })
-//   } catch (error) {
-//     return res.status(403).json({
-//       message: 'Refresh token không hợp lệ hoặc đã hết hạn'
-//     })
-//   }
-// }
-module.exports = { login }
+  try {
+    const existingAdmin = await SystemAdministratorAccount.findOne({
+      where: { username }
+    })
+
+    if (existingAdmin) {
+      return res.status(400).json({
+        message: 'Tên tài khoản đã tồn tại'
+      })
+    }
+
+    const newAdminAccount = await SystemAdministratorAccount.create({
+      username,
+      password // Không hash vì đã quy định admin password không cần hash
+    })
+
+    const token = generateTokenAdmin(newAdminAccount.id, newAdminAccount.username)
+
+    return res.status(201).json({
+      message: 'Tài khoản admin được tạo thành công',
+      data: {
+        id: newAdminAccount.id,
+        username: newAdminAccount.username,
+        token: `Bearer ${token}`
+      }
+    })
+  } catch (error) {
+    console.error('Error in createAdminAccount:', error)
+    return res.status(500).json({
+      message: 'Có lỗi xảy ra trong quá trình tạo tài khoản'
+    })
+  }
+}
+
+module.exports = { login, createAdminAccount }

@@ -4,7 +4,7 @@ const { route } = require('../AccountRoutes')
 
 const router = express.Router()
 
-router.get('/all', CommentAdmin.getComments)
+router.get('/', CommentAdmin.getComments)
 router.get('/:id', CommentAdmin.getCommentById)
 router.get('/by_question/:question_id', CommentAdmin.getCommentByQuestion)
 

@@ -6,9 +6,12 @@ import { getRules } from '../../utils/rules'
 import { omit } from 'lodash'
 import InputLogin from '../../Components/InputLogin'
 import { isAxiosErrorConflictError } from '../../utils/util'
+import { useState } from 'react'
+import Toast from '../../Components/Toast'
 export default function Register() {
   const navigate = useNavigate()
-
+  const [message, setMessage] = useState('')
+  const [status, setStatus] = useState('')
   const {
     register,
     handleSubmit,
@@ -28,8 +31,9 @@ export default function Register() {
     registerAccountMutation.mutate(body, {
       onSuccess: (data) => {
         console.log(data)
-        alert('Đăng ký thành công. Vui lòng đăng nhập.')
-        navigate('/login')
+        setStatus('success')
+        setMessage('Đăng ký thành công !')
+        setTimeout(() => navigate('/login'), 1000)
       },
       onError: (error) => {
         if (isAxiosErrorConflictError(error)) {
@@ -171,6 +175,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      {message && <Toast status={status} message={message} />}
     </div>
   )
 }

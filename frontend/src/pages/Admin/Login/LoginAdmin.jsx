@@ -4,8 +4,16 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccountAdmin } from '../../../apis/account.api'
 import { isAxiosUnauthorizedError } from '../../../utils/util'
+import { useState } from 'react'
+import Toast from '../../../Components/Toast'
+import { useDispatch } from 'react-redux'
+import { loginSuccess } from '../../../redux/slides/authSlice'
+
 const LoginAdmin = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [message, setMessage] = useState('')
+  const [stausMessage, setStausMessage] = useState('')
   const {
     register,
     handleSubmit,
@@ -26,8 +34,10 @@ const LoginAdmin = () => {
         const res = data.data.data
         const tokenAdmin = res.token.split(' ')[1]
         localStorage.setItem('token_admin', tokenAdmin)
-        alert(data.data.message)
-        navigate('/admin')
+        dispatch(loginSuccess(tokenAdmin))
+        setStausMessage('success')
+        setMessage(data.data.message)
+        setTimeout(() => navigate('/admin/home'), 1000)
       },
       onError: (error) => {
         if (isAxiosUnauthorizedError(error)) {
@@ -88,6 +98,7 @@ const LoginAdmin = () => {
           </button>
         </form>
       </div>
+      {message && <Toast status={stausMessage} message={message} />}
     </div>
   )
 }
