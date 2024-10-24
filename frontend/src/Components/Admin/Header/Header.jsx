@@ -1,8 +1,12 @@
-// import React from 'react'
+import React from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { HiOutlineMenuAlt2 } from 'react-icons/hi'
-import { MdSpaceDashboard } from 'react-icons/md'
+import { IoLogoStackoverflow } from 'react-icons/io5'
+import { IoLogOut } from 'react-icons/io5'
 import { Link } from 'react-router-dom'
+import routes from '../../../config/routePath/routes'
+import Profile from '../Profile/Profile'
+
 const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
   return (
     <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
@@ -18,16 +22,23 @@ const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
               <HiOutlineMenuAlt2 className='text-2xl' />
             </button>
             <Link className='flex ms-2 md: me-24' to='/'>
-              <MdSpaceDashboard className='h-8 me-3 text-xl text-violet-500' />
+              <IoLogoStackoverflow className='h-8 me-3 text-xl text-orange-400' />
               <span className='self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white'>
                 Stack Overflow Admin
               </span>
             </Link>
           </div>
-
-          <button className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2' onClick={toggleDarkMode}>
-            {darkMode ? <FaSun /> : <FaMoon />}
-          </button>
+          <div className='flex items-center space-x-4'>
+            <Profile />
+            <div className='flex items-center'>
+              <button className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 mr-2' onClick={toggleDarkMode}>
+                {darkMode ? <FaSun /> : <FaMoon />}
+              </button>
+              <Link to={routes.adminLogin} className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 text-lg'>
+                <IoLogOut />
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
