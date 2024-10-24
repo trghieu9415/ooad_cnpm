@@ -4,24 +4,45 @@ import Button from '../../../Components/Admin/components/Button'
 import { getAllMember, toggleAccountStateMember } from '../../../apis/admin/adminMember.api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Toast from '../../../Components/Toast'
+import Pagination from '../../../Components/Pagination'
 
 export default function Member() {
   const darkMode = useSelector((state) => state.theme.darkMode)
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
+
   const queryClient = useQueryClient()
   const { data } = useQuery({
     queryKey: ['members'],
-    queryFn: getAllMember,
+    queryFn: async () => {
+      const result = await getAllMember()
+      setTotalMember(result.data.length)
+      return result
+    },
     staleTime: 5 * 1000
   })
+  // Phân trang
+  const [totalMember, setTotalMember] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [memberPerPage, setMemberPerPage] = useState(10)
+  const indexOfLastMember = currentPage * memberPerPage
+  const indexOfFirstMember = indexOfLastMember - memberPerPage
+  const currentMember = data?.data.slice(indexOfFirstMember, indexOfLastMember)
+  const pageCount = Math.ceil(totalMember / memberPerPage)
+  const pages = Array(pageCount)
+    .fill()
+    .map((_, index) => index + 1)
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page) // Cập nhật trang hiện tại
+  }
 
   const toggleStatusMember = useMutation({
     mutationFn: (account_id) => toggleAccountStateMember(account_id),
     onSuccess: (data) => {
-      console.log(data.data.message)
+      // console.log(data.data.message)
       queryClient.invalidateQueries(['members'])
       setStatus('success')
       setMessage(data.data.message)
@@ -35,6 +56,17 @@ export default function Member() {
   const handleStatus = (account_id) => {
     toggleStatusMember.mutate(account_id)
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getAllMember()
+      setTotalMember(result.data.length)
+      setCurrentPage(1)
+
+      fetchData()
+    }
+  }, [currentPage])
+
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
@@ -59,8 +91,8 @@ export default function Member() {
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
-                  {data &&
-                    data?.data.map((member) => (
+                  {currentMember &&
+                    currentMember.map((member) => (
                       <tr key={member.id} className='text-gray-700 dark:text-gray-400'>
                         <td className='px-4 py-3'>
                           <div className='flex items-center text-sm'>
@@ -167,15 +199,19 @@ export default function Member() {
               </table>
             </div>
             <div className='grid px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase border-t dark:border-gray-700 bg-gray-50 sm:grid-cols-9 dark:text-gray-400 dark:bg-gray-800'>
-              <span className='flex items-center col-span-3'>Showing 21-30 of 100</span>
+              <span className='flex items-center col-span-3'>
+                Showing {indexOfFirstMember + 1} - {Math.min(indexOfLastMember, totalMember)} of {totalMember}{' '}
+              </span>
               <span className='col-span-2'></span>
               <span className='flex col-span-4 mt-2 sm:mt-auto sm:justify-end'>
                 <nav aria-label='Table navigation'>
                   <ul className='inline-flex items-center'>
                     <li>
                       <button
+                        onClick={() => handlePageChange(currentPage - 1)} // Thay đổi trang khi nhấn nút Previous
                         className='px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple'
                         aria-label='Previous'
+                        disabled={currentPage === 1} // Vô hiệu hóa nút nếu đang ở trang đầu
                       >
                         <svg className='w-4 h-4 fill-current' aria-hidden='true' viewBox='0 0 20 20'>
                           <path
@@ -186,33 +222,23 @@ export default function Member() {
                         </svg>
                       </button>
                     </li>
-                    <li>
-                      <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>1</button>
-                    </li>
-                    <li>
-                      <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>2</button>
-                    </li>
-                    <li>
-                      <button className='px-3 py-1 text-white transition-colors duration-150 bg-purple-600 border border-r-0 border-purple-600 rounded-md focus:outline-none focus:shadow-outline-purple'>
-                        3
-                      </button>
-                    </li>
-                    <li>
-                      <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>4</button>
-                    </li>
-                    <li>
-                      <span className='px-3 py-1'>...</span>
-                    </li>
-                    <li>
-                      <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>8</button>
-                    </li>
-                    <li>
-                      <button className='px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple'>9</button>
-                    </li>
+                    {/* Tạo các nút cho từng trang */}
+                    {pages.map((page) => (
+                      <li key={page}>
+                        <button
+                          onClick={() => handlePageChange(page)} // Chuyển đến trang tương ứng
+                          className={`px-3 py-1 rounded-md focus:outline-none focus:shadow-outline-purple ${currentPage === page ? 'bg-purple-600 text-white' : ''}`}
+                        >
+                          {page}
+                        </button>
+                      </li>
+                    ))}
                     <li>
                       <button
+                        onClick={() => handlePageChange(currentPage + 1)} // Thay đổi trang khi nhấn nút Next
                         className='px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple'
                         aria-label='Next'
+                        disabled={currentPage === Math.ceil(totalMember / memberPerPage)} // Vô hiệu hóa nút nếu đang ở trang cuối
                       >
                         <svg className='w-4 h-4 fill-current' aria-hidden='true' viewBox='0 0 20 20'>
                           <path
