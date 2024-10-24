@@ -70,7 +70,7 @@ const changeState = async (id) => {
     await account.update({ status: newState }) // Cập nhật trạng thái
 
     return createResData(200, {
-      message: `Account ${newState === 'Banned' ? 'blocked' : 'unblocked'} successfully`,
+      message: `Tài khoản ${newState === 'Banned' ? 'khóa' : 'mở khóa'} thành công`,
       status: newState
     })
   } catch (error) {

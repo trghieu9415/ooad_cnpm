@@ -8,7 +8,7 @@ const getAllMembers = async () => {
       include: [
         {
           model: Account,
-          attributes: ['username']
+          attributes: ['username', 'registration_time', 'status']
         },
         {
           model: Badge,

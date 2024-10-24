@@ -12,7 +12,7 @@ const getAllMember = async (req, res) => {
 const updateMember = async (req, res) => {
   try {
     const member_id = req.params.id
-    console.log(member_id)
+    // console.log(member_id)
 
     const { name, email, phone, biography } = req.body
     const memberResult = await Member.updateMember(member_id, name, email, phone, biography)
