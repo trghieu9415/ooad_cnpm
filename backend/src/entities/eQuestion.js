@@ -187,6 +187,34 @@ const updateQuestionTags = async (question_id, tags) => {
   }
 }
 
+const handleStatus = async (question_id, status, closing_remark = null) => {
+  try {
+    const question = await Question.findByPk(question_id)
+    if (!question) {
+      return createResData(404, { message: 'Question not found' })
+    }
+
+    switch (status) {
+      case 'Close':
+        await question.update({ status: 'Close', closing_remark: closing_remark })
+        return createResData(200, { message: 'Question closed successfully' })
+
+      case 'Open':
+        await question.update({ status: 'Open', closing_remark: null })
+        return createResData(200, { message: 'Question opened successfully' })
+
+      case 'Delete':
+        await question.update({ status: 'Delete', closing_remark: null })
+        return createResData(204, { message: 'Question deleted successfully' })
+
+      default:
+        return createResData(400, { message: 'Invalid status option' })
+    }
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
 module.exports = {
   getAllQuestions,
   getQuestionById,
@@ -195,5 +223,6 @@ module.exports = {
   deleteQuestion,
   getQuestionByTag,
   getQuestionByMember,
-  updateQuestionTags
+  updateQuestionTags,
+  handleStatus
 }

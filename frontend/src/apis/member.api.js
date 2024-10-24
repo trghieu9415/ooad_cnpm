@@ -2,7 +2,7 @@ import http from '../utils/http'
 
 export const memberSelf = (body) => http.post('/account/register', body)
 
-export const memberAll = (body) => http.post('/account/login', body)
+export const memberAll = (body) => http.get('/member/all', body)
 
 export const memberUpdate = (body) => http.post('/admin/account/login', body)
 
