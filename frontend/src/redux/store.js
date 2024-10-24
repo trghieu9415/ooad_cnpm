@@ -3,7 +3,7 @@ import userReducer from './slides/userSlide'
 import themeReducer from './slides/themeSlide'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
-
+import authReducer from './slides/authSlice'
 const persistConfig = {
   key: 'root',
   version: 1,
@@ -13,11 +13,11 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  theme: themeReducer
+  theme: themeReducer,
+  auth: authReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>

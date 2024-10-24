@@ -35,9 +35,19 @@ const toggleAccountStateMember = async (req, res) => {
   }
 }
 
-const updateInfoMember = () => {}
+const getMemberById = async (req, res) => {
+  try {
+    const member_id = req.params.id
+    const memberResult = await Member.getMemberById(member_id)
+    res.status(memberResult.status).json(memberResult.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 module.exports = {
   toggleAccountStateMember,
   getAllMember,
-  updateMember
+  updateMember,
+  getMemberById
 }

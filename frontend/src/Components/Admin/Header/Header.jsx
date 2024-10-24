@@ -8,6 +8,9 @@ import routes from '../../../config/routePath/routes'
 import Profile from '../Profile/Profile'
 
 const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
+  const logOut = () => {
+    localStorage.removeItem('token_admin')
+  }
   return (
     <nav className='fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
       <div className='px-3 py-3 lg:px-5 lg:pl-3'>
@@ -34,7 +37,11 @@ const Header = ({ darkMode, toggleDarkMode, toggleSidebar }) => {
               <button className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 mr-2' onClick={toggleDarkMode}>
                 {darkMode ? <FaSun /> : <FaMoon />}
               </button>
-              <Link to={routes.adminLogin} className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 text-lg'>
+              <Link
+                to={routes.adminLogin}
+                onClick={logOut}
+                className='dark:bg-slate-50 dark:text-slate-700 rounded-full p-2 text-lg'
+              >
                 <IoLogOut />
               </Link>
             </div>
