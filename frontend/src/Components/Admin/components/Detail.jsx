@@ -1,16 +1,12 @@
-const Detail = ({onClose}) => {
-
-  const handleOnClose = () => {
-
-  }
+const Detail = ({handleOnClose }) => {
   return (
-    <div className='w-screen h-screen bg-[rgba(255,255,255,0.3)] dark:bg-[#rgba()] fixed top-5 left-20 flex items-center justify-center '>
+    <div className='w-screen h-screen bg-[rgba(0,0,0,0.2)] dark:bg-[rgba(255,255,255,0.3)] fixed top-5 left-20 flex items-center justify-center '>
       <div className='w-[32%] h-[80%] bg-white rounded-lg border-4 border-purple-500 dark:bg-slate-800 dark:text-white'>
         <div className='flex justify-between w-[100%] items-center p-3'>
           <p className='font-bold'>Member Details</p>
           <button
             className='border text-red-500 hover:bg-red-500 hover:text-white font-bold w-[25px] h-[25px] rounded'
-            onClick={() => {}}
+            onClick={handleOnClose}
           >
             X
           </button>
