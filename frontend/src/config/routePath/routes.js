@@ -14,7 +14,6 @@ const routes = {
   adminAnswer: '/admin/answers',
   adminTag: '/admin/tags',
   adminBadge: '/admin/badges'
-  // adminActivityTracking: '/admin/tracking'
 }
 
 export default routes
