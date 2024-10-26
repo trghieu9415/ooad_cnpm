@@ -5,7 +5,7 @@ import Content from '../../../Components/Admin/components/Content'
 const Answer = () => {
   const darkMode = useSelector((state) => state.theme.darkMode)
   //cột
-  const columns = ['Answer content', 'Question', 'Author', 'Date up', 'Actions']
+  const columns = ['Answer content', 'Question', 'Author', 'Date up','Flag', 'Actions']
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>

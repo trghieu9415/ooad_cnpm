@@ -3,7 +3,7 @@ import Profile from '../../../Components/Admin/Profile/Profile'
 import { FaSearch } from 'react-icons/fa'
 import Content from '../../../Components/Admin/components/Content'
 
-export default function Member() {
+export default function Question() {
   const darkMode = useSelector((state) => state.theme.darkMode)
   //cột
   const columns = ['Title question', 'Status', 'Date up', 'Actions']
