@@ -18,6 +18,9 @@ export default function Member() {
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
 
+  //Card xem chi tiết
+  const [isClose, setIsClose] = useState(true)
+
   const queryClient = useQueryClient()
   const [currentPage, setCurrentPage] = useState(1)
   const memberPerPage = 5
@@ -32,6 +35,7 @@ export default function Member() {
     staleTime: 5 * 1000
   })
 
+  // Phân trang
   const totalMember = data?.data.length || 0
   const indexOfLastMember = currentPage * memberPerPage
   const indexOfFirstMember = indexOfLastMember - memberPerPage
@@ -52,6 +56,11 @@ export default function Member() {
 
   const handleStatus = (account_id) => {
     toggleStatusMember.mutate(account_id)
+  }
+
+  const handleOnClose = (member) => {
+    console.log(member)
+    setIsClose(!isClose)
   }
 
   if (isLoading) {
@@ -121,6 +130,9 @@ export default function Member() {
                             <button
                               className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='View Detail'
+                              onClick={() => {
+                                handleOnClose(member)
+                              }}
                             >
                               <AiOutlineExclamationCircle className='size-6' />
                             </button>
@@ -157,9 +169,7 @@ export default function Member() {
               setCurrentPage={setCurrentPage}
             />
           </div>
-          <div className='overflow-hidden'>
-            <Detail />
-          </div>
+          <div className='overflow-hidden'>{isClose && <Detail handleOnClose={handleOnClose} />}</div>
         </Content>
       </div>
 

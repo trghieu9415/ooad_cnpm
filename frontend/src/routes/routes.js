@@ -13,6 +13,8 @@ const NotFound = lazy(() => import('../pages/NotFound'))
 const AdminLayout = lazy(() => import('../layouts/AdminLayout'))
 const AdminMember = lazy(() => import('../pages/Admin/Member'))
 const AdminQuestion = lazy(() => import('../pages/Admin/Question'))
+const AdminAnswer = lazy(() => import('../pages/Admin/Answer'))
+const AdminTag = lazy(() => import('../pages/Admin/Tag'))
 // const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
@@ -56,6 +58,16 @@ const publicRoutes = [
   {
     path: config.routes.adminQuestion,
     component: AdminQuestion,
+    layout: AdminLayout
+  },
+  {
+    path: config.routes.adminAnswer,
+    component: AdminAnswer,
+    layout: AdminLayout
+  },
+  {
+    path: config.routes.adminTag,
+    component: AdminTag,
     layout: AdminLayout
   }
 ]

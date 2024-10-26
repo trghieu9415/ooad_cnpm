@@ -10,7 +10,9 @@ const routes = {
   admin: '/admin',
   adminLogin: '/admin/login',
   adminMember: '/admin/members',
-  adminQuestion: '/admin/questions'
+  adminQuestion: '/admin/questions',
+  adminAnswer: '/admin/answers',
+  adminTag: '/admin/tags'
   // adminActivityTracking: '/admin/tracking'
 }
 
