@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-const Toast = ({ message, status, duration = 3000 }) => {
+const Toast = ({ message, status, duration = 3000, position = 'top-right' }) => {
   useEffect(() => {
     switch (status) {
       case 'success':
@@ -25,7 +25,7 @@ const Toast = ({ message, status, duration = 3000 }) => {
 
   return (
     <div>
-      <ToastContainer />
+      <ToastContainer position={position} />
     </div>
   )
 }
