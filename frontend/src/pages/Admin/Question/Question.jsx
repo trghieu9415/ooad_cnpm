@@ -412,7 +412,7 @@ export default function Member() {
                               clipRule='evenodd'
                             ></path>
                           </svg>
-                        </button>
+                        </button> 
                       </div>
                     </td>
                   </tr>
