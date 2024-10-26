@@ -10,8 +10,12 @@ export default {
         secondaryColor: '#343a40',
         lightColor: '#f8f9fa',
         darkColor: '#212529'
+      },
+      height: {
+        navbar: '64px'
       }
     }
   },
-  plugins: []
+  plugins: [], 
+  darkMode: 'class'
 }

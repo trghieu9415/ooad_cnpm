@@ -29,5 +29,4 @@ router.post('/flag/answer/:id', authenticateAccount, setTypeisAnswer, Member.fla
 router.post('/vote/question/:id', authenticateAccount, setTypeisQuestion, Member.vote)
 router.post('/vote/answer/:id', authenticateAccount, setTypeisAnswer, Member.vote)
 
-
 module.exports = router

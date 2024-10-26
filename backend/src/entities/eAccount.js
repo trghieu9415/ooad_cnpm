@@ -58,14 +58,21 @@ const changePassword = async (id, currentPassword, newPassword) => {
   }
 }
 
-const changeState = async (id, state) => {
+const changeState = async (id) => {
   try {
-    const account = await Account.findByPk(id)
+    const account = await Account.findByPk(id) // Tìm tài khoản theo ID
     if (!account) {
       return createResData(404, { message: 'Account not found' })
     }
-    await account.update({ state })
-    return createResData(200, { message: 'State changed successfully' })
+
+    // Kiểm tra trạng thái hiện tại và thay đổi
+    const newState = account.status === 'Active' ? 'Banned' : 'Active'
+    await account.update({ status: newState }) // Cập nhật trạng thái
+
+    return createResData(200, {
+      message: `Tài khoản ${newState === 'Banned' ? 'khóa' : 'mở khóa'} thành công`,
+      status: newState
+    })
   } catch (error) {
     return createResData(500, error)
   }

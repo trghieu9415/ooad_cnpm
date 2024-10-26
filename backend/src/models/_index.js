@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const config = require('@configs/database')
 
 // Import các mô hình từ các file riêng biệt
-const SystemAdministratorAccount = require('./SystemAdministratorAccount')
+const SystemAdministratorAccount = require('./admin/SystemAdministratorAccount')
 const Account = require('./Account')
 const Member = require('./Member')
 const Badge = require('./Badge')
