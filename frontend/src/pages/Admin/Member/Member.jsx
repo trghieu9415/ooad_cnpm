@@ -4,7 +4,7 @@ import Button from '../../../Components/Admin/components/Button'
 import { getAllMember, toggleAccountStateMember } from '../../../apis/admin/adminMember.api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Toast from '../../../Components/Toast'
 import Pagination from '../../../Components/Pagination'
 import { MdEdit } from 'react-icons/md'
@@ -14,6 +14,7 @@ import { CiUnlock } from 'react-icons/ci'
 import Detail from '../../../Components/Admin/components/Detail'
 
 export default function Member() {
+  const [isDetailOpen, SetIsDetailOpen] = useState(true)
   const darkMode = useSelector((state) => state.theme.darkMode)
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
@@ -21,7 +22,16 @@ export default function Member() {
   const queryClient = useQueryClient()
   const [currentPage, setCurrentPage] = useState(1)
   const memberPerPage = 5
-
+  useEffect(() => {
+    if (isDetailOpen) {
+      document.body.classList.add('overflow-hidden')
+    } else {
+      document.body.classList.remove('overflow-hidden')
+    }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+    }
+  }, [isDetailOpen])
   const { data, isLoading } = useQuery({
     queryKey: ['members', currentPage],
     queryFn: async () => {
@@ -157,9 +167,11 @@ export default function Member() {
               setCurrentPage={setCurrentPage}
             />
           </div>
-          <div className='overflow-hidden'>
-            <Detail />
-          </div>
+          {isDetailOpen && (
+            <div className='overflow-hidden'>
+              <Detail onClose={() => SetIsDetailOpen(false)} />
+            </div>
+          )}
         </Content>
       </div>
 
