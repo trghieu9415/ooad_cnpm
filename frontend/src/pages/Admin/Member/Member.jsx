@@ -147,11 +147,7 @@ export default function Member() {
                               className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='View Detail'
                               onClick={() => {
-<<<<<<< HEAD
                                 handleDetail(member)
-=======
-                                handleOnClose(member)
->>>>>>> origin/main
                               }}
                             >
                               <AiOutlineExclamationCircle className='size-6' />
