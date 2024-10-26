@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux'
 import Content from '../../../Components/Admin/components/Content'
 import Button from '../../../Components/Admin/components/Button'
-import { getAllMember, toggleAccountStateMember } from '../../../apis/admin/adminMember.api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
 import { useState } from 'react'
@@ -11,26 +10,26 @@ import { MdEdit } from 'react-icons/md'
 import { AiOutlineExclamationCircle } from 'react-icons/ai'
 import { CiLock } from 'react-icons/ci'
 import { CiUnlock } from 'react-icons/ci'
-import Detail from '../../../Components/Admin/components/Detail'
+import ActionMember from '../../../Components/Admin/components/ActionMember'
+import { getAllMember, toggleAccountStateMember } from '../../../apis/Admin/adminMember.api'
 
 export default function Member() {
   const darkMode = useSelector((state) => state.theme.darkMode)
+  const queryClient = useQueryClient()
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
-
+  const [disabled, setDisabled] = useState()
+  const [memberEditing, setMemberEditing] = useState(null)
+  const [action, setAction] = useState('')
   //Card xem chi tiết
-  const [isClose, setIsClose] = useState(true)
+  const [isClose, setIsClose] = useState(false)
 
-  const queryClient = useQueryClient()
   const [currentPage, setCurrentPage] = useState(1)
   const memberPerPage = 5
 
   const { data, isLoading } = useQuery({
     queryKey: ['members', currentPage],
-    queryFn: async () => {
-      const result = await getAllMember()
-      return result
-    },
+    queryFn: getAllMember,
     keepPreviousData: true,
     staleTime: 5 * 1000
   })
@@ -61,9 +60,23 @@ export default function Member() {
     toggleStatusMember.mutate(account_id)
   }
 
-  const handleOnClose = (member) => {
-    console.log(member)
+  const handleDetail = (member) => {
+    setAction('detail')
+    setDisabled(true)
+    if (member) {
+      setMemberEditing(member)
+    }
     setIsClose(!isClose)
+  }
+
+  const handleEdit = (member) => {
+    setAction('edit')
+    setDisabled(false)
+    if (member) {
+      setMemberEditing(member)
+    }
+    setIsClose(!isClose)
+    queryClient.invalidateQueries(['members', currentPage])
   }
 
   if (isLoading) {
@@ -134,7 +147,7 @@ export default function Member() {
                               className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='View Detail'
                               onClick={() => {
-                                handleOnClose(member)
+                                handleDetail(member)
                               }}
                             >
                               <AiOutlineExclamationCircle className='size-6' />
@@ -142,6 +155,9 @@ export default function Member() {
                             <button
                               className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='Edit'
+                              onClick={() => {
+                                handleEdit(member)
+                              }}
                             >
                               <MdEdit className='size-6' />
                             </button>
@@ -172,10 +188,18 @@ export default function Member() {
               setCurrentPage={setCurrentPage}
             />
           </div>
-          <div className='overflow-hidden'>{isClose && <Detail handleOnClose={handleOnClose} />}</div>
+          <div className='overflow-hidden'>
+            {isClose && (
+              <ActionMember
+                handleDetail={action === 'detail' ? handleEdit : handleEdit}
+                member={memberEditing}
+                action={action}
+                disabled={disabled}
+              />
+            )}
+          </div>
         </Content>
       </div>
-
       {message && <Toast status={status} message={message} />}
     </div>
   )
