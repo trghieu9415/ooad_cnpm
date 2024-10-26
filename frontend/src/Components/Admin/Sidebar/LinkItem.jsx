@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
 import { FaUsersCog } from 'react-icons/fa'
 import { MdDashboard } from 'react-icons/md'
-import { RiQuestionAnswerFill } from 'react-icons/ri'
-import { FaPenToSquare } from 'react-icons/fa6'
-import { MdSpatialTracking } from 'react-icons/md'
+import { RiQuestionAnswerFill, RiQuestionnaireFill } from 'react-icons/ri'
+import { FaTags,FaAward  } from 'react-icons/fa'
 import routes from '../../../config/routePath/routes'
 const LinkItem = () => {
   let arrayItem = [
@@ -19,18 +18,23 @@ const LinkItem = () => {
     },
     {
       to: routes.adminQuestion,
+      icon: RiQuestionnaireFill,
+      name: 'Quản lý câu hỏi'
+    },
+    {
+      to: routes.adminAnswer,
       icon: RiQuestionAnswerFill,
-      name: 'Quản lý câu hỏi và câu trả lời'
+      name: 'Quản lý câu trả lời'
     },
     {
-      to: '',
-      icon: FaPenToSquare,
-      name: 'Quản lý nội dung'
+      to: routes.adminTag,
+      icon: FaTags,
+      name: 'Quản lí thẻ gắn'
     },
     {
-      to: '',
-      icon: MdSpatialTracking,
-      name: 'Theo dõi hoạt động'
+      to: routes.adminBadge,
+      icon: FaAward,
+      name: 'Quản lí danh hiệu'
     }
   ]
 
