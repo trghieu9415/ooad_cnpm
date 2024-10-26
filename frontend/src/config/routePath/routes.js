@@ -12,7 +12,8 @@ const routes = {
   adminMember: '/admin/members',
   adminQuestion: '/admin/questions',
   adminAnswer: '/admin/answers',
-  adminTag: '/admin/tags'
+  adminTag: '/admin/tags',
+  adminBadge: '/admin/badges'
   // adminActivityTracking: '/admin/tracking'
 }
 

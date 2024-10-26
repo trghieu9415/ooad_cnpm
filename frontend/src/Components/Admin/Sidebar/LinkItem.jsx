@@ -32,7 +32,7 @@ const LinkItem = () => {
       name: 'Quản lí thẻ gắn'
     },
     {
-      to: '',
+      to: routes.adminBadge,
       icon: FaAward,
       name: 'Quản lí danh hiệu'
     }

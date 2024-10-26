@@ -41,6 +41,9 @@ export default function Member() {
   const indexOfFirstMember = indexOfLastMember - memberPerPage
   const currentMember = data?.data.slice(indexOfFirstMember, indexOfLastMember)
 
+  //cột của bảng
+  const columns = ['Member', 'Username', 'Email', 'Phone', 'Reputation', 'Status', 'Register date', 'Actions']
+
   const toggleStatusMember = useMutation({
     mutationFn: (account_id) => toggleAccountStateMember(account_id),
     onSuccess: (data) => {
@@ -71,23 +74,17 @@ export default function Member() {
     <div className={`${darkMode ? 'dark' : ''} `}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
         <Content>
-          <h4 className='mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'></h4>
-          <Button larger right>
-            Thêm thành viên
-          </Button>
+          <h4 className='mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí người dùng</h4>
           <div className='w-full overflow-hidden rounded-lg shadow-xs'>
             <div className='w-full overflow-x-auto'>
               <table className='w-full whitespace-no-wrap'>
                 <thead>
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500  uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
-                    <th className='px-4 py-3'>Member</th>
-                    <th className='px-4 py-3'>Username</th>
-                    <th className='px-4 py-3'>Email</th>
-                    <th className='px-4 py-3'>Phone</th>
-                    <th className='px-4 py-3'>Reputation</th>
-                    <th className='px-5 py-3'>Status</th>
-                    <th className='px-4 py-3'>Register time</th>
-                    <th className='px-4 py-3'>Actions</th>
+                    {columns?.map((column, index) => (
+                      <th key={index} className='px-4 py-3'>
+                        {column}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>

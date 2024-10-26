@@ -5,12 +5,14 @@ import Content from '../../../Components/Admin/components/Content'
 
 export default function Member() {
   const darkMode = useSelector((state) => state.theme.darkMode)
+  //cột
+  const columns = ['Title question', 'Status', 'Date up', 'Actions']
 
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
         <Content>
-          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Questions and answers</h4>
+          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí câu hỏi</h4>
           <div className='flex flex-col items-start mb-4'>
             <div className='flex  items-center'>
               <input
@@ -44,10 +46,11 @@ export default function Member() {
               <table className='w-full whitespace-no-wrap'>
                 <thead>
                   <tr className='text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800'>
-                    <th className='px-4 py-3'>Title question</th>
-                    <th className='px-4 py-3'>Status</th>
-                    <th className='px-4 py-3'>Date up</th>
-                    <th className='px-4 py-3'>Actions</th>
+                    {columns?.map((column, index) => (
+                      <th key={index} className='px-4 py-3'>
+                        {column}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y dark:divide-gray-700 dark:bg-gray-800'>
@@ -412,7 +415,7 @@ export default function Member() {
                               clipRule='evenodd'
                             ></path>
                           </svg>
-                        </button> 
+                        </button>
                       </div>
                     </td>
                   </tr>

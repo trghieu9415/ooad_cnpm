@@ -1,49 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Content from '../../../Components/Admin/components/Content'
+import { MdEdit } from 'react-icons/md'
 
-const Answer = () => {
+const Badge = () => {
   const darkMode = useSelector((state) => state.theme.darkMode)
-  //cột
-  const columns = ['Answer content', 'Question', 'Author', 'Date up', 'Actions']
+  const columns = ['Badge name', 'Condition', 'Actions']
+
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
         <Content>
-          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí câu hỏi</h4>
-          <div className='flex items-start mb-4'>
-            <label className='flex items-center mr-4 '>
-              <input
-                type='checkbox'
-                className={`appearance-none h-4 w-4 mr-1 rounded border-2 transition duration-300 ${
-                  darkMode
-                    ? 'bg-gray-700 border-gray-600 checked:bg-purple-500 checked:border-purple-500'
-                    : 'bg-white border-gray-300 checked:bg-purple-600 checked:border-purple-600'
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  darkMode
-                    ? 'focus:ring-offset-gray-800 focus:ring-purple-500'
-                    : 'focus:ring-offset-white focus:ring-purple-600'
-                }`}
-              />
-              Câu trả lời có gắn cờ
-            </label>
-            <label className='flex items-center'>
-              <input
-                type='checkbox'
-                className={`appearance-none h-4 w-4 mr-1 rounded border-2 transition duration-300 ${
-                  darkMode
-                    ? 'bg-gray-700 border-gray-600 checked:bg-purple-500 checked:border-purple-500'
-                    : 'bg-white border-gray-300 checked:bg-purple-600 checked:border-purple-600'
-                } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                  darkMode
-                    ? 'focus:ring-offset-gray-800 focus:ring-purple-500'
-                    : 'focus:ring-offset-white focus:ring-purple-600'
-                }`}
-              />
-              Câu trả lời không gắn cờ
-            </label>
-          </div>
-
+          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí danh hiệu</h4>
           <div className='w-full overflow-hidden rounded-lg shadow-xs'>
             <div className='w-full overflow-x-auto'>
               <table className='w-full whitespace-no-wrap'>
@@ -61,45 +29,28 @@ const Answer = () => {
                     <td className='px-4 py-3'>
                       <div className='flex items-center text-sm'>
                         <div>
-                          <p className='font-semibold'>
-                            Property station at write such system. Also beat every win company under nor push.
-                          </p>
+                          <p className='font-semibold'>Câu Hỏi Hay </p>
                         </div>
                       </div>
                     </td>
-                    <td className='px-4 py-3 text-xs'>
-                      <button
-                        className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                        aria-label='forward'
-                      >
-                        <svg className='w-6 h-6' aria-hidden='true' fill='none' viewBox='0 0 24 24'>
-                          <path
-                            d='M8.0001 10.1308C9.61344 8.97671 11.4547 8.57075 13 8.57075V6.22616C13 5.26817 13 4.78917 13.2952 4.65662C13.5903 4.52407 13.9484 4.8423 14.6644 5.47875L18.6367 9.00968C20.2053 10.404 20.9896 11.1012 20.9896 11.9993C20.9896 12.8975 20.2053 13.5946 18.6367 14.989L14.6644 18.5199C13.9484 19.1563 13.5903 19.4746 13.2952 19.342C13 19.2095 13 18.7305 13 17.7725V15.4279C9.4 15.4279 5.5 17.1422 4 19.9993C4 17.5676 4.37726 15.621 5.0001 14.0735'
-                            stroke='currentColor'
-                            strokeWidth='1.5'
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                          />
-                        </svg>
-                      </button>
-                    </td>
-                    <td className='px-4 py-3 text-sm'>Huy Hoang</td>
-                    <td className='px-4 py-3 text-sm'>6/10/2020</td>
-                    <td className='px-4 py-3 text-xs'>
-                      <span className='px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600'>
-                        Yes
-                      </span>
-                    </td>
+                    {/*eslint-disable-next-line react/no-unescaped-entities*/}
+                    <td className='px-4 py-3 text-xs'>Câu hỏi nhận được ít nhất 5 phiếu bầu "Hữu ích" (Upvotes). </td>
                     <td className='px-4 py-3'>
                       <div className='flex items-center space-x-4 text-sm'>
                         {/* <button
+                      className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                      aria-label='Edit'
+                    >
+                      <svg className='w-5 h-5' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20'>
+                        <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+                      </svg>
+                    </button> */}
+                        <button
                           className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                           aria-label='Edit'
                         >
-                          <svg className='w-5 h-5' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20'>
-                            <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
-                          </svg>
-                        </button> */}
+                          <MdEdit className='size-6' />
+                        </button>
                         <button
                           className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                           aria-label='Delete'
@@ -120,45 +71,31 @@ const Answer = () => {
                     <td className='px-4 py-3'>
                       <div className='flex items-center text-sm'>
                         <div>
-                          <p className='font-semibold'>
-                            Property station at write such system. Also beat every win company under nor push.
-                          </p>
+                          <p className='font-semibold'>Câu Trả Lời Hay</p>
                         </div>
                       </div>
                     </td>
                     <td className='px-4 py-3 text-xs'>
-                      <button
-                        className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                        aria-label='forward'
-                      >
-                        <svg className='w-6 h-6' aria-hidden='true' fill='none' viewBox='0 0 24 24'>
-                          <path
-                            d='M8.0001 10.1308C9.61344 8.97671 11.4547 8.57075 13 8.57075V6.22616C13 5.26817 13 4.78917 13.2952 4.65662C13.5903 4.52407 13.9484 4.8423 14.6644 5.47875L18.6367 9.00968C20.2053 10.404 20.9896 11.1012 20.9896 11.9993C20.9896 12.8975 20.2053 13.5946 18.6367 14.989L14.6644 18.5199C13.9484 19.1563 13.5903 19.4746 13.2952 19.342C13 19.2095 13 18.7305 13 17.7725V15.4279C9.4 15.4279 5.5 17.1422 4 19.9993C4 17.5676 4.37726 15.621 5.0001 14.0735'
-                            stroke='currentColor'
-                            strokeWidth='1.5'
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                          />
-                        </svg>
-                      </button>
+                      {/*eslint-disable-next-line react/no-unescaped-entities*/}
+                      Câu trả lời nhận được ít nhất 10 phiếu bầu "Hữu ích" (Upvotes).
                     </td>
-                    <td className='px-4 py-3 text-sm'>Huy Hoang</td>
-                    <td className='px-4 py-3 text-sm'>6/10/2020</td>
-                    <td className='px-4 py-3 text-xs'>
-                      <span className='px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600'>
-                        No
-                      </span>
-                    </td>
+
                     <td className='px-4 py-3'>
                       <div className='flex items-center space-x-4 text-sm'>
                         {/* <button
+                      className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                      aria-label='Edit'
+                    >
+                      <svg className='w-5 h-5' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20'>
+                        <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+                      </svg>
+                    </button> */}
+                        <button
                           className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                           aria-label='Edit'
                         >
-                          <svg className='w-5 h-5' aria-hidden='true' fill='currentColor' viewBox='0 0 20 20'>
-                            <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
-                          </svg>
-                        </button> */}
+                          <MdEdit className='size-6' />
+                        </button>
                         <button
                           className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                           aria-label='Delete'
@@ -245,4 +182,4 @@ const Answer = () => {
   )
 }
 
-export default Answer
+export default Badge
