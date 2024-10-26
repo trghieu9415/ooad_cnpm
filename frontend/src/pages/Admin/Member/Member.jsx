@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
 import Content from '../../../Components/Admin/components/Content'
-import Button from '../../../Components/Admin/components/Button'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
 import { useState } from 'react'

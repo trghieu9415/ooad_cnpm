@@ -18,8 +18,8 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
   })
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
     updateInfoMemberMutation.mutate({ id: member.id, body: data })
+    setMessage('')
   })
 
   return (
