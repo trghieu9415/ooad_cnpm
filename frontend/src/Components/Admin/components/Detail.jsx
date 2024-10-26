@@ -1,8 +1,5 @@
-const Detail = ({onClose}) => {
-
-  const handleOnClose = () => {
-
-  }
+const Detail = ({ onClose }) => {
+  const handleOnClose = () => {}
   return (
     <div className='w-screen h-screen bg-[rgba(255,255,255,0.3)] dark:bg-[#rgba()] fixed top-5 left-20 flex items-center justify-center '>
       <div className='w-[32%] h-[80%] bg-white rounded-lg border-4 border-purple-500 dark:bg-slate-800 dark:text-white'>
