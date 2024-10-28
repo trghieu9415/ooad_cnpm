@@ -1,46 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FaRegClock } from 'react-icons/fa'
 import { Link, useLocation } from 'react-router-dom'
-import ButtonGroup from '../../Components/ButtonGroup'
+import ButtonGroup from '../../../Components/ButtonGroup'
+import { useEffect, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { allQuestion } from '../../../apis/question.api'
 
-const Questions = () => {
-  const questionList = [
-    {
-      id: 1,
-      title: 'How to implement authentication in Next.js?',
-      description: 'I want to implement JWT-based authentication in Next.js and need some guidance.',
-      tags: ['next.js', 'authentication', 'jwt'],
-      votes: 10,
-      answers: 2,
-      createdAt: '2024-10-10'
-    },
-    {
-      id: 2,
-      title: 'What is the best state management for React?',
-      description: 'I am looking for recommendations on state management libraries for large React applications.',
-      tags: ['react', 'redux', 'state-management'],
-      votes: 5,
-      answers: 3,
-      createdAt: '2024-10-08'
-    },
-    {
-      id: 3,
-      title: 'How to style components using Tailwind CSS?',
-      description: 'I need help understanding the best practices when using Tailwind CSS with React components.',
-      tags: ['tailwindcss', 'react', 'css'],
-      votes: 15,
-      answers: 1,
-      createdAt: '2024-10-05'
-    }
-  ]
-
+const AllQuestions = () => {
+  const [questionList, setQuestionList] = useState([])
+  const [loading, setLoading] = useState(true)
   const buttonItems = ['All', 'Newest', 'Active', 'Bountied', 'Unanswered']
   const location = useLocation()
+
+  const fetchQuestionsMutation = useMutation({
+    mutationFn: allQuestion,
+    onSuccess: (response) => {
+      const transformedQuestions = response.data.map((question) => ({
+        id: question.id,
+        title: question.title,
+        description: question.question_text,
+        tags: question.Tags.map((tag) => tag.name),
+        votes: question.voteCount,
+        answers: question.flagCount,
+        createdAt: new Date(question.creation_time).toLocaleDateString()
+      }))
+      setQuestionList(transformedQuestions)
+      setLoading(false)
+    },
+    onError: (error) => {
+      console.error('Failed to fetch questions:', error)
+      setLoading(false)
+    }
+  })
+
+  useEffect(() => {
+    fetchQuestionsMutation.mutate()
+  }, [])
 
   const handleTabClick = (item) => {
     const searchParams = new URLSearchParams(location.search)
     searchParams.set('tab', item)
     const newPath = `${location.pathname}?${searchParams.toString()}`
     window.history.pushState({}, '', newPath)
+  }
+
+  if (loading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -50,7 +55,10 @@ const Questions = () => {
           <div className='border border-gray-300 rounded-lg p-4'>
             <div className='flex justify-between items-center mb-6'>
               <h1 className='text-2xl md:text-3xl font-semibold'>All Questions</h1>
-              <button className='bg-blue-600 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-blue-700 transition duration-200 text-sm md:text-base'>
+              <button
+                onClick={() => (window.location.href = '/questions/ask')}
+                className='bg-blue-600 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-blue-700 transition duration-200 text-sm md:text-base'
+              >
                 Ask Question
               </button>
             </div>
@@ -71,7 +79,12 @@ const Questions = () => {
                     <span className='block font-semibold'>{question.votes} votes</span>
                   </div>
                   <div className='flex-1'>
-                    <Link to={`/questions/${question.id}`}>
+                    {/* <Link to={`/questions//id/${question.id}`}>
+                      <h2 className='text-xl md:text-lg font-bold text-blue-600 hover:underline cursor-pointer'>
+                        {question.title}
+                      </h2>
+                    </Link> */}
+                    <Link to={`/questions/id`}>
                       <h2 className='text-xl md:text-lg font-bold text-blue-600 hover:underline cursor-pointer'>
                         {question.title}
                       </h2>
@@ -119,4 +132,4 @@ const Questions = () => {
   )
 }
 
-export default Questions
+export default AllQuestions
