@@ -6,12 +6,16 @@ import { loginAccount } from '../../apis/account.api'
 import { isAxiosUnauthorizedError } from '../../utils/util'
 import { useEffect, useRef, useState } from 'react'
 import Toast from '../../Components/Toast'
+import { memberSelf } from '../../apis/member.api'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../../redux/slides/userSlide'
 
 const Login = () => {
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
   const navigate = useNavigate()
   const timeoutRef = useRef(null)
+  const dispatch = useDispatch()
 
   const {
     register,
@@ -21,24 +25,34 @@ const Login = () => {
   } = useForm({})
   const rules = getRulesLogin()
 
-  const registerAccountMutation = useMutation({
+  const loginAccountMutation = useMutation({
     mutationFn: (body) => loginAccount(body)
   })
 
-  const onSubmit = handleSubmit((data) => {
-    const body = data
-    setMessage('')
+  const memberSelfMutation = useMutation({
+    mutationFn: (token) => memberSelf(token),
+    onSuccess: (userDetails) => {
+      dispatch(updateUser({ ...userDetails.data }))
+      setMessage('Đăng nhập thành công!')
+      setStatus('success')
+      timeoutRef.current = setTimeout(() => navigate('/'), 3000)
+    },
+    onError: () => {
+      setMessage('Đăng nhập thành công, nhưng không thể tải chi tiết người dùng.')
+      setStatus('warning')
+    }
+  })
 
-    registerAccountMutation.mutate(body, {
+  const onSubmit = handleSubmit((data) => {
+    setMessage('')
+    loginAccountMutation.mutate(data, {
       onSuccess: (data) => {
         if (data.status === 200) {
           const token = data.headers.authorization.split(' ')[1]
           if (token) {
             localStorage.setItem('UserToken', token)
+            memberSelfMutation.mutate(token)
           }
-          setMessage('Đăng nhập thành công !')
-          setStatus('success')
-          timeoutRef.current = setTimeout(() => navigate('/'), 3000)
         } else {
           setStatus('warning')
           setMessage('Tài khoản đã bị khoá.')

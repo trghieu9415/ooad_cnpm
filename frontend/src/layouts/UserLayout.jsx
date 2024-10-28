@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import UserAvatar from '../Components/UserAvatar'
 import Button from '../Components/Button'
+import { useSelector } from 'react-redux'
 
 const UserLayout = ({ children }) => {
   const [tabs] = useState([
@@ -10,13 +11,15 @@ const UserLayout = ({ children }) => {
     { name: 'Saves', path: '/users/saves' }
   ])
 
+  const user = useSelector((state) => state.user)
+
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='flex flex-col lg:flex-row justify-between'>
         <div className='flex items-center gap-8 mb-8'>
           <UserAvatar width={150} height={150} />
           <div>
-            <h1 className='text-3xl'>Username</h1>
+            <h1 className='text-3xl'>{user.name}</h1>
             <p className='text-gray-600'>Member since January 2024</p>
           </div>
         </div>
@@ -47,7 +50,7 @@ const UserLayout = ({ children }) => {
           <h2 className='text-lg font-semibold'>Stats</h2>
           <div className='grid grid-cols-2 gap-4'>
             <div className='text-gray-700 text-sm flex flex-col items-center'>
-              <span>1</span>
+              <span>{user.reputation}</span>
               <span>reputation</span>
             </div>
             <div className='text-gray-700 text-sm flex flex-col items-center'>

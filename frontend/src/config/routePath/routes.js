@@ -2,7 +2,7 @@ const routes = {
   home: '/',
   login: '/login',
   register: '/register',
-  questions: '/questions',
+  questions: '/questions/:slug',
   users: '/users/:slug',
   userAdjustments: '/users/:slug/:feature',
   tags: '/tags',
