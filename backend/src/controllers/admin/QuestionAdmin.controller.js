@@ -20,7 +20,18 @@ const handleStatusChange = async (req, res) => {
     res.status(500).json(error)
   }
 }
+const getQuestionById = async (req, res) => {
+  try {
+    const { id } = req.params
+    const result = await Question.getQuestionById(id)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 module.exports = {
   getAllQuestions,
-  handleStatusChange
+  handleStatusChange,
+  getQuestionById
 }

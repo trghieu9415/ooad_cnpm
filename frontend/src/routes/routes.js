@@ -16,6 +16,7 @@ const AdminQuestion = lazy(() => import('../pages/Admin/Question'))
 const AdminAnswer = lazy(() => import('../pages/Admin/Answer'))
 const AdminTag = lazy(() => import('../pages/Admin/Tag'))
 const AdminBadge = lazy(() => import('../pages/Admin/Badge'))
+const AdminQuestionDetail = lazy(() => import('../pages/Admin/Question/QuestionDetail'))
 // const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
@@ -74,6 +75,11 @@ const publicRoutes = [
   {
     path: config.routes.adminBadge,
     component: AdminBadge,
+    layout: AdminLayout
+  },
+  {
+    path: config.routes.adminQuestionDetail,
+    component: AdminQuestionDetail,
     layout: AdminLayout
   }
 ]

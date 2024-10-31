@@ -32,7 +32,6 @@ export default function HomeAdmin() {
     fetchMembers()
   }, [])
   useEffect(() => {
-    // call api
     // Khởi tạo biểu đồ Pie
     const ctxPie = document.getElementById('pie').getContext('2d')
     const pieChart = new Chart(ctxPie, {

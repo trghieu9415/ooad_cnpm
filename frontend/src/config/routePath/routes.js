@@ -13,7 +13,8 @@ const routes = {
   adminQuestion: '/admin/questions',
   adminAnswer: '/admin/answers',
   adminTag: '/admin/tags',
-  adminBadge: '/admin/badges'
+  adminBadge: '/admin/badges',
+  adminQuestionDetail: '/admin/questions/question'
 }
 
 export default routes
