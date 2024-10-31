@@ -39,7 +39,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
           <div className='m-4 flex flex-col items-center gap-4'>
             <div className='flex items-center'>
               <img
-                src='https://picsum.photos/id/222/200/300'
+                src='https://www.gravatar.com/avatar/999068a6dbcc836522fd6eb79bb9ad2b?s=48&d=identicon&r=PG&f=y&so-version=2'
                 alt='User'
                 className='w-[60px] h-[60px] rounded-full mr-3'
               />
@@ -49,9 +49,9 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
               </div>
             </div>
 
-            <div className='w-full mt-4 px-2'>
+            <div className='w-full mt-4 px-2 '>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Name:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Name:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'
@@ -61,7 +61,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
                 />
               </div>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Email:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Email:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'
@@ -71,7 +71,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
                 />
               </div>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Phone:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Phone:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'
@@ -81,7 +81,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
                 />
               </div>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Biography:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Biography:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'
@@ -92,7 +92,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
                 <p className='text-gray-600'></p>
               </div>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Register time:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Register time:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'
@@ -102,7 +102,7 @@ const ActionMember = ({ handleDetail, member, action, disabled }) => {
                 <p className='text-gray-600'></p>
               </div>
               <div className='border-b border-gray-300 py-2'>
-                <p className='text-sm font-semibold text-gray-700'>Reputation:</p>
+                <p className='text-sm font-semibold text-gray-700 dark:text-gray-400'>Reputation:</p>
                 <input
                   type='text'
                   className='bg-white border-none focus:outline-none w-full text-gray-600'

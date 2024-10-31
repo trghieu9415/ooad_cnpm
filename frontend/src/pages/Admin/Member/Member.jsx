@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux'
 import Content from '../../../Components/Admin/components/Content'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Toast from '../../../Components/Toast'
 import Pagination from '../../../Components/Pagination'
 import { MdEdit } from 'react-icons/md'
@@ -77,6 +77,16 @@ export default function Member() {
     setIsClose(!isClose)
     queryClient.invalidateQueries(['members', currentPage])
   }
+  useEffect(() => {
+    if (isClose) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isClose])
 
   if (isLoading) {
     return <div>Loading...</div>
