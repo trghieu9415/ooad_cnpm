@@ -26,8 +26,7 @@ function App() {
     const token = localStorage.getItem('UserToken')
     if (token) {
       fetchUserDetails(token)
-    } else {
-      window.location.href = '/login'
+      return
     }
   }, [])
 
