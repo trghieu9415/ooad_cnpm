@@ -1,37 +1,56 @@
-const DetailQuestion = () => {
+import { useEffect, useState } from 'react'
+import { detailQuestion } from '../../../apis/question.api'
+
+const DetailQuestion = ({ id }) => {
+  const [questionDetails, setQuestionDetails] = useState(null)
+
+  useEffect(() => {
+    detailQuestion(id)
+      .then((response) => {
+        setQuestionDetails(response.data)
+      })
+      .catch((error) => {
+        console.error('Failed to fetch question details:', error)
+      })
+  }, [id])
+
+  if (!questionDetails) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className='p-4 sm:p-8 bg-gray-50 min-h-screen flex justify-center items-start'>
       <div className='w-full max-w-2xl lg:max-w-4xl bg-white shadow-lg rounded-lg p-6 sm:p-8'>
         <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 leading-snug break-words'>
-          Cannot invoke org.hibernate.engine.jdbc.spi.SQLExceptionHelper.convert(java.sql.SQLException, String, String)
+          {questionDetails.title}
         </h1>
 
         <div className='flex flex-col sm:flex-row mb-6 sm:mb-8'>
           <div className='flex flex-col items-center sm:mr-6 mb-4 sm:mb-0'>
             <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
-            <span className='text-lg sm:text-2xl font-semibold text-gray-600 my-1 sm:my-2'>5</span>
+            <span className='text-lg sm:text-2xl font-semibold text-gray-600 my-1 sm:my-2'>
+              {questionDetails.voteCount}
+            </span>
             <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
           </div>
 
           <div className='flex-1'>
-            <p className='text-gray-700 mb-4 sm:mb-6'>
-              I am encountering an error with Hibernate is SQLExceptionHelper. Here is the error message and my setup...
-            </p>
+            <p className='text-gray-700 mb-4 sm:mb-6'>{questionDetails.question_text}</p>
 
             <div className='flex flex-wrap gap-2 mb-4 sm:mb-6'>
-              <span className='bg-blue-100 text-blue-600 rounded-full px-3 sm:px-4 py-1 text-sm font-semibold'>
-                hibernate
-              </span>
-              <span className='bg-green-100 text-green-600 rounded-full px-3 sm:px-4 py-1 text-sm font-semibold'>
-                java
-              </span>
-              <span className='bg-purple-100 text-purple-600 rounded-full px-3 sm:px-4 py-1 text-sm font-semibold'>
-                sql
-              </span>
+              {questionDetails.Tags.map((tag) => (
+                <span
+                  key={tag.id}
+                  className='bg-blue-100 text-blue-600 rounded-full px-3 sm:px-4 py-1 text-sm font-semibold'
+                >
+                  {tag.name}
+                </span>
+              ))}
             </div>
 
             <p className='text-sm text-gray-500'>
-              Asked by <span className='font-semibold text-gray-700'>User123</span> on October 28, 2024
+              Asked by <span className='font-semibold text-gray-700'>User123</span> on{' '}
+              {new Date(questionDetails.creation_time).toLocaleDateString()}
             </p>
           </div>
         </div>

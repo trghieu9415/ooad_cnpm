@@ -1,20 +1,24 @@
+import { allQuestion } from '../apis/question.api'
 import { NavLink } from 'react-router-dom'
 import UserAvatar from './UserAvatar'
 import { FaInbox } from 'react-icons/fa'
 import InputComponent from './InputComponent'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetUser } from '../redux/slides/userSlide'
 import InboxPopup from './InboxPopup'
+import useDebounce from '../hooks/useDebounce'
 
 const Navbar = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [isInboxOpen, setIsInboxOpen] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
 
   const handleClearSearch = () => {
     setSearch('')
+    setSearchResults([])
   }
 
   const handleLogout = () => {
@@ -23,6 +27,24 @@ const Navbar = () => {
     localStorage.removeItem('persist:root')
     window.location.href = '/'
   }
+
+  const debouncedSearch = useDebounce(search, 500)
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      allQuestion({ search: debouncedSearch })
+        .then((response) => {
+          console.log(response)
+          setSearchResults(response.data)
+        })
+        .catch((error) => {
+          console.error('Error fetching questions:', error)
+          setSearchResults([])
+        })
+    } else {
+      setSearchResults([])
+    }
+  }, [debouncedSearch])
 
   return (
     <header className='flex items-center justify-between px-4 py-2 border-b-2 border-gray-200 bg-white'>
@@ -37,7 +59,7 @@ const Navbar = () => {
       </div>
 
       <form className='flex-1 px-2 max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl'>
-        <div className='flex justify-center items-center border border-gray-400 rounded-lg px-2 py-1'>
+        <div className='flex justify-center items-center border border-gray-400 rounded-lg px-2 py-1 relative'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -64,6 +86,19 @@ const Navbar = () => {
             iconClear={true}
             onClear={handleClearSearch}
           />
+          {searchResults.length > 0 && (
+            <div className='absolute top-full left-0 right-0 bg-white shadow-lg border border-gray-200 mt-1 z-10'>
+              <ul>
+                {searchResults.map((result) => (
+                  <li key={result.id} className='p-2 hover:bg-gray-100'>
+                    <NavLink to={`/questions/id?questionId=${result.id}`} onClick={() => setSearch('')}>
+                      {result.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </form>
 

@@ -84,7 +84,7 @@ const AllQuestions = () => {
                         {question.title}
                       </h2>
                     </Link> */}
-                    <Link to={`/questions/id`}>
+                    <Link to={`/questions/id?questionId=${question.id}`}>
                       <h2 className='text-xl md:text-lg font-bold text-blue-600 hover:underline cursor-pointer'>
                         {question.title}
                       </h2>
