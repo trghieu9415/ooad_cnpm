@@ -17,7 +17,6 @@ const AdminAnswer = lazy(() => import('../pages/Admin/Answer'))
 const AdminTag = lazy(() => import('../pages/Admin/Tag'))
 const AdminBadge = lazy(() => import('../pages/Admin/Badge'))
 const AdminQuestionDetail = lazy(() => import('../pages/Admin/Question/QuestionDetail'))
-// const Saves = lazy(() => import('../pages/Saves'))
 
 const publicRoutes = [
   {

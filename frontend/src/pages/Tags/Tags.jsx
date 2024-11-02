@@ -1,35 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import InputComponent from '../../Components/InputComponent'
-import ButtonGroup from '../../Components/ButtonGroup'
-import { useLocation } from 'react-router-dom'
 import Tag from '../../Components/Tag'
-
-const tagsData = [
-  { name: 'JavaScript', questionCount: 1200, description: 'Programming language for web development.' },
-  { name: 'React', questionCount: 800, description: 'A JavaScript library for building user interfaces.' },
-  {
-    name: 'CSS',
-    questionCount: 600,
-    description: 'Style sheet language for describing the presentation of a document.'
-  },
-  { name: 'Java', questionCount: 500, description: 'A high-level, class-based programming language.' }
-]
+import { AllTag } from '../../apis/tag.api'
+import useDebounce from '../../hooks/useDebounce'
 
 const Tags = () => {
   const [search, setSearch] = useState('')
+  const [tagsData, setTagsData] = useState([])
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await AllTag()
+        setTagsData(response.data)
+      } catch (error) {
+        console.error('Error fetching tags:', error)
+      }
+    }
+
+    fetchTags()
+  }, [])
+
+  const debouncedSearchTerm = useDebounce(search, 300)
+
+  const searchResults = useMemo(() => {
+    if (!debouncedSearchTerm) return tagsData
+    return tagsData.filter((tag) => tag.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+  }, [debouncedSearchTerm, tagsData])
 
   const handleClearSearch = () => {
     setSearch('')
-  }
-
-  const buttonItems = ['Popular', 'Name', 'New']
-  const location = useLocation()
-
-  const handleTabClick = (item) => {
-    const searchParams = new URLSearchParams(location.search)
-    searchParams.set('tab', item)
-    const newPath = `${location.pathname}?${searchParams.toString()}`
-    window.history.pushState({}, '', newPath)
   }
 
   return (
@@ -69,13 +69,12 @@ const Tags = () => {
             onClear={handleClearSearch}
           />
         </div>
-        <ButtonGroup listItem={buttonItems} onClick={handleTabClick} />
       </div>
       <div className='m-5'></div>
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
-        {tagsData.map((tag, index) => (
-          <Tag key={index} tag={tag} />
+        {searchResults.map((tag) => (
+          <Tag key={tag.id} tag={{ name: tag.name, description: tag.description }} />
         ))}
       </div>
     </div>

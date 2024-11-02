@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import UserAvatar from '../Components/UserAvatar'
 import Button from '../Components/Button'
 import { useSelector } from 'react-redux'
@@ -23,7 +23,9 @@ const UserLayout = ({ children }) => {
             <p className='text-gray-600'>Member since January 2024</p>
           </div>
         </div>
-        <Button className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500' label='Edit Profile' />
+        <Link to='/users/edit-profile'>
+          <Button className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500' label='Edit Profile' />
+        </Link>
       </div>
 
       <div className='my-8'>
