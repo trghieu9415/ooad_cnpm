@@ -44,6 +44,11 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+  - name: tag
+    description: Operations related to Tags
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io      
 paths:
   /account/login:
     post:
@@ -1476,6 +1481,384 @@ paths:
                     example: 0
         '401':
           description: Unauthorized - Invalid or missing token
+
+  /question/create:
+    post:
+      tags:
+        - question
+      summary: Create question
+      description: Create a question with the provided data
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyNTAwLCJleHAiOjE3MjkxODEzMDB9.qNaBPrs6PyqxUE-HFk-q4BcT9rD0MmaSGPdOQIh1kEk
+          description: JWT token for authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title for the question
+                question_text:
+                  type: string
+                  description: Content of the question
+                tags:
+                  type: array
+                  description: List of tags for the question
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ID of the tag
+              required:
+                - title
+                - question_text
+            example:
+              title: 'About JWT'
+              question_text: 'Can someone explain how JWT works in terms of authentication and authorization?'
+              tags:
+                - id: '19899ab6-0bef-44fc-b55b-2db2fd6c7713'
+                - id: '2c620291-aba3-410c-a3a7-416949ebba45'
+      responses:
+        '201':
+            description: Question created successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '09239885-0630-4cad-82fc-27735408f97c'
+                    member_id:
+                      type: string
+                      example: '948dba74-dc07-40f2-b659-910b6ac5a6d0'
+                    title:
+                      type: string
+                      example: 'About JWT'
+                    question_text:
+                      type: string
+                      example: 'I want to implement authentication using JWT in a Node.js application. Can someone help with an example?'
+                    creation_time:
+                      type: string
+                      format: date-time
+                      example: '2024-11-02T08:05:16.000Z'
+                    update_time:
+                      type: string
+                      format: date-time
+                      nullable: true
+                      example: null
+                    status:
+                      type: string
+                      example: 'Open'
+                    closing_remark:
+                      type: string
+                      nullable: true
+                      example: null
+                    Tags:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: '2c620291-aba3-410c-a3a7-416949ebba45'
+                          name:
+                            type: string
+                            example: 'Java/J2EE'
+                          description:
+                            type: string
+                            example: 'Các vấn đề về ngôn ngữ Java và Java Enterprise Edition, tập trung vào phát triển ứng dụng doanh nghiệp và web.'
+                    viewCount:
+                      type: integer
+                      example: 0
+                    voteCount:
+                      type: integer
+                      example: 0
+                    flagCount:
+                      type: integer
+                      example: 0
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid or missing token'
+        '400':
+          description: Bad Request - Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid request payload'
+
+  /tag:
+    get:
+      tags:
+        - tag
+      summary: Get a list of tags
+      description: Retrieve all tags with their details.
+      responses:
+        '200':
+          description: A list of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '19899ab6-0bef-44fc-b55b-2db2fd6c7713'
+                    name:
+                      type: string
+                      example: 'C/C++'
+                    description:
+                      type: string
+                      example: 'Các câu hỏi về lập trình C và C++, bao gồm cú pháp, bộ nhớ, hiệu suất và quản lý tài nguyên.'
+              example: 
+                - id: "19899ab6-0bef-44fc-b55b-2db2fd6c7713"
+                  name: "C/C++"
+                  description: "Các câu hỏi về lập trình C và C++, bao gồm cú pháp, bộ nhớ, hiệu suất và quản lý tài nguyên."
+                - id: "2c620291-aba3-410c-a3a7-416949ebba45"
+                  name: "Java/J2EE"
+                  description: "Các vấn đề về ngôn ngữ Java và Java Enterprise Edition, tập trung vào phát triển ứng dụng doanh nghiệp và web."
+                - id: "3368797f-bd13-46c4-a602-facb59b88c86"
+                  name: "JavaScript"
+                  description: "Câu hỏi về lập trình JavaScript, từ cơ bản đến nâng cao, bao gồm xử lý sự kiện, DOM, và JavaScript hiện đại (ES6+)."
+                - id: "a023d044-95a3-4953-939e-cfce47d27c18"
+                  name: "HTML, CSS"
+                  description: "Câu hỏi về định dạng và cấu trúc của trang web, giao diện người dùng, và thiết kế với HTML, CSS."
+                - id: "a9d4f188-a1a6-41b6-8e75-76bfb8bbca61"
+                  name: "Python"
+                  description: "Thảo luận về ngôn ngữ Python, bao gồm lập trình cơ bản, web, khoa học dữ liệu, và AI."
+                - id: "c620b32c-8a02-48f5-8090-e33f9e21e5f0"
+                  name: "C#/ASP.NET"
+                  description: "Các câu hỏi về ngôn ngữ C# và ASP.NET, framework của Microsoft cho phát triển ứng dụng web và doanh nghiệp."
+                - id: "c7e1aa8a-833c-44fb-b164-239cdcd6270a"
+                  name: "Git/Github"
+                  description: "Vấn đề liên quan đến hệ thống quản lý phiên bản Git và nền tảng GitHub, bao gồm nhánh, merge và xung đột mã."
+                - id: "d6248c1e-1985-45dd-8063-c71ff21b3e03"
+                  name: "Nodejs"
+                  description: "Các câu hỏi về Node.js, bao gồm tạo máy chủ, làm việc với API, và xây dựng ứng dụng RESTful."
+                - id: "e069d464-efe5-4596-8dcc-170be32830fc"
+                  name: "JSON"
+                  description: "Thắc mắc về cách sử dụng JSON trong việc trao đổi dữ liệu, parse, và serialization."
+                - id: "f7ef70bd-753f-496b-a476-430637fa1899"
+                  name: "API/Library"
+                  description: "Câu hỏi về việc sử dụng API và thư viện trong lập trình, bao gồm cách tích hợp và sử dụng chúng hiệu quả."
+                - id: "f868e0e1-3c02-4031-b1b0-4ea842d36fa8"
+                  name: "Others"
+                  description: "Tag tổng quát cho những câu hỏi không thuộc về các chủ đề phổ biến khác."
+        '401':
+          description: Unauthorized - Invalid or missing token
+  /tag/{id}:
+    get:
+      tags:
+        - tag
+      summary: Get a specific tag by its ID
+      description: Retrieve a tag by its ID along with its details.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the tag
+          schema:
+            type: string
+            example: '19899ab6-0bef-44fc-b55b-2db2fd6c7713'
+      responses:
+        '200':
+          description: The requested tag
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '19899ab6-0bef-44fc-b55b-2db2fd6c7713'
+                  name:
+                    type: string
+                    example: 'C/C++'
+                  description:
+                    type: string
+                    example: 'Các câu hỏi về lập trình C và C++, bao gồm cú pháp, bộ nhớ, hiệu suất và quản lý tài nguyên.'
+        '401':
+          description: Unauthorized - Invalid or missing token
+
+  /tag/create:
+    post:
+      tags:
+        - tag
+      summary: Create tag
+      description: Create a new tag with the provided data
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyNTAwLCJleHAiOjE3MjkxODEzMDB9.qNaBPrs6PyqxUE-HFk-q4BcT9rD0MmaSGPdOQIh1kEk
+          description: JWT token for authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the tag
+                description:
+                  type: string
+                  description: Description of the tag
+              required:
+                - name
+                - description
+            example:
+              name: 'Reactjs'
+              description: 'Lên gg mà search'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: '601b7bdc-a521-4bca-984c-396b2e1076ea'
+                  name:
+                    type: string
+                    example: 'Reactjs'
+                  description:
+                    type: string
+                    example: 'Lên gg mà search'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid or missing token'
+        '400':
+          description: Bad Request - Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid request payload'
+  /tag/update/{id}:
+    put:
+      tags:
+        - tag
+      summary: Update tag
+      description: Update an existing tag by its ID with the provided data
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the tag to be updated
+          schema:
+            type: string
+            example: 'd6248c1e-1985-45dd-8063-c71ff21b3e03'
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMDZiMDFkOTktZDBkNS00YTM0LTg2ZTQtODllMTNmYTQ1ZTRmIiwibWVtYmVyX2lkIjoiODNmYTE0YzctNzBhZS00YTRiLTk3N2UtYmZmYTE4ZGRmMzZmIiwiaWF0IjoxNzI4NjEyNTAwLCJleHAiOjE3MjkxODEzMDB9.qNaBPrs6PyqxUE-HFk-q4BcT9rD0MmaSGPdOQIh1kEk
+          description: JWT token for authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: New name of the tag
+                description:
+                  type: string
+                  description: New description of the tag
+              required:
+                - name
+                - description
+            example:
+              name: "Nodejs"
+              description: "Lên gg mà search wtf"
+      responses:
+        '200':
+          description: Tag updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 'd6248c1e-1985-45dd-8063-c71ff21b3e03'
+                  name:
+                    type: string
+                    example: 'Nodejs'
+                  description:
+                    type: string
+                    example: 'Lên gg mà search wtf'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid or missing token'
+        '400':
+          description: Bad Request - Invalid input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid request payload'
+        '404':
+          description: Not Found - Tag with the specified ID does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: 'Tag not found'
 
 components:
   securitySchemes:
