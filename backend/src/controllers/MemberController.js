@@ -70,7 +70,7 @@ const saveQuestion = async (req, res) => {
   try {
     const member_id = req.member_id
     const question_id = req.params.question_id
-    
+
     const result = await Member.saveQuestion(member_id, question_id, true)
     res.status(result.status).json(result.data)
   } catch (err) {
