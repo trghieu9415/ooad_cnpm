@@ -13,7 +13,7 @@ export const memberAll = () => http.get('/member/all')
 
 export const memberUpdate = (body) => http.post('/admin/account/login', body)
 
-export const memberSave = (body) => http.post('/account/register', body)
+export const memberSave = (id) => http.post(`/member/save/${id}}`)
 
 export const memberFlagComment = (body) => http.post('/admin/account/login', body)
 

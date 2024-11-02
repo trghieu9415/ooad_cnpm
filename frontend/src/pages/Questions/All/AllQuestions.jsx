@@ -1,16 +1,37 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FaRegClock } from 'react-icons/fa'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButtonGroup from '../../../Components/ButtonGroup'
 import { useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { allQuestion } from '../../../apis/question.api'
+import { AllTag } from '../../../apis/tag.api'
 
 const AllQuestions = () => {
   const [questionList, setQuestionList] = useState([])
+  const [filteredQuestions, setFilteredQuestions] = useState([]) // Thêm state cho câu hỏi đã lọc
   const [loading, setLoading] = useState(true)
   const buttonItems = ['All', 'Newest', 'Active', 'Bountied', 'Unanswered']
   const location = useLocation()
+  const [tagsData, setTagsData] = useState([])
+  const navigate = useNavigate()
+
+  const searchParams = new URLSearchParams(location.search)
+  const searchQuestion = searchParams.get('search')
+  const tagQuestion = searchParams.get('tag')
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const response = await AllTag()
+        const firstFiveTags = response.data.slice(0, 5)
+        setTagsData(firstFiveTags)
+      } catch (error) {
+        console.error('Error fetching tags:', error)
+      }
+    }
+
+    fetchTags()
+  }, [])
 
   const fetchQuestionsMutation = useMutation({
     mutationFn: allQuestion,
@@ -35,7 +56,25 @@ const AllQuestions = () => {
 
   useEffect(() => {
     fetchQuestionsMutation.mutate()
-  }, [])
+  }, [fetchQuestionsMutation])
+
+  useEffect(() => {
+    if (searchQuestion || tagQuestion) {
+      const filtered = questionList.filter((question) => {
+        const matchesSearch = searchQuestion
+          ? question.title.toLowerCase().includes(searchQuestion.toLowerCase()) ||
+            question.description.toLowerCase().includes(searchQuestion.toLowerCase())
+          : true
+        const matchesTag = tagQuestion
+          ? question.tags.some((tag) => tag.toLowerCase() === tagQuestion.toLowerCase())
+          : true
+        return matchesSearch && matchesTag
+      })
+      setFilteredQuestions(filtered)
+    } else {
+      setFilteredQuestions(questionList)
+    }
+  }, [searchQuestion, tagQuestion, questionList])
 
   const handleTabClick = (item) => {
     const searchParams = new URLSearchParams(location.search)
@@ -46,6 +85,10 @@ const AllQuestions = () => {
 
   if (loading) {
     return <div>Loading...</div>
+  }
+
+  const handleTagClick = (tagName) => {
+    navigate(`/questions/all?tag=${tagName}`)
   }
 
   return (
@@ -64,12 +107,12 @@ const AllQuestions = () => {
             </div>
 
             <div className='flex flex-col justify-between items-center lg:flex-row'>
-              <span>{questionList.length} questions</span>
+              <span>{filteredQuestions.length} questions</span>
               <ButtonGroup listItem={buttonItems} onClick={handleTabClick} />
             </div>
 
             <div className='mt-4'>
-              {questionList.map((question) => (
+              {filteredQuestions.map((question) => (
                 <div
                   key={question.id}
                   className='border border-gray-300 rounded-lg p-4 mb-4 flex flex-col md:flex-row hover:shadow-lg transition-shadow duration-300 gap-3'
@@ -79,11 +122,6 @@ const AllQuestions = () => {
                     <span className='block font-semibold'>{question.votes} votes</span>
                   </div>
                   <div className='flex-1'>
-                    {/* <Link to={`/questions//id/${question.id}`}>
-                      <h2 className='text-xl md:text-lg font-bold text-blue-600 hover:underline cursor-pointer'>
-                        {question.title}
-                      </h2>
-                    </Link> */}
                     <Link to={`/questions/id?questionId=${question.id}`}>
                       <h2 className='text-xl md:text-lg font-bold text-blue-600 hover:underline cursor-pointer'>
                         {question.title}
@@ -95,7 +133,8 @@ const AllQuestions = () => {
                         {question.tags.map((tag, index) => (
                           <span
                             key={index}
-                            className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs md:text-sm mr-2'
+                            onClick={() => handleTagClick(tag)}
+                            className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs md:text-sm mr-2 cursor-pointer'
                           >
                             {tag}
                           </span>
@@ -117,12 +156,14 @@ const AllQuestions = () => {
           <div className='border border-gray-300 rounded-lg p-4'>
             <h3 className='text-lg font-semibold mb-4'>Top Tags</h3>
             <div className='flex flex-wrap gap-2'>
-              {['next.js', 'react', 'tailwindcss', 'redux', 'authentication'].map((tag, index) => (
-                <Link key={index} to={`/tags/${tag}`}>
-                  <span className='bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-300 cursor-pointer'>
-                    {tag}
-                  </span>
-                </Link>
+              {tagsData.map((tag) => (
+                <span
+                  key={tag.id}
+                  onClick={() => handleTagClick(tag.name)}
+                  className='bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm hover:bg-gray-300 cursor-pointer'
+                >
+                  {tag.name}
+                </span>
               ))}
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import InputComponent from '../../Components/InputComponent'
 import Tag from '../../Components/Tag'
 import { AllTag } from '../../apis/tag.api'
@@ -74,7 +75,9 @@ const Tags = () => {
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
         {searchResults.map((tag) => (
-          <Tag key={tag.id} tag={{ name: tag.name, description: tag.description }} />
+          <Link key={tag.id} to={`/questions/all?tag=${tag.name}`}>
+            <Tag tag={{ name: tag.name, description: tag.description }} />
+          </Link>
         ))}
       </div>
     </div>
