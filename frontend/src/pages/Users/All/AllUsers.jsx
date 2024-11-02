@@ -5,7 +5,8 @@ import ButtonGroup from '../../../Components/ButtonGroup'
 import UserInfo from '../../../Components/UserInfo'
 import { memberAll } from '../../../apis/member.api'
 import useDebounce from '../../../hooks/useDebounce'
-
+import { Link } from 'react-router-dom'
+import config from '../../../config/routePath'
 const Users = () => {
   const [usersData, setUsersData] = useState([])
   const [loading, setLoading] = useState(true)
@@ -97,7 +98,13 @@ const Users = () => {
       <div className='m-5'></div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
         {filteredUsers.map((user) => (
-          <UserInfo key={user.id} user={user} />
+          <Link
+            key={user.id}
+            to={`${config.routes.users.replace(':slug', 'profile')}?id=${user.id}`}
+            aria-label='View Detail'
+          >
+            <UserInfo user={user} />
+          </Link>
         ))}
       </div>
     </div>

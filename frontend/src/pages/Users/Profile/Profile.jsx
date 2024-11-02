@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { memberById } from '../../../apis/member.api'
+import { useLocation } from 'react-router-dom'
 
-const Profile = () => {
-  const user = useSelector((state) => state.user)
+const Profile = ({ user }) => {
   return (
     <div className='min-h-screen flex justify-center items-start bg-gray-50 p-4'>
       <div className='max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 sm:p-8'>
@@ -23,18 +25,16 @@ const Profile = () => {
         <div className='mt-4'>
           <h2 className='text-xl font-bold text-gray-800 mb-4'>Badges</h2>
           <div className='flex flex-wrap space-x-4'>
-            <div className='bg-gray-100 p-4 rounded-lg'>
-              <h3 className='font-semibold text-gray-700'>Gold Badge</h3>
-              <p className='text-gray-500'>3 Achievements</p>
-            </div>
-            <div className='bg-gray-100 p-4 rounded-lg'>
-              <h3 className='font-semibold text-gray-700'>Silver Badge</h3>
-              <p className='text-gray-500'>5 Achievements</p>
-            </div>
-            <div className='bg-gray-100 p-4 rounded-lg'>
-              <h3 className='font-semibold text-gray-700'>Bronze Badge</h3>
-              <p className='text-gray-500'>10 Achievements</p>
-            </div>
+            {user.Badges && user.Badges.length > 0 ? (
+              user.Badges.map((badge) => (
+                <div key={badge.id} className='bg-gray-100 p-4 rounded-lg'>
+                  <h3 className='font-semibold text-gray-700'>{badge.name}</h3>
+                  <p className='text-gray-500'>{badge.description}</p>
+                </div>
+              ))
+            ) : (
+              <p className='text-gray-500'>No badges earned yet.</p>
+            )}
           </div>
         </div>
 

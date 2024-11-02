@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Content from '../../../../Components/Admin/components/Content'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { formatRegistrationTime } from '../../../../helpers/formatRegistrationTime'
 import { getQuestionById } from '../../../../apis/Admin/adminQuestion.api'
+import { IoReturnUpBack } from 'react-icons/io5'
+import Button from '../../../../Components/Admin/components/Button'
 
 // Giả sử đây là dữ liệu câu trả lời
 const answers = [
@@ -21,10 +23,12 @@ const answers = [
 
 const QuestionDetail = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [question, setQuestion] = useState(null)
   const queryParams = new URLSearchParams(location.search)
-  const id = queryParams.get('id') // Lấy giá trị của id
+  const id = queryParams.get('id')
   const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
     const fetchQuestion = async () => {
       try {
@@ -41,16 +45,28 @@ const QuestionDetail = () => {
       fetchQuestion()
     }
   }, [id])
+
   if (isLoading) {
     return <div>Loading...</div>
   }
+
   if (!question) {
     return <div>No question found.</div>
   }
+
   return (
     <div className='p-4 mt-14 sm:ml-64 flex flex-col lg:flex-row gap-4 bg-gray-100 text-gray-500 dark:bg-gray-800 transition-all duration-300'>
       <Content>
-        <h4 className='mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300'>Chi tiết câu hỏi</h4>
+        <h4 className='my-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Chi tiết câu hỏi</h4>
+        <Button
+          left
+          regular
+          onClick={() => {
+            navigate(-1)
+          }}
+        >
+          Back
+        </Button>
         {question && (
           <div className='flex flex-col lg:flex-row gap-4'>
             <div className='flex flex-col gap-4 w-full lg:w-3/4'>

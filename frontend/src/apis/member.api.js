@@ -13,6 +13,8 @@ export const memberAll = () => http.get('/member/all')
 
 export const memberUpdate = (body) => http.post('/admin/account/login', body)
 
+export const memberById = (id) => http.get(`/member/${id}`)
+
 export const memberSave = (id) => http.post(`/member/save/${id}}`)
 
 export const memberFlagComment = (body) => http.post('/admin/account/login', body)

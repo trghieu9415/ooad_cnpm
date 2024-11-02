@@ -4,14 +4,14 @@ import UserAvatar from '../Components/UserAvatar'
 import Button from '../Components/Button'
 import { useSelector } from 'react-redux'
 
-const UserLayout = ({ children }) => {
+const UserLayout = ({ children, user = undefined, isOtherMember = false, idMember }) => {
   const [tabs] = useState([
-    { name: 'Profile', path: '/users/profile' },
-    { name: 'Questions', path: '/users/questions' },
-    { name: 'Saves', path: '/users/saves' }
+    { name: 'Profile', path: idMember ? `/users/profile?id=${idMember}` : '/users/profile' },
+    { name: 'Questions', path: idMember ? `/users/questions?id=${idMember}` : '/users/questions' },
+    { name: 'Saves', path: idMember ? `/users/saves?id=${idMember}` : '/users/saves' }
   ])
 
-  const user = useSelector((state) => state.user)
+  console.log(user)
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -23,9 +23,14 @@ const UserLayout = ({ children }) => {
             <p className='text-gray-600'>Member since January 2024</p>
           </div>
         </div>
-        <Link to='/users/edit-profile'>
-          <Button className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500' label='Edit Profile' />
-        </Link>
+        {isOtherMember && (
+          <Link to='/users/edit-profile'>
+            <Button
+              className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500'
+              label='Edit Profile'
+            />
+          </Link>
+        )}
       </div>
 
       <div className='my-8'>
