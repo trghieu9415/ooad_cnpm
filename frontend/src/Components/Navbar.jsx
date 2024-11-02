@@ -1,9 +1,9 @@
 import { allQuestion } from '../apis/question.api'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import UserAvatar from './UserAvatar'
 import { FaInbox } from 'react-icons/fa'
 import InputComponent from './InputComponent'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetUser } from '../redux/slides/userSlide'
 import InboxPopup from './InboxPopup'
@@ -14,11 +14,11 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const [search, setSearch] = useState('')
   const [isInboxOpen, setIsInboxOpen] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
+  const [allQuestions, setAllQuestions] = useState([])
+  const navigate = useNavigate()
 
   const handleClearSearch = () => {
     setSearch('')
-    setSearchResults([])
   }
 
   const handleLogout = () => {
@@ -31,20 +31,26 @@ const Navbar = () => {
   const debouncedSearch = useDebounce(search, 500)
 
   useEffect(() => {
-    if (debouncedSearch) {
-      allQuestion({ search: debouncedSearch })
-        .then((response) => {
-          console.log(response)
-          setSearchResults(response.data)
-        })
-        .catch((error) => {
-          console.error('Error fetching questions:', error)
-          setSearchResults([])
-        })
-    } else {
-      setSearchResults([])
+    allQuestion()
+      .then((response) => {
+        setAllQuestions(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching questions:', error)
+      })
+  }, [])
+
+  const searchResults = useMemo(() => {
+    if (!debouncedSearch) return []
+    return allQuestions.filter((question) => question.title.toLowerCase().includes(debouncedSearch.toLowerCase()))
+  }, [debouncedSearch, allQuestions])
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      navigate(`/questions/all?search=${debouncedSearch}`)
     }
-  }, [debouncedSearch])
+  }
 
   return (
     <header className='flex items-center justify-between px-4 py-2 border-b-2 border-gray-200 bg-white'>
@@ -81,6 +87,7 @@ const Navbar = () => {
             placeholder='Search...'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
             className='w-full'
             classNameInput='border-none outline-none w-full px-2 pl-1 pr-10'
             iconClear={true}
