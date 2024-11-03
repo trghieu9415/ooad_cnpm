@@ -200,7 +200,7 @@ export default function Member() {
           <div className='overflow-hidden'>
             {isClose && (
               <ActionMember
-                handleDetail={action === 'detail' ? handleEdit : handleEdit}
+                handleDetail={action === 'detail' ? handleDetail : handleEdit}
                 member={memberEditing}
                 action={action}
                 disabled={disabled}
