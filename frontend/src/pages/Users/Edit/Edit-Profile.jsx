@@ -1,8 +1,13 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { memberUpdate } from '../../../apis/member.api'
+import { updateUser } from '../../../redux/slides/userSlide'
 
 const EditProfile = () => {
   const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+  const token = localStorage.getItem('UserToken')
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -18,9 +23,14 @@ const EditProfile = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Form data submitted:', formData)
+    try {
+      const response = await memberUpdate(formData, token)
+      dispatch(updateUser({ ...response.data }))
+    } catch (error) {
+      console.error('Error updating profile:', error)
+    }
   }
 
   return (

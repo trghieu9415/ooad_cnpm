@@ -1,14 +1,14 @@
 import { FaRegClock } from 'react-icons/fa'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButtonGroup from '../../../Components/ButtonGroup'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { allQuestion } from '../../../apis/question.api'
 import { AllTag } from '../../../apis/tag.api'
 
 const AllQuestions = () => {
   const [questionList, setQuestionList] = useState([])
-  const [filteredQuestions, setFilteredQuestions] = useState([]) // Thêm state cho câu hỏi đã lọc
+  const [filteredQuestions, setFilteredQuestions] = useState([]) // Filtered questions state
   const [loading, setLoading] = useState(true)
   const buttonItems = ['All', 'Newest', 'Active', 'Bountied', 'Unanswered']
   const location = useLocation()
@@ -19,18 +19,23 @@ const AllQuestions = () => {
   const searchQuestion = searchParams.get('search')
   const tagQuestion = searchParams.get('tag')
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await AllTag()
-        const firstFiveTags = response.data.slice(0, 5)
-        setTagsData(firstFiveTags)
-      } catch (error) {
-        console.error('Error fetching tags:', error)
-      }
-    }
+  const isTagsFetched = useRef(false)
+  const isQuestionsFetched = useRef(false)
 
-    fetchTags()
+  useEffect(() => {
+    if (!isTagsFetched.current) {
+      const fetchTags = async () => {
+        try {
+          const response = await AllTag()
+          const firstFiveTags = response.data.slice(0, 5)
+          setTagsData(firstFiveTags)
+          isTagsFetched.current = true
+        } catch (error) {
+          console.error('Error fetching tags:', error)
+        }
+      }
+      fetchTags()
+    }
   }, [])
 
   const fetchQuestionsMutation = useMutation({
@@ -47,6 +52,7 @@ const AllQuestions = () => {
       }))
       setQuestionList(transformedQuestions)
       setLoading(false)
+      isQuestionsFetched.current = true
     },
     onError: (error) => {
       console.error('Failed to fetch questions:', error)
@@ -55,7 +61,9 @@ const AllQuestions = () => {
   })
 
   useEffect(() => {
-    fetchQuestionsMutation.mutate()
+    if (!isQuestionsFetched.current) {
+      fetchQuestionsMutation.mutate()
+    }
   }, [fetchQuestionsMutation])
 
   useEffect(() => {

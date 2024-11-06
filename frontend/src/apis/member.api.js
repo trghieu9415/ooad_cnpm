@@ -11,7 +11,14 @@ export const memberSelf = async (token) => {
 
 export const memberAll = () => http.get('/member/all')
 
-export const memberUpdate = (body) => http.post('/admin/account/login', body)
+export const memberUpdate = async (body, token) => {
+  const response = await http.put('/member/update', body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response
+}
 
 export const memberById = (id) => http.get(`/member/${id}`)
 

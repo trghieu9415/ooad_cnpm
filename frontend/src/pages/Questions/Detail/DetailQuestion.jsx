@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react'
 import { detailQuestion } from '../../../apis/question.api'
+import { memberById } from '../../../apis/member.api'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
+  const [askedByUser, setAskedByUser] = useState(null)
 
   useEffect(() => {
     detailQuestion(id)
       .then((response) => {
         setQuestionDetails(response.data)
+        return memberById(response.data.member_id)
+      })
+      .then((response) => {
+        setAskedByUser(response.data.name)
       })
       .catch((error) => {
-        console.error('Failed to fetch question details:', error)
+        console.error('Failed to fetch details:', error)
       })
   }, [id])
 
@@ -49,8 +55,8 @@ const DetailQuestion = ({ id }) => {
             </div>
 
             <p className='text-sm text-gray-500'>
-              Asked by <span className='font-semibold text-gray-700'>User123</span> on{' '}
-              {new Date(questionDetails.creation_time).toLocaleDateString()}
+              Asked by <span className='font-semibold text-gray-700'>{askedByUser}</span> on{' '}
+              {new Date(questionDetails.update_time || questionDetails.creation_time).toLocaleDateString()}
             </p>
           </div>
         </div>

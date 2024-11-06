@@ -1,8 +1,3 @@
-import { useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { memberById } from '../../../apis/member.api'
-import { useLocation } from 'react-router-dom'
-
 const Profile = ({ user }) => {
   return (
     <div className='min-h-screen flex justify-center items-start bg-gray-50 p-4'>
