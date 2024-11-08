@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FaRegClock } from 'react-icons/fa'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import ButtonGroup from '../../../Components/ButtonGroup'
@@ -5,12 +6,14 @@ import { useEffect, useState, useRef } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { allQuestion } from '../../../apis/question.api'
 import { AllTag } from '../../../apis/tag.api'
+import { answerQuestionById } from '../../../apis/answer.api'
 
 const AllQuestions = () => {
   const [questionList, setQuestionList] = useState([])
-  const [filteredQuestions, setFilteredQuestions] = useState([]) // Filtered questions state
+  const [filteredQuestions, setFilteredQuestions] = useState([])
   const [loading, setLoading] = useState(true)
-  const buttonItems = ['All', 'Newest', 'Active', 'Bountied', 'Unanswered']
+  const [selectedTab, setSelectedTab] = useState('All')
+  const buttonItems = ['All', 'Open', 'Bountied', 'Unanswered']
   const location = useLocation()
   const [tagsData, setTagsData] = useState([])
   const navigate = useNavigate()
@@ -48,6 +51,7 @@ const AllQuestions = () => {
         tags: question.Tags.map((tag) => tag.name),
         votes: question.voteCount,
         answers: question.flagCount,
+        status: question.status,
         createdAt: new Date(question.creation_time).toLocaleDateString()
       }))
       setQuestionList(transformedQuestions)
@@ -67,8 +71,14 @@ const AllQuestions = () => {
   }, [fetchQuestionsMutation])
 
   useEffect(() => {
+    filterQuestions()
+  }, [searchQuestion, tagQuestion, questionList, selectedTab])
+
+  const filterQuestions = () => {
+    let filtered = questionList
+
     if (searchQuestion || tagQuestion) {
-      const filtered = questionList.filter((question) => {
+      filtered = filtered.filter((question) => {
         const matchesSearch = searchQuestion
           ? question.title.toLowerCase().includes(searchQuestion.toLowerCase()) ||
             question.description.toLowerCase().includes(searchQuestion.toLowerCase())
@@ -78,13 +88,30 @@ const AllQuestions = () => {
           : true
         return matchesSearch && matchesTag
       })
-      setFilteredQuestions(filtered)
-    } else {
-      setFilteredQuestions(questionList)
     }
-  }, [searchQuestion, tagQuestion, questionList])
+
+    if (selectedTab === 'Open' || selectedTab === 'Bountied') {
+      filtered = filtered.filter((question) => question.status === selectedTab)
+    } else if (selectedTab === 'Unanswered') {
+      const fetchUnansweredQuestions = async () => {
+        const unansweredQuestions = []
+        for (const question of questionList) {
+          const response = await answerQuestionById(question.id)
+          if (response.data.length === 0) {
+            unansweredQuestions.push(question)
+          }
+        }
+        setFilteredQuestions(unansweredQuestions)
+      }
+      fetchUnansweredQuestions()
+      return
+    }
+
+    setFilteredQuestions(filtered)
+  }
 
   const handleTabClick = (item) => {
+    setSelectedTab(item)
     const searchParams = new URLSearchParams(location.search)
     searchParams.set('tab', item)
     const newPath = `${location.pathname}?${searchParams.toString()}`
