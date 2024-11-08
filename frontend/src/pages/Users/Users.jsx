@@ -2,7 +2,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Saves from './Saves'
 import AllUsers from './All'
 import Profile from './Profile'
-import ListQuestion from './ListQuestion'
 import UserLayout from '../../layouts/UserLayout'
 import EditProfile from './Edit'
 import { useSelector } from 'react-redux'
@@ -42,8 +41,6 @@ const Users = () => {
         return <AllUsers />
       case 'saves':
         return <Saves />
-      case 'questions':
-        return <ListQuestion />
       case 'profile':
         return <Profile user={data} />
       case 'edit-profile':

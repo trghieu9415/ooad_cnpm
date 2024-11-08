@@ -2,16 +2,14 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import UserAvatar from '../Components/UserAvatar'
 import Button from '../Components/Button'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
 const UserLayout = ({ children, user = undefined, isOtherMember = false, idMember }) => {
   const [tabs] = useState([
     { name: 'Profile', path: idMember ? `/users/profile?id=${idMember}` : '/users/profile' },
-    { name: 'Questions', path: idMember ? `/users/questions?id=${idMember}` : '/users/questions' },
+    // { name: 'Questions', path: idMember ? `/users/questions?id=${idMember}` : '/users/questions' },
     { name: 'Saves', path: idMember ? `/users/saves?id=${idMember}` : '/users/saves' }
   ])
-
-  console.log(user)
 
   return (
     <div className='container mx-auto px-4 py-8'>
