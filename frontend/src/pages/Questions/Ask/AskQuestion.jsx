@@ -4,14 +4,17 @@ import { askQuestion } from '../../../apis/question.api'
 import { useNavigate } from 'react-router-dom'
 import { AllTag } from '../../../apis/tag.api'
 import TagModal from '../../../Components/TagModal'
+import Toast from '../../../Components/Toast'
 
 const AskQuestion = () => {
   const [title, setTitle] = useState('')
   const [questionText, setQuestionText] = useState('')
-  const [attemptedSolutions, setAttemptedSolutions] = useState('')
+  // const [attemptedSolutions, setAttemptedSolutions] = useState('')
   const [selectedTags, setSelectedTags] = useState([])
   const [tags, setTags] = useState([])
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastStatus, setToastStatus] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,7 +33,8 @@ const AskQuestion = () => {
   const mutation = useMutation({
     mutationFn: async (questionData) => {
       const token = localStorage.getItem('UserToken')
-      return await askQuestion(questionData, token)
+      const response = await askQuestion(questionData, token)
+      return response
     },
     onSuccess: () => {
       navigate('/questions/all')
@@ -41,6 +45,13 @@ const AskQuestion = () => {
   })
 
   const handleSubmit = () => {
+    // if (!title || !questionText || !attemptedSolutions || selectedTags.length === 0) {
+    if (!title || !questionText || selectedTags.length === 0) {
+      setToastMessage('All fields are required.')
+      setToastStatus('warn')
+      return
+    }
+
     const questionData = {
       title,
       question_text: questionText,
@@ -54,9 +65,19 @@ const AskQuestion = () => {
     if (newSelectedTags.length <= 5) {
       setSelectedTags(newSelectedTags)
     } else {
-      alert('You can select up to 5 tags only.')
+      setToastMessage('You can select up to 5 tags only.')
+      setToastStatus('error')
     }
   }
+
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage('')
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toastMessage])
 
   return (
     <div className='p-8 bg-gray-100 min-h-screen'>
@@ -89,7 +110,7 @@ const AskQuestion = () => {
             </p>
           </div>
 
-          <div>
+          {/* <div>
             <label className='block font-semibold text-lg mb-1'>What did you try and what were you expecting?</label>
             <textarea
               className='w-full border border-gray-300 rounded-lg p-2 h-32'
@@ -100,7 +121,7 @@ const AskQuestion = () => {
             <p className='text-sm text-gray-500 mt-1'>
               Mention solutions you have tried and explain why they didn’t work.
             </p>
-          </div>
+          </div> */}
 
           <div>
             <label className='block font-semibold text-lg mb-1'>Tags</label>
@@ -135,6 +156,8 @@ const AskQuestion = () => {
         selectedTags={selectedTags}
         onTagChange={handleTagChange}
       />
+
+      {toastMessage && <Toast status={toastStatus} message={toastMessage} position='bottom-right' />}
     </div>
   )
 }

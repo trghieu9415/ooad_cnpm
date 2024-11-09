@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { detailQuestion } from '../../../apis/question.api'
+import { commentQuestionById } from '../../../apis/comment.api'
+import { answerQuestionById } from '../../../apis/answer.api'
 import { memberById } from '../../../apis/member.api'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
   const [askedByUser, setAskedByUser] = useState(null)
+  const [comments, setComments] = useState([])
+  const [answers, setAnswers] = useState([])
 
   useEffect(() => {
     detailQuestion(id)
@@ -15,9 +19,37 @@ const DetailQuestion = ({ id }) => {
       .then((response) => {
         setAskedByUser(response.data.name)
       })
-      .catch((error) => {
-        console.error('Failed to fetch details:', error)
+      .catch((error) => console.error('Failed to fetch question details or author:', error))
+
+    commentQuestionById(id)
+      .then(async (response) => {
+        const commentsWithNames = await Promise.all(
+          response.data.map(async (comment) => {
+            const memberResponse = await memberById(comment.member_id)
+            return {
+              ...comment,
+              memberName: memberResponse.data.name
+            }
+          })
+        )
+        setComments(commentsWithNames)
       })
+      .catch((error) => console.error('Failed to fetch comments:', error))
+
+    answerQuestionById(id)
+      .then(async (response) => {
+        const answersWithNames = await Promise.all(
+          response.data.map(async (answer) => {
+            const memberResponse = await memberById(answer.member_id)
+            return {
+              ...answer,
+              memberName: memberResponse.data.name
+            }
+          })
+        )
+        setAnswers(answersWithNames)
+      })
+      .catch((error) => console.error('Failed to fetch answers:', error))
   }, [id])
 
   if (!questionDetails) {
@@ -62,48 +94,45 @@ const DetailQuestion = ({ id }) => {
         </div>
 
         <div className='bg-gray-100 p-3 sm:p-4 rounded-lg shadow-inner mb-6 sm:mb-8'>
-          <p className='text-sm text-gray-700 mb-1 sm:mb-2'>
-            <span className='font-semibold text-gray-800'>User456</span> - Have you tried checking your SQL syntax?
-          </p>
-          <p className='text-sm text-gray-700'>
-            <span className='font-semibold text-gray-800'>User789</span> - I had a similar issue; updating Hibernate
-            fixed it.
-          </p>
+          {comments.map((comment) => (
+            <p key={comment.id} className='text-sm text-gray-700 mb-1 sm:mb-2'>
+              <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
+            </p>
+          ))}
         </div>
 
         <div className='mt-8 sm:mt-10'>
           <h2 className='text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6'>Answers</h2>
+          {answers.map((answer) => (
+            <div key={answer.id} className='bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6'>
+              <div className='flex'>
+                <div className='flex flex-col items-center mr-4 sm:mr-6'>
+                  <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
+                  <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
+                  <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
+                </div>
 
-          <div className='bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6'>
-            <div className='flex'>
-              <div className='flex flex-col items-center mr-4 sm:mr-6'>
-                <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
-                <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>3</span>
-                <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
-              </div>
-
-              <div className='flex-1'>
-                <p className='text-gray-700 mb-2 sm:mb-4'>
-                  I encountered this issue before; it was due to a version mismatch. Try upgrading to the latest
-                  Hibernate version.
-                </p>
-                <p className='text-sm text-gray-500'>
-                  Answered by <span className='font-semibold text-gray-700'>User456</span> on October 28, 2024
-                </p>
+                <div className='flex-1'>
+                  <p className='text-gray-700 mb-2 sm:mb-4'>{answer.answer_text}</p>
+                  <p className='text-sm text-gray-500'>
+                    Answered by <span className='font-semibold text-gray-700'>{answer.memberName}</span> on{' '}
+                    {new Date(answer.creation_time).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          <div className='mt-6 sm:mt-10'>
-            <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
-            <textarea
-              className='w-full h-32 sm:h-40 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 sm:mb-4 focus:outline-none focus:border-blue-500 transition'
-              placeholder='Write your answer here...'
-            />
-            <button className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'>
-              Post Your Answer
-            </button>
-          </div>
+        <div className='mt-6 sm:mt-10'>
+          <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
+          <textarea
+            className='w-full h-32 sm:h-40 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 sm:mb-4 focus:outline-none focus:border-blue-500 transition'
+            placeholder='Write your answer here...'
+          />
+          <button className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'>
+            Post Your Answer
+          </button>
         </div>
       </div>
     </div>
