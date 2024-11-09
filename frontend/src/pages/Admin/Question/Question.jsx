@@ -11,6 +11,8 @@ import { CiLock, CiUnlock } from 'react-icons/ci'
 import { Link } from 'react-router-dom'
 import config from '../../../config/routePath'
 import Toast from '../../../Components/Toast'
+import { getAllTags } from '../../../apis/Admin/adminTag.api'
+import { getAnswerByQuestion } from '../../../apis/Admin/adminAnswer.api'
 export default function Question() {
   const darkMode = useSelector((state) => state.theme.darkMode)
   const [questions, setQuestions] = useState([])
@@ -25,32 +27,33 @@ export default function Question() {
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
   useEffect(() => {
-    const fetchQuestions = async () => {
+    const fetchData = async () => {
       try {
-        const result = await getAllQuestion()
-        setQuestions(result.data)
+        const [questionRes, tagsRes] = await Promise.all([getAllQuestion(), getAllTags()])
+        const questionWithAnswerLength = await Promise.all(
+          questionRes.data.map(async (question) => {
+            const answers = await getAnswerByQuestion(question.id)
+            return { ...question, answer_length: answers.data.length }
+          })
+        )
+        setQuestions(questionWithAnswerLength)
+        setTags(tagsRes.data)
       } catch (error) {
-        console.error('Error fetching questions:', error)
+        console.error('Error fetching data:', error)
       } finally {
         setIsLoading(false)
       }
     }
-
-    fetchQuestions()
+    fetchData()
   }, [])
-  //cột
   const columns = ['Title question', 'Status', 'Date up', 'Actions']
   const handleStatus = async (question_id, currentStatus) => {
     try {
-      const newStatus = currentStatus === 'Open' ? 'Close' : 'Open' // Toggle status
-      await handleStatusChange(question_id, { status: newStatus, closing_remark: null }) // Call API to change the status
-
-      // Cập nhật trạng thái cục bộ để phản ánh sự thay đổi trạng thái
+      const newStatus = currentStatus === 'Open' ? 'Close' : 'Open'
+      await handleStatusChange(question_id, { status: newStatus, closing_remark: null })
       setQuestions((prevQuestions) =>
         prevQuestions.map((question) => (question.id === question_id ? { ...question, status: newStatus } : question))
       )
-
-      // Cập nhật thông điệp thành công
       setStatus('success')
       setMessage(`Trạng thái câu hỏi đã được thay đổi thành ${newStatus}.`)
     } catch (error) {
@@ -82,18 +85,18 @@ export default function Question() {
             </div>
             <div className='mt-1 w-52'>
               <span className='text-gray-700 dark:text-gray-400'>Tags</span>
-              <select className='block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'>
-                <option>C/C++</option>
-                <option>Java/J2EE</option>
-                <option>JavaScript</option>
-                <option>HTML, CSS</option>
-                <option>Python</option>
-                <option>C#/ASP.NET</option>
-                <option>Git/Github</option>
-                <option>Nodejs</option>
-                <option>JSON</option>
-                <option>API/Library</option>
-                <option>Others</option>
+              <select
+                className='block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
+                defaultValue=''
+              >
+                <option value='' disabled hidden>
+                  Chọn thẻ
+                </option>
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.name}>
+                    {tag.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -117,7 +120,9 @@ export default function Question() {
                           <div className='flex items-center text-sm'>
                             <div>
                               <p className='font-semibold'>{question.title}</p>
-                              <p className='text-xs text-gray-600 dark:text-gray-400'>10 answer</p>
+                              <p className='text-xs text-gray-600 dark:text-gray-400'>
+                                {question.answer_length} answer
+                              </p>
                             </div>
                           </div>
                         </td>
