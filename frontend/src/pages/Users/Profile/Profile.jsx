@@ -78,12 +78,14 @@ const Profile = ({ user }) => {
                     <div className='text-right'>
                       <p className='text-gray-600 text-sm'>Votes: {question.voteCount}</p>
                       <p className='text-gray-600 text-sm'>Views: {question.viewCount}</p>
-                      <button
-                        onClick={() => handleEdit(question.id)}
-                        className='mt-2 text-gray-100 text-sm hover:text-blue-300 bg-blue-500 p-2 rounded-lg'
-                      >
-                        Edit
-                      </button>
+                      {!user?.id && (
+                        <button
+                          onClick={() => handleEdit(question.id)}
+                          className='mt-2 text-gray-100 text-sm hover:text-blue-300 bg-blue-500 p-2 rounded-lg'
+                        >
+                          Edit
+                        </button>
+                      )}
                     </div>
                   </div>
                 </li>
