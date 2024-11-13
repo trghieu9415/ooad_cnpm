@@ -7,6 +7,7 @@ import EditProfile from './Edit'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { memberById } from '../../apis/member.api'
+import ChangePassword from './Change-Password'
 
 const Users = () => {
   const { slug } = useParams()
@@ -45,6 +46,8 @@ const Users = () => {
         return <Profile user={data} />
       case 'edit-profile':
         return <EditProfile />
+      case 'change-password':
+        return <ChangePassword />
       default:
         navigate('/not-found')
     }

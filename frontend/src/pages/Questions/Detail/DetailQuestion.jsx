@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 import { detailQuestion } from '../../../apis/question.api'
-import { commentQuestionById } from '../../../apis/comment.api'
-import { answerQuestionById } from '../../../apis/answer.api'
+import { commentQuestionById, createCommentQuestionById } from '../../../apis/comment.api'
+import { answerQuestionById, createAnswerQuestionById } from '../../../apis/answer.api'
 import { memberById } from '../../../apis/member.api'
+import { useSelector } from 'react-redux'
+import { AiOutlineCheck } from 'react-icons/ai'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
   const [askedByUser, setAskedByUser] = useState(null)
   const [comments, setComments] = useState([])
   const [answers, setAnswers] = useState([])
+  const [newComment, setNewComment] = useState('')
+  const [bestAnswerId, setBestAnswerId] = useState(null)
+  const [newAnswer, setNewAnswer] = useState('')
+  const currentUser = useSelector((state) => state.user)
 
   useEffect(() => {
     detailQuestion(id)
@@ -52,6 +58,44 @@ const DetailQuestion = ({ id }) => {
       .catch((error) => console.error('Failed to fetch answers:', error))
   }, [id])
 
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return
+    try {
+      const response = await createCommentQuestionById(id, localStorage.getItem('UserToken'), {
+        content_text: newComment
+      })
+      const addedComment = {
+        ...response.data,
+        memberName: currentUser.name
+      }
+      setComments([...comments, addedComment])
+      setNewComment('')
+    } catch (error) {
+      console.error('Failed to add comment:', error)
+    }
+  }
+
+  const handleAddAnswer = async () => {
+    if (!newAnswer.trim()) return
+    try {
+      const response = await createAnswerQuestionById(id, localStorage.getItem('UserToken'), {
+        answer_text: newAnswer
+      })
+      const addedAnswer = {
+        ...response.data,
+        memberName: currentUser.name
+      }
+      setAnswers([...answers, addedAnswer])
+      setNewAnswer('')
+    } catch (error) {
+      console.error('Failed to add answer:', error)
+    }
+  }
+
+  const handleBestAnswerToggle = (answerId) => {
+    setBestAnswerId((prev) => (prev === answerId ? null : answerId))
+  }
+
   if (!questionDetails) {
     return <div>Loading...</div>
   }
@@ -74,7 +118,6 @@ const DetailQuestion = ({ id }) => {
 
           <div className='flex-1'>
             <p className='text-gray-700 mb-4 sm:mb-6'>{questionDetails.question_text}</p>
-
             <div className='flex flex-wrap gap-2 mb-4 sm:mb-6'>
               {questionDetails.Tags.map((tag) => (
                 <span
@@ -85,7 +128,6 @@ const DetailQuestion = ({ id }) => {
                 </span>
               ))}
             </div>
-
             <p className='text-sm text-gray-500'>
               Asked by <span className='font-semibold text-gray-700'>{askedByUser}</span> on{' '}
               {new Date(questionDetails.update_time || questionDetails.creation_time).toLocaleDateString()}
@@ -101,6 +143,21 @@ const DetailQuestion = ({ id }) => {
           ))}
         </div>
 
+        <div className='mb-6 sm:mb-8'>
+          <textarea
+            className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
+            placeholder='Add a comment...'
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <button
+            className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+            onClick={handleAddComment}
+          >
+            Post Comment
+          </button>
+        </div>
+
         <div className='mt-8 sm:mt-10'>
           <h2 className='text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6'>Answers</h2>
           {answers.map((answer) => (
@@ -111,7 +168,6 @@ const DetailQuestion = ({ id }) => {
                   <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
                   <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
                 </div>
-
                 <div className='flex-1'>
                   <p className='text-gray-700 mb-2 sm:mb-4'>{answer.answer_text}</p>
                   <p className='text-sm text-gray-500'>
@@ -119,6 +175,11 @@ const DetailQuestion = ({ id }) => {
                     {new Date(answer.creation_time).toLocaleDateString()}
                   </p>
                 </div>
+                <button onClick={() => handleBestAnswerToggle(answer.id)}>
+                  <AiOutlineCheck
+                    className={`text-2xl transition ${bestAnswerId === answer.id ? 'text-green-500' : 'text-gray-400'}`}
+                  />
+                </button>
               </div>
             </div>
           ))}
@@ -129,8 +190,13 @@ const DetailQuestion = ({ id }) => {
           <textarea
             className='w-full h-32 sm:h-40 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 sm:mb-4 focus:outline-none focus:border-blue-500 transition'
             placeholder='Write your answer here...'
+            value={newAnswer}
+            onChange={(e) => setNewAnswer(e.target.value)}
           />
-          <button className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'>
+          <button
+            className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+            onClick={handleAddAnswer}
+          >
             Post Your Answer
           </button>
         </div>

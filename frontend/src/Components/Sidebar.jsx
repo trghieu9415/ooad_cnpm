@@ -38,7 +38,7 @@ const Sidebar = ({ menuItems, onToggle }) => {
     }
   }, [onToggle, isOpen])
 
-  const slugsOfUser = ['all', 'profile', 'questions', 'edit-profile']
+  const slugsOfUser = ['all', 'profile', 'change-password', 'edit-profile']
 
   const handleActive = (currentPath) => {
     if (currentPath.startsWith('/users/')) {
