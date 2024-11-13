@@ -23,7 +23,6 @@ const ChangePassword = () => {
     try {
       const body = { current_password: currentPassword, new_password: newPassword }
       const response = await ChangePasswordUser(body, token)
-        console.log(response)
       if (response.status === 200) {
         setMessage('Đổi mật khẩu thành công!')
         setStatus('success')
