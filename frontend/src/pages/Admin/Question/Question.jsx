@@ -20,12 +20,12 @@ export default function Question() {
   const [currentPage, setCurrentPage] = useState(1)
   const [tags, setTags] = useState([])
   const questionPerPage = 5
-  const totalQuestion = questions?.length || 0
   const indexOfLastQuestion = currentPage * questionPerPage
   const indexOfFirstQuestion = indexOfLastQuestion - questionPerPage
-  const currentQuestion = questions?.slice(indexOfFirstQuestion, indexOfLastQuestion)
   const [message, setMessage] = useState('')
   const [status, setStatus] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [selectedTag, setSelectedTag] = useState('')
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,6 +46,17 @@ export default function Question() {
     }
     fetchData()
   }, [])
+  const filterQuestions = () => {
+    return questions.filter((question) => {
+      const matchesKeyword = question.title.toLowerCase().includes(searchKeyword.toLowerCase())
+      const matchesTag = selectedTag ? question.Tags?.some((tag) => tag.id === selectedTag) : true
+      return matchesKeyword && matchesTag
+    })
+  }
+  const filteredQuestions = filterQuestions()
+  const totalQuestion = filteredQuestions.length
+  const currentQuestion = filteredQuestions.slice(indexOfFirstQuestion, indexOfLastQuestion)
+
   const columns = ['Title question', 'Status', 'Date up', 'Actions']
   const handleStatus = async (question_id, currentStatus) => {
     try {
@@ -78,6 +89,8 @@ export default function Question() {
                 type='text'
                 placeholder='Tìm kiếm câu hỏi...'
                 className='border rounded-lg p-2 outline-none dark:divide-gray-700 dark:bg-gray-800'
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
               />
               <button className='ml-2 bg-purple-600 text-white px-4 rounded-lg h-9'>
                 <FaSearch />
@@ -87,13 +100,12 @@ export default function Question() {
               <span className='text-gray-700 dark:text-gray-400'>Tags</span>
               <select
                 className='block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray'
-                defaultValue=''
+                value={selectedTag}
+                onChange={(e) => setSelectedTag(e.target.value)}
               >
-                <option value='' disabled hidden>
-                  Chọn thẻ
-                </option>
+                <option value=''>Tất cả thẻ</option>
                 {tags.map((tag) => (
-                  <option key={tag.id} value={tag.name}>
+                  <option key={tag.id} value={tag.id}>
                     {tag.name}
                   </option>
                 ))}
