@@ -1,3 +1,3 @@
-import Questions from './questions'
+import Questions from './QuestionPage'
 
 export default Questions

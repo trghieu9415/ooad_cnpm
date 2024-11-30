@@ -1,11 +1,35 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { Fragment, Suspense } from 'react'
+import { Fragment, Suspense, useEffect } from 'react'
 import { authRoutes, privateRoutes, publicRoutes } from './routes/routes'
 import DefaultLayout from './layouts/DefaultLayout'
 import ProtectedRoute from './middlewares/ProtectedRoute'
 import AuthRoute from './middlewares/AuthRoute'
+import { useDispatch } from 'react-redux'
+import { useMutation } from '@tanstack/react-query'
+import { memberSelf } from './apis/member.api'
+import { updateUser } from './redux/slides/userSlide'
 
 function App() {
+  const dispatch = useDispatch()
+
+  const { mutate: fetchUserDetails } = useMutation({
+    mutationFn: (token) => memberSelf(token),
+    onSuccess: (userDetails) => {
+      dispatch(updateUser({ ...userDetails.data }))
+    },
+    onError: (e) => {
+      console.log(e)
+    }
+  })
+  useEffect(() => {
+    const token = localStorage.getItem('UserToken')
+    if (token) {
+      fetchUserDetails(token)
+      return
+    }
+  }, [])
+
   return (
     <Router>
       <Suspense fallback={<div>Loading...</div>}>

@@ -6,15 +6,18 @@ const UserInfo = ({ user }) => {
         alt={`${user.name}'s avatar`}
         className='rounded-lg mb-2 border w-12 h-12'
       />
-      <div>
+      <div className='flex-1'>
         <h2 className='text-[17px] font-normal text-blue-600'>{user.name}</h2>
         <div className='flex flex-col mt-1 text-gray-500 text-sm'>
           <span className='mb-1'>Location: {user.location || 'N/A'}</span>
           <span>Reputation: {user.reputation || 0}</span>
+          <span>Questions: {user.questionCount || 0}</span>
+          <span>Answers: {user.answerCount || 0}</span>
+          <span>Joined: {user.joinedDate}</span>
         </div>
-        <div className='mt-2'>
+        <div className='mt-2 flex flex-wrap gap-2'>
           {user.tags.map((tag, index) => (
-            <span key={index} className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs md:text-sm mr-2'>
+            <span key={index} className='bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs md:text-sm'>
               {tag}
             </span>
           ))}

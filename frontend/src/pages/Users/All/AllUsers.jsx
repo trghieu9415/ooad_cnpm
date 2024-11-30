@@ -1,54 +1,43 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import InputComponent from '../../../Components/InputComponent'
 import ButtonGroup from '../../../Components/ButtonGroup'
 import UserInfo from '../../../Components/UserInfo'
-
+import { memberAll } from '../../../apis/member.api'
+import useDebounce from '../../../hooks/useDebounce'
+import { Link } from 'react-router-dom'
+import config from '../../../config/routePath'
 const Users = () => {
-  const usersData = [
-    {
-      id: 1,
-      name: 'John Doe',
-      location: 'New York',
-      reputation: 150,
-      questionCount: 10,
-      answerCount: 5,
-      joinedDate: '2024-01-10',
-      tags: ['React', 'JavaScript']
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      location: 'Los Angeles',
-      reputation: 200,
-      questionCount: 8,
-      answerCount: 12,
-      joinedDate: '2023-11-22',
-      tags: ['HTML', 'CSS']
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      location: 'San Francisco',
-      reputation: 300,
-      questionCount: 15,
-      answerCount: 20,
-      joinedDate: '2024-03-15',
-      tags: ['Node.js', 'Express']
-    },
-    {
-      id: 4,
-      name: 'Bob Brown',
-      location: 'Chicago',
-      reputation: 50,
-      questionCount: 5,
-      answerCount: 2,
-      joinedDate: '2024-02-01',
-      tags: ['Vue.js']
-    }
-  ]
-
+  const [usersData, setUsersData] = useState([])
+  const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+
+  const debounceSearch = useDebounce(search, 300)
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await memberAll()
+        const transformedUsers = response.data.map((user) => ({
+          id: user.id,
+          name: user.name,
+          location: user.location || 'N/A',
+          reputation: user.reputation,
+          questionCount: user.questionCount || 0,
+          answerCount: user.answerCount || 0,
+          joinedDate: new Date(user.joinedDate).toLocaleDateString() || 'N/A',
+          tags: user.Badges.map((badge) => badge.name)
+        }))
+        setUsersData(transformedUsers)
+      } catch (error) {
+        console.error('Failed to fetch users:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
 
   const handleClearSearch = () => {
     setSearch('')
@@ -64,12 +53,20 @@ const Users = () => {
     window.history.pushState({}, '', newPath)
   }
 
+  const filteredUsers = useMemo(() => {
+    return usersData.filter((user) => user.name.toLowerCase().includes(debounceSearch.toLowerCase()))
+  }, [usersData, debounceSearch])
+
+  if (loading) {
+    return <div className='text-center'>Loading...</div>
+  }
+
   return (
     <div className='container mx-auto px-5 py-5'>
       <h1 className='text-2xl font-semibold mb-4'>Users</h1>
       <div className='m-5'></div>
-      <div className='flex justify-between flex-col gap-4 lg:flex-row'>
-        <div className='lg:w-[350px] w-[200px] p-1 border border-gray-900 rounded-lg flex justify-center items-center'>
+      <div className='flex flex-col gap-4 lg:flex-row lg:justify-between'>
+        <div className='flex items-center lg:w-[350px] w-full p-1 border border-gray-900 rounded-lg'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -100,8 +97,14 @@ const Users = () => {
       </div>
       <div className='m-5'></div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-        {usersData.map((user) => (
-          <UserInfo key={user.id} user={user} />
+        {filteredUsers.map((user) => (
+          <Link
+            key={user.id}
+            to={`${config.routes.users.replace(':slug', 'profile')}?id=${user.id}`}
+            aria-label='View Detail'
+          >
+            <UserInfo user={user} />
+          </Link>
         ))}
       </div>
     </div>

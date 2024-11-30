@@ -1,12 +1,28 @@
 import http from '../utils/http'
 
-export const memberSelf = (body) => http.post('/account/register', body)
+export const memberSelf = async (token) => {
+  const response = await http.get('/member/self', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response
+}
 
-export const memberAll = (body) => http.get('/member/all', body)
+export const memberAll = () => http.get('/member/all')
 
-export const memberUpdate = (body) => http.post('/admin/account/login', body)
+export const memberUpdate = async (body, token) => {
+  const response = await http.put('/member/update', body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response
+}
 
-export const memberSave = (body) => http.post('/account/register', body)
+export const memberById = (id) => http.get(`/member/${id}`)
+
+export const memberSave = (id) => http.post(`/member/save/${id}}`)
 
 export const memberFlagComment = (body) => http.post('/admin/account/login', body)
 

@@ -44,7 +44,7 @@ const getQuestionsByTag = async (req, res) => {
 
 const createQuestion = async (req, res) => {
   try {
-    const member_id = req.member
+    const member_id = req.member_id
     const { title, question_text, tags } = req.body
     const result = await Question.createQuestion(member_id, title, question_text, tags)
     res.status(result.status).json(result.data)

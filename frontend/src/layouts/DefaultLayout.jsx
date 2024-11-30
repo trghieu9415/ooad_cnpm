@@ -8,7 +8,7 @@ const DefaultLayout = ({ children }) => {
 
   const menuItems = [
     { name: 'Home', icon: <FaHome />, redirectTo: '/' },
-    { name: 'Questions', icon: <FaQuestionCircle />, redirectTo: '/questions' },
+    { name: 'Questions', icon: <FaQuestionCircle />, redirectTo: '/questions/all' },
     { name: 'Tags', icon: <FaTags />, redirectTo: '/tags' },
     { name: 'Saves', icon: <FaBookmark />, redirectTo: '/users/saves' },
     { name: 'Users', icon: <FaUser />, redirectTo: '/users/all' }

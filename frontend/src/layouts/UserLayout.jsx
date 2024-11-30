@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import UserAvatar from '../Components/UserAvatar'
 import Button from '../Components/Button'
 
-const UserLayout = ({ children }) => {
+const UserLayout = ({ children, user = undefined, isOtherMember = false, idMember }) => {
   const [tabs] = useState([
-    { name: 'Profile', path: '/users/profile' },
-    { name: 'Questions', path: '/users/questions' },
-    { name: 'Saves', path: '/users/saves' }
+    { name: 'Profile', path: idMember ? `/users/profile?id=${idMember}` : '/users/profile' },
+    { name: 'Security', path: idMember ? `/users/change-password?id=${idMember}` : '/users/change-password' },
+    { name: 'Saves', path: idMember ? `/users/saves?id=${idMember}` : '/users/saves' }
   ])
+
+  const filteredTabs = !isOtherMember ? tabs.filter((tab) => tab.name !== 'Security') : tabs
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -16,16 +18,23 @@ const UserLayout = ({ children }) => {
         <div className='flex items-center gap-8 mb-8'>
           <UserAvatar width={150} height={150} />
           <div>
-            <h1 className='text-3xl'>Username</h1>
+            <h1 className='text-3xl'>{user.name}</h1>
             <p className='text-gray-600'>Member since January 2024</p>
           </div>
         </div>
-        <Button className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500' label='Edit Profile' />
+        {isOtherMember && (
+          <Link to='/users/edit-profile'>
+            <Button
+              className='w-50 h-10 bg-transparent p-2 border border-gray-500 text-gray-500'
+              label='Edit Profile'
+            />
+          </Link>
+        )}
       </div>
 
       <div className='my-8'>
         <ul className='flex gap-4'>
-          {tabs.map((tab, index) => (
+          {filteredTabs.map((tab, index) => (
             <li key={index}>
               <NavLink
                 to={tab.path}
@@ -47,7 +56,7 @@ const UserLayout = ({ children }) => {
           <h2 className='text-lg font-semibold'>Stats</h2>
           <div className='grid grid-cols-2 gap-4'>
             <div className='text-gray-700 text-sm flex flex-col items-center'>
-              <span>1</span>
+              <span>{user.reputation}</span>
               <span>reputation</span>
             </div>
             <div className='text-gray-700 text-sm flex flex-col items-center'>

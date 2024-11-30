@@ -1,10 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  fullName: '',
-  member: {
-    id: ''
-  }
+  id: '',
+  account_id: '',
+  name: '',
+  email: '',
+  phone: '',
+  reputation: 0,
+  role: '',
+  biography: '',
+  account: {
+    username: ''
+  },
+  badges: []
 }
 
 export const userSlice = createSlice({
@@ -12,13 +20,32 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      const { fullName = '', member = {} } = action.payload
-      state.fullName = fullName ? fullName : state.fullName
-      state.member.id = member.id ? member.id : state.member.id
+      const {
+        id = state.id,
+        account_id = state.account_id,
+        name = state.name,
+        email = state.email,
+        phone = state.phone,
+        reputation = state.reputation,
+        role = state.role,
+        biography = state.biography,
+        account = {},
+        badges = []
+      } = action.payload
+
+      state.id = id
+      state.account_id = account_id
+      state.name = name
+      state.email = email
+      state.phone = phone
+      state.reputation = reputation
+      state.role = role
+      state.biography = biography
+      state.account.username = account.username || state.account.username
+      state.badges = badges.length ? badges : state.badges
     },
     resetUser: (state) => {
-      state.fullName = ''
-      state.member.id = ''
+      Object.assign(state, initialState)
     }
   }
 })
