@@ -7,32 +7,38 @@ import Pagination from '../../../Components/Pagination'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getAllMember } from '../../../apis/admin/adminMember.api'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
+import { getAllTags } from '../../../apis/Admin/adminTag.api'
+import { getAllQuestion } from '../../../apis/Admin/adminQuestion.api'
 
 export default function HomeAdmin() {
-  // const [members, setMembers] = useState([])
-  // const [questions, setQuestions] = useState([])
-  // const [answers, setAnswers] = useState([])
-  // const [accounts, setAccounts] = useState([])
+  const [tags, setTags] = useState([])
+  const [questions, setQuestions] = useState([])
+  const [answers, setAnswers] = useState([])
   const [members, setMembers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const memberPerPage = 5
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchData = async () => {
       try {
-        const result = await getAllMember()
-        setMembers(result.data)
+        setIsLoading(true)
+        const [membersResponse, questionsResponse, tagssResponse] = await Promise.all([
+          getAllMember(),
+          getAllQuestion(),
+          getAllTags()
+        ])
+        setMembers(membersResponse.data)
+        setQuestions(questionsResponse.data)
+        setTags(tagssResponse.data)
       } catch (error) {
         console.error('Error fetching members:', error)
       } finally {
         setIsLoading(false)
       }
     }
-
-    fetchMembers()
+    fetchData()
   }, [])
   useEffect(() => {
-    // Khởi tạo biểu đồ Pie
     const ctxPie = document.getElementById('pie').getContext('2d')
     const pieChart = new Chart(ctxPie, {
       type: 'pie',
@@ -41,7 +47,7 @@ export default function HomeAdmin() {
         datasets: [
           {
             label: 'Revenue',
-            data: [50, 30, 20],
+            data: [questions.length, 30, members.length],
             backgroundColor: ['#4299E1', '#38B2AC', '#805AD5']
           }
         ]
@@ -73,24 +79,19 @@ export default function HomeAdmin() {
         ]
       },
       options: {
-        maintainAspectRatio: false // Điều chỉnh tỉ lệ
+        maintainAspectRatio: false
       }
     })
-
-    // Cleanup function để huỷ các biểu đồ khi component unmount
     return () => {
       pieChart.destroy()
       lineChart.destroy()
     }
-  }, [])
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>
-  // }
+  }, [members, questions])
   const totalMember = members?.length || 0
   const indexOfLastMember = currentPage * memberPerPage
   const indexOfFirstMember = indexOfLastMember - memberPerPage
   const currentMember = members?.slice(indexOfFirstMember, indexOfLastMember)
+  // if (isLoading) return <div>Loading...</div>
   return (
     <div className={`100 ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
@@ -124,7 +125,7 @@ export default function HomeAdmin() {
                   </div>
                   <div>
                     <p className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>Tags</p>
-                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'>10</p>
+                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'> {tags?.length || 0}</p>
                   </div>
                 </div>
                 <div className='flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800'>
@@ -148,7 +149,7 @@ export default function HomeAdmin() {
                   </div>
                   <div>
                     <p className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>Questions</p>
-                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'>376</p>
+                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'> {questions?.length || 0}</p>
                   </div>
                 </div>
                 <div className='flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800'>

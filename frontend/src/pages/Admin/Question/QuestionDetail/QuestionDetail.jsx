@@ -15,7 +15,7 @@ const QuestionDetail = () => {
   const [answers, setAnswers] = useState([])
   const [comments, setComments] = useState([])
   const id = new URLSearchParams(location.search).get('id')
-
+  const focusAnswer = new URLSearchParams(location.search).get('answer_id')
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,7 +70,11 @@ const QuestionDetail = () => {
         {items.map((item) => (
           <div
             key={item.id}
-            className='p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 break-words'
+            className={`p-3 border rounded-lg bg-gray-50 dark:bg-gray-800 break-words ${
+              focusAnswer === item.id
+                ? 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-800'
+                : 'border-gray-200 dark:border-gray-600'
+            }`}
           >
             <div className='flex justify-between items-center'>
               <span className='text-sm font-semibold text-gray-800 dark:text-gray-300'>{item.author}</span>

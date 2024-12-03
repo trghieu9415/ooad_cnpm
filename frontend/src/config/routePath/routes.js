@@ -13,7 +13,7 @@ const routes = {
   adminQuestion: '/admin/questions',
   adminAnswer: '/admin/answers',
   adminTag: '/admin/tags',
-  adminBadge: '/admin/badges',
+  adminFlag: '/admin/flags',
   adminQuestionDetail: '/admin/questions/question'
 }
 
