@@ -1,5 +1,14 @@
 const { Answer } = require('@entities/_index')
 
+const getAllAnswer = async (req, res) => {
+  try {
+    const answerResult = await Answer.getAllAnswers()
+    res.status(answerResult.status).json(answerResult.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 const getAnswerById = async (req, res) => {
   const id = req.params.id
   const result = await Answer.getAnswerById(id)
@@ -14,5 +23,6 @@ const getAnswerByQuestion = async (req, res) => {
 
 module.exports = {
   getAnswerById,
-  getAnswerByQuestion
+  getAnswerByQuestion,
+  getAllAnswer
 }

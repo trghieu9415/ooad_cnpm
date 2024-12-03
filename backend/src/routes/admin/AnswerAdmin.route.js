@@ -4,6 +4,7 @@ const { AnswerAdmin } = require('@controllers/admin/_index')
 
 const router = express.Router()
 
+router.get('/', AnswerAdmin.getAllAnswer)
 router.get('/:id', AnswerAdmin.getAnswerById)
 router.get('/question/:question_id', AnswerAdmin.getAnswerByQuestion)
 
