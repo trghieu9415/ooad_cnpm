@@ -29,7 +29,6 @@ const Saves = () => {
 
                 <div className='mt-4 sm:mt-0 sm:ml-4 flex items-center space-x-4 text-gray-500 text-sm'>
                   <button className='hover:text-blue-600 transition'>Remove</button>
-                  <button className='hover:text-blue-600 transition'>View</button>
                 </div>
               </div>
             </div>

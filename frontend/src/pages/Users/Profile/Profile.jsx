@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { detailQuestionOfMember } from '../../../apis/question.api'
+import { useNavigate } from 'react-router-dom'
 
 const Profile = ({ user }) => {
   const [questions, setQuestions] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user?.id) {
@@ -18,6 +20,10 @@ const Profile = ({ user }) => {
 
   const handleEdit = (questionId) => {
     console.log(`Edit question with ID: ${questionId}`)
+  }
+
+  const handleNavigationQuestion = (questionId) => {
+    navigate(`/questions/id?questionId=${questionId}`)
   }
 
   return (
@@ -38,7 +44,7 @@ const Profile = ({ user }) => {
           </div>
         </div>
 
-        <div className='mt-4'>
+        {/* <div className='mt-4'>
           <h2 className='text-xl font-bold text-gray-800 mb-4'>Badges</h2>
           <div className='flex flex-wrap space-x-4'>
             {user.Badges && user.Badges.length > 0 ? (
@@ -52,14 +58,20 @@ const Profile = ({ user }) => {
               <p className='text-gray-500'>No badges earned yet.</p>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className='mt-4'>
           <h2 className='text-xl font-bold text-gray-800 mb-4'>Posts</h2>
           <ul className='space-y-4'>
             {questions.length > 0 ? (
               questions.map((question) => (
-                <li key={question.id} className='p-4 border border-gray-200 rounded-lg'>
+                <li
+                  key={question.id}
+                  className='p-4 border border-gray-200 rounded-lg'
+                  onClick={() => {
+                    handleNavigationQuestion(question.id)
+                  }}
+                >
                   <div className='flex justify-between items-start'>
                     <div>
                       <h3 className='text-lg font-semibold text-gray-800'>{question.title}</h3>

@@ -5,6 +5,7 @@ import { answerQuestionById, createAnswerQuestionById } from '../../../apis/answ
 import { memberById } from '../../../apis/member.api'
 import { useSelector } from 'react-redux'
 import { AiOutlineCheck } from 'react-icons/ai'
+import { FaBookmark, FaBullseye, FaFlag, FaPenSquare, FaTimes, FaTrash } from 'react-icons/fa'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
@@ -14,6 +15,8 @@ const DetailQuestion = ({ id }) => {
   const [newComment, setNewComment] = useState('')
   const [bestAnswerId, setBestAnswerId] = useState(null)
   const [newAnswer, setNewAnswer] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [bountyAmount, setBountyAmount] = useState('')
   const currentUser = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -96,6 +99,22 @@ const DetailQuestion = ({ id }) => {
     setBestAnswerId((prev) => (prev === answerId ? null : answerId))
   }
 
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleBountyChange = (e) => {
+    setBountyAmount(e.target.value)
+  }
+
+  const handleAddBounty = () => {
+    alert('abc')
+  }
+
   if (!questionDetails) {
     return <div>Loading...</div>
   }
@@ -103,11 +122,55 @@ const DetailQuestion = ({ id }) => {
   return (
     <div className='p-4 sm:p-8 bg-gray-50 min-h-screen flex justify-center items-start'>
       <div className='w-full max-w-2xl lg:max-w-4xl bg-white shadow-lg rounded-lg p-6 sm:p-8'>
+        {currentUser.id === questionDetails.member_id && (
+          <div className='float-right flex items-center space-x-2'>
+            <button onClick={openModal} className='p-2 text-black'>
+              <FaBullseye />
+            </button>
+
+            <button className='py-2 text-black'>
+              <FaPenSquare />
+            </button>
+
+            <button className='p-2 text-black'>
+              <FaTimes />
+            </button>
+          </div>
+        )}
         <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 leading-snug break-words'>
           {questionDetails.title}
         </h1>
 
-        <div className='flex flex-col sm:flex-row mb-6 sm:mb-8'>
+        {isModalOpen && (
+          <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+            <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
+              <h2 className='text-xl font-semibold text-gray-800 mb-4'>Mức Bounty</h2>
+              <input
+                type='number'
+                value={bountyAmount}
+                onChange={handleBountyChange}
+                className='w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500'
+                placeholder='Enter bounty amount'
+              />
+              <div className='flex justify-end space-x-2'>
+                <button
+                  onClick={closeModal}
+                  className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold'
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={handleAddBounty}
+                  className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+                >
+                  Thêm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className='flex flex-col sm:flex-row'>
           <div className='flex flex-col items-center sm:mr-6 mb-4 sm:mb-0'>
             <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
             <span className='text-lg sm:text-2xl font-semibold text-gray-600 my-1 sm:my-2'>
@@ -132,14 +195,41 @@ const DetailQuestion = ({ id }) => {
               Asked by <span className='font-semibold text-gray-700'>{askedByUser}</span> on{' '}
               {new Date(questionDetails.update_time || questionDetails.creation_time).toLocaleDateString()}
             </p>
+            {/* icon */}
+            <div className='flex space-x-4 py-2'>
+              <button className='p-2 text-black'>
+                <FaBookmark />
+              </button>
+              <button className='p-2 text-black'>
+                <FaFlag />
+              </button>
+            </div>
           </div>
         </div>
 
         <div className='bg-gray-100 p-3 sm:p-4 rounded-lg shadow-inner mb-6 sm:mb-8'>
           {comments.map((comment) => (
-            <p key={comment.id} className='text-sm text-gray-700 mb-1 sm:mb-2'>
-              <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
-            </p>
+            <div key={comment.id} className='py-2'>
+              <p className='text-sm text-gray-700'>
+                <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
+              </p>
+              {/* icon */}
+              <div className='flex items-center space-x-2 mt-1'>
+                <button className='p-1 text-black text-sm'>
+                  <FaFlag className='w-4 h-4' />
+                </button>
+                {currentUser.id === comment.member_id && (
+                  <div className='flex items-center space-x-2'>
+                    <button className='p-1 text-black text-sm'>
+                      <FaPenSquare className='w-4 h-4' />
+                    </button>
+                    <button className='p-1 text-black text-sm'>
+                      <FaTrash className='w-4 h-4' />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
         </div>
 
@@ -159,7 +249,7 @@ const DetailQuestion = ({ id }) => {
         </div>
 
         <div className='mt-8 sm:mt-10'>
-          <h2 className='text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6'>Answers</h2>
+          <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
           {answers.map((answer) => (
             <div key={answer.id} className='bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6'>
               <div className='flex'>
@@ -175,11 +265,29 @@ const DetailQuestion = ({ id }) => {
                     {new Date(answer.creation_time).toLocaleDateString()}
                   </p>
                 </div>
-                <button onClick={() => handleBestAnswerToggle(answer.id)}>
-                  <AiOutlineCheck
-                    className={`text-2xl transition ${bestAnswerId === answer.id ? 'text-green-500' : 'text-gray-400'}`}
-                  />
+                {currentUser.id === questionDetails.member_id && (
+                  <button onClick={() => handleBestAnswerToggle(answer.id)}>
+                    <AiOutlineCheck
+                      className={`text-2xl transition ${bestAnswerId === answer.id ? 'text-green-500' : 'text-gray-400'}`}
+                    />
+                  </button>
+                )}
+              </div>
+              {/* icon */}
+              <div className='flex items-center space-x-2 mt-1'>
+                <button className='p-1 text-black text-sm'>
+                  <FaFlag className='w-4 h-4' />
                 </button>
+                {currentUser.id === answer.member_id && (
+                  <div className='flex items-center space-x-2'>
+                    <button className='p-1 text-black text-sm'>
+                      <FaPenSquare className='w-4 h-4' />
+                    </button>
+                    <button className='p-1 text-black text-sm'>
+                      <FaTrash className='w-4 h-4' />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
