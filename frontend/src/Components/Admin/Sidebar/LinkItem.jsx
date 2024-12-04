@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { FaUsersCog } from 'react-icons/fa'
 import { MdDashboard } from 'react-icons/md'
 import { RiQuestionAnswerFill, RiQuestionnaireFill } from 'react-icons/ri'
-import { FaTags,FaAward  } from 'react-icons/fa'
+import { FaTags,FaAward,FaFlag  } from 'react-icons/fa'
 import routes from '../../../config/routePath/routes'
 const LinkItem = () => {
   let arrayItem = [
@@ -32,9 +32,9 @@ const LinkItem = () => {
       name: 'Quản lí thẻ gắn'
     },
     {
-      to: routes.adminBadge,
-      icon: FaAward,
-      name: 'Quản lí danh hiệu'
+      to: routes.adminFlag,
+      icon: FaFlag,
+      name: 'Quản lí cắm cờ'
     }
   ]
 
