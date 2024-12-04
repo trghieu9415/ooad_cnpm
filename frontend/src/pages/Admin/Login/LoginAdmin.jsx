@@ -54,10 +54,15 @@ const LoginAdmin = () => {
               type: 'error'
             })
           }
+          setMessage(formError?.message || 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.')
+        } else {
+          setMessage('Đã xảy ra lỗi. Vui lòng thử lại sau.')
         }
+        setStausMessage('error')
       }
     })
   })
+
   return (
     <div className='flex h-screen items-center justify-center bg-gray-100'>
       <div className='w-full max-w-xs rounded-lg bg-white p-6 shadow-lg'>
