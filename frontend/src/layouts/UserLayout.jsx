@@ -10,7 +10,8 @@ const UserLayout = ({ children, user = undefined, isOtherMember = false, idMembe
     { name: 'Saves', path: idMember ? `/users/saves?id=${idMember}` : '/users/saves' }
   ])
 
-  const filteredTabs = !isOtherMember ? tabs.filter((tab) => tab.name !== 'Security') : tabs
+  // const filteredTabs = !isOtherMember ? tabs.filter((tab) => tab.name !== 'Security') : tabs
+  const filteredTabs = !isOtherMember ? tabs.filter((tab) => tab.name === 'Profile') : tabs
 
   return (
     <div className='container mx-auto px-4 py-8'>
