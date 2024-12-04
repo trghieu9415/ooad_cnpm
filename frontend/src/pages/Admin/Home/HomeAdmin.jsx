@@ -9,7 +9,7 @@ import { getAllMember } from '../../../apis/admin/adminMember.api'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
 import { getAllTags } from '../../../apis/Admin/adminTag.api'
 import { getAllQuestion } from '../../../apis/Admin/adminQuestion.api'
-
+import { getAllAnswer } from '../../../apis/Admin/adminAnswer.api'
 export default function HomeAdmin() {
   const [tags, setTags] = useState([])
   const [questions, setQuestions] = useState([])
@@ -22,14 +22,16 @@ export default function HomeAdmin() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const [membersResponse, questionsResponse, tagssResponse] = await Promise.all([
+        const [membersResponse, questionsResponse, tagsResponse, answersPResponse] = await Promise.all([
           getAllMember(),
           getAllQuestion(),
-          getAllTags()
+          getAllTags(),
+          getAllAnswer()
         ])
         setMembers(membersResponse.data)
         setQuestions(questionsResponse.data)
-        setTags(tagssResponse.data)
+        setTags(tagsResponse.data)
+        setAnswers(answersPResponse.data)
       } catch (error) {
         console.error('Error fetching members:', error)
       } finally {
@@ -47,7 +49,7 @@ export default function HomeAdmin() {
         datasets: [
           {
             label: 'Revenue',
-            data: [questions.length, 30, members.length],
+            data: [questions.length, answers.length, members.length],
             backgroundColor: ['#4299E1', '#38B2AC', '#805AD5']
           }
         ]
@@ -86,7 +88,7 @@ export default function HomeAdmin() {
       pieChart.destroy()
       lineChart.destroy()
     }
-  }, [members, questions])
+  }, [members, questions, answers])
   const totalMember = members?.length || 0
   const indexOfLastMember = currentPage * memberPerPage
   const indexOfFirstMember = indexOfLastMember - memberPerPage
@@ -164,7 +166,7 @@ export default function HomeAdmin() {
                   </div>
                   <div>
                     <p className='mb-2 text-sm font-medium text-gray-600 dark:text-gray-400'>Answers</p>
-                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'>35</p>
+                    <p className='text-lg font-semibold text-gray-700 dark:text-gray-200'>{answers?.length || 0}</p>
                   </div>
                 </div>
               </div>
