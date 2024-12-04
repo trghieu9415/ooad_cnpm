@@ -10,3 +10,7 @@ export function isAxiosErrorConflictError(error) {
 export function isAxiosUnauthorizedError(error) {
   return isAxiosError(error) && error.response?.status === 401
 }
+
+export function isAccountBanned(error) {
+  return isAxiosError(error) && error.response?.status === 403
+}
