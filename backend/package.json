@@ -37,7 +37,9 @@
     "mysql2": "^3.11.2",
     "mysqlm": "^2.0.3",
     "rotating-file-stream": "^1.4.6",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "_moduleAliases": {
     "@root": "src",
