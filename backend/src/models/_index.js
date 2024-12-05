@@ -63,6 +63,9 @@ MemberFlag.belongsTo(Comment, { foreignKey: 'comment_id', as: 'comment' })
 MemberFlag.belongsTo(Answer, { foreignKey: 'answer_id', as: 'answer' })
 MemberFlag.belongsTo(Question, { foreignKey: 'question_id', as: 'question' })
 
+Answer.belongsTo(Member, { foreignKey: 'member_id', as: 'member' })
+Question.belongsTo(Member, { foreignKey: 'member_id', as: 'member' })
+Comment.belongsTo(Member, { foreignKey: 'member_id', as: 'member' })
 module.exports = {
   SystemAdministratorAccount,
   Account,

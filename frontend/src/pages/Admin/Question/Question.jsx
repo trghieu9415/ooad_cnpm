@@ -82,7 +82,7 @@ export default function Question() {
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
         <Content>
-          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí câu hỏi</h4>
+          <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Thống kê câu hỏi</h4>
           <div className='flex flex-col items-start mb-4'>
             <div className='flex  items-center'>
               <input
