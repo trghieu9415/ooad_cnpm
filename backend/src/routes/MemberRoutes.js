@@ -17,7 +17,6 @@ const setType = (type) => {
 
 router.get('/self', authenticateAccount, Member.getCurrentMember)
 router.get('/all', Member.getAllMember)
-router.get('/id', Member.getMemberById)
 router.put('/update', authenticateAccount, Member.updateMember)
 router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
 router.get('/saved', authenticateAccount, Member.getSavedQuestion)
@@ -26,7 +25,7 @@ router.post('/flag/comment/:id', authenticateAccount, setType('Comment'), Member
 router.post('/flag/answer/:id', authenticateAccount, setType('Answer'), Member.flag)
 router.post('/vote/question/:id', authenticateAccount, setType('Question'), Member.vote)
 router.post('/vote/answer/:id', authenticateAccount, setType('Answer'), Member.vote)
-router.get('/id=:id', Member.getMemberById)
+router.get('/:id', Member.getMemberById)
 
 
 module.exports = router
