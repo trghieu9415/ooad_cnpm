@@ -32,12 +32,15 @@ export default function Member() {
     keepPreviousData: true,
     staleTime: 5 * 1000
   })
+  const sortedMembers = data?.data
+    ? [...data.data].sort((a, b) => new Date(b.Account.registration_time) - new Date(a.Account.registration_time))
+    : []
 
   // Phân trang
   const totalMember = data?.data.length || 0
   const indexOfLastMember = currentPage * memberPerPage
   const indexOfFirstMember = indexOfLastMember - memberPerPage
-  const currentMember = data?.data.slice(indexOfFirstMember, indexOfLastMember)
+  const currentMember = sortedMembers.slice(indexOfFirstMember, indexOfLastMember)
 
   //cột của bảng
   const columns = ['Member', 'Username', 'Email', 'Phone', 'Reputation', 'Status', 'Register date', 'Actions']

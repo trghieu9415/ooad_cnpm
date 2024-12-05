@@ -7,6 +7,7 @@ const QuestionRoutes = require('./QuestionAdmin.route')
 const CommentRoutes = require('./CommentAdmin.route')
 const TagRoutes = require('./TagAdmin.route')
 const AnswerRoutes = require('./AnswerAdmin.route')
+const FlagRoutes = require('./FlagAdmin.route')
 
 router.use('/account', AccountRoutes)
 router.use('/member', MemberRoutes)
@@ -14,5 +15,5 @@ router.use('/question', QuestionRoutes)
 router.use('/comment', CommentRoutes)
 router.use('/tag', TagRoutes)
 router.use('/answer', AnswerRoutes)
-
+router.use('/flag', FlagRoutes)
 module.exports = router
