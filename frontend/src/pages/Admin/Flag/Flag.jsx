@@ -84,9 +84,7 @@ const Flag = () => {
   })
   const handleStatus = (account_id, currentStatus) => {
     const confirmMessage =
-      currentStatus === 'Banned'
-        ? 'Are you sure you want to unlock this account?'
-        : 'Are you sure you want to ban this account?'
+      currentStatus === 'Banned' ? 'Bạn có muốn mở khóa người dùng này?' : 'Bạn có muốn khóa người dùng này?'
     const isConfirmed = window.confirm(confirmMessage)
     if (isConfirmed) {
       toggleStatusMember.mutate(account_id)
@@ -95,8 +93,11 @@ const Flag = () => {
 
   const handleFlag = async (flag) => {
     try {
+      const confirmed = window.confirm('Bạn có chắc chắn muốn bỏ tố cáo này?')
+      if (!confirmed) return
       let response
       const body = { flag_type: false }
+
       if (flag.related_type === 'Question') {
         response = await memberFlagQuestion(flag.question.id, body, flag.member_id)
       } else if (flag.related_type === 'Answer') {
@@ -104,6 +105,7 @@ const Flag = () => {
       } else if (flag.related_type === 'Comment') {
         response = await memberFlagComment(flag.comment.id, body, flag.member_id)
       }
+
       if (response && response.status === 200) {
         setFlagData((prevFlags) => prevFlags.filter((item) => item.id !== flag.id))
         alert('Unflag thành công!')
@@ -115,6 +117,7 @@ const Flag = () => {
       alert('Đã xảy ra lỗi, vui lòng thử lại.')
     }
   }
+
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
