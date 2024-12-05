@@ -59,6 +59,10 @@ MemberView.belongsTo(Question, { foreignKey: 'question_id' })
 Member.hasMany(Notification, { foreignKey: 'member_id' })
 Notification.belongsTo(Member, { foreignKey: 'member_id' })
 
+MemberFlag.belongsTo(Comment, { foreignKey: 'comment_id', as: 'comment' })
+MemberFlag.belongsTo(Answer, { foreignKey: 'answer_id', as: 'answer' })
+MemberFlag.belongsTo(Question, { foreignKey: 'question_id', as: 'question' })
+
 module.exports = {
   SystemAdministratorAccount,
   Account,
