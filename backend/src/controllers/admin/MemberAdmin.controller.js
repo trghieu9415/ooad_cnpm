@@ -44,10 +44,23 @@ const getMemberById = async (req, res) => {
     res.status(500).json(err)
   }
 }
+const flag = async (req, res) => {
+  try {
+    const member_id = req.member_id
+    const related_type = req.related_type
+    const related_id = req.params.id
+    const { flag_type } = req.body
+    const flagResult = await Member.flag(member_id, related_id, related_type, flag_type)
+    res.status(flagResult.status).json(flagResult.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
 
 module.exports = {
   toggleAccountStateMember,
   getAllMember,
   updateMember,
-  getMemberById
+  getMemberById,
+  flag
 }
