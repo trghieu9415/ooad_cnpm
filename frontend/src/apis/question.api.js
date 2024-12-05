@@ -11,3 +11,12 @@ export const askQuestion = async (body, token) => {
   })
   return response
 }
+
+export const statusQuestion = async (id, body, token) => {
+  const response = await http.put(`/question/${id}/update-status`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response
+}

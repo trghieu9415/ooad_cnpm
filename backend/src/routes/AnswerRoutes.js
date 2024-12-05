@@ -11,4 +11,5 @@ router.put('/hide/:id', Answer.hideAnswer)
 router.put('/show/:id', Answer.showAnswer)
 router.put('/:id/correct', authenticateAccount, Answer.setCorrectAnswer)
 
+router.get('/:questionId/accepted-answers', Answer.getAcceptedAnswersByQuestionIdController) // Định nghĩa route với tham số questionId
 module.exports = router
