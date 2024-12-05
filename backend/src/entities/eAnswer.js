@@ -191,6 +191,21 @@ const showAnswer = async (id) => {
   }
 }
 
+const getAcceptedAnswersByQuestionId = async (questionId) => {
+  try {
+    const acceptedAnswers = await Answer.findAll({
+      where: {
+        question_id: questionId,
+        accepted: true // Điều kiện lấy các câu trả lời đã được chấp nhận
+      }
+    })
+    return acceptedAnswers
+  } catch (error) {
+    console.error('Lỗi khi lấy câu trả lời đã chấp nhận:', error)
+    throw error // Ném lỗi để xử lý ở controller
+  }
+}
+
 module.exports = {
   getAllAnswers,
   getAnswerById,
@@ -200,5 +215,6 @@ module.exports = {
   getAnswerByQuestion,
   setCorrectAnswer,
   showAnswer,
-  hideAnswer
+  hideAnswer,
+  getAcceptedAnswersByQuestionId
 }
