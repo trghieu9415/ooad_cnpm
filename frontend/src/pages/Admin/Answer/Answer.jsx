@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { getMemberById } from '../../../apis/Admin/adminMember.api'
 const Answer = () => {
   const darkMode = useSelector((state) => state.theme.darkMode)
-  const columns = ['Answer content', 'Author', 'Date up', 'Flag', 'Question']
+  const columns = ['Answer content', 'Author', 'Date up', 'Question']
   const [answers, setAnswers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
@@ -49,7 +49,7 @@ const Answer = () => {
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>
         <Content>
           <h4 className='mt-1 mb-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Quản lí câu hỏi</h4>
-          <div className='flex items-start mb-4'>
+          {/* <div className='flex items-start mb-4'>
             <label className='flex items-center mr-4 '>
               <input
                 type='checkbox'
@@ -80,7 +80,7 @@ const Answer = () => {
               />
               Câu trả lời không gắn cờ
             </label>
-          </div>
+          </div> */}
 
           <div className='w-full overflow-hidden rounded-lg shadow-xs'>
             <div className='w-full overflow-x-auto'>
@@ -107,11 +107,11 @@ const Answer = () => {
                         </td>
                         <td className='px-4 py-3 text-sm'>{answer.author}</td>
                         <td className='px-4 py-3 text-sm'>{formatRegistrationTime(answer.creation_time)}</td>
-                        <td className='px-4 py-3 text-xs'>
+                        {/* <td className='px-4 py-3 text-xs'>
                           <span className='px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-white dark:bg-green-600'>
                             Yes
                           </span>
-                        </td>
+                        </td> */}
                         <td className='px-4 py-3'>
                           <Link
                             to={`${config.routes.adminQuestionDetail}?id=${answer.question_id}&answer_id=${answer.id}`}
