@@ -20,6 +20,7 @@ import {
 import { useSelector } from 'react-redux'
 import { AiOutlineCheck } from 'react-icons/ai'
 import { FaBookmark, FaBullseye, FaFlag, FaTimes, FaTrash } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 // import { getAllMemberFlag } from '../../../apis/flag.api'
 
 const DetailQuestion = ({ id }) => {
@@ -234,6 +235,7 @@ const DetailQuestion = ({ id }) => {
       const response = await memberSave(id, token)
       console.log(response)
       if (response.status === 200) {
+        toast.success('Lưu câu hỏi thành công')
         alert('Lưu câu hỏi thành công')
       } else {
         alert('Đã xảy ra lỗi khi cập nhật câu hỏi')

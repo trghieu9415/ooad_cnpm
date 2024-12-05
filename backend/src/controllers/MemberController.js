@@ -103,6 +103,22 @@ const viewQuestion = async (req, res) => {
   }
 }
 
+const updateSavedStatusController = async (req, res) => {
+  try {
+    const { memberViewId } = req.params // Lấy memberViewId từ URL parameter
+
+    const updatedRows = await Member.updateSavedStatus(memberViewId)
+
+    if (updatedRows === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy bản ghi.' })
+    }
+
+    return res.status(200).json({ message: 'Cập nhật thành công.' })
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server.', error: error.message })
+  }
+}
+
 module.exports = {
   getCurrentMember,
   getMemberById,
@@ -112,5 +128,6 @@ module.exports = {
   updateMember,
   viewQuestion,
   saveQuestion,
-  getSavedQuestion
+  getSavedQuestion,
+  updateSavedStatusController
 }

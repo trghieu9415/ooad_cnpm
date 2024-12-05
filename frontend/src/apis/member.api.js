@@ -74,3 +74,7 @@ export const memberVoteAnswer = (id, body, token) =>
       Authorization: `Bearer ${token}`
     }
   })
+
+export const removeSavedQuestion = (memberViewId) => {
+  return http.put(`/member/un-save/${memberViewId}`)
+}

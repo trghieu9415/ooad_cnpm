@@ -18,6 +18,7 @@ const Users = () => {
   const [isOtherMember, setIsOtherMember] = useState(true)
   const queryParams = new URLSearchParams(location.search)
   const id = queryParams.get('id')
+
   useEffect(() => {
     const fetchMemberById = async () => {
       try {
