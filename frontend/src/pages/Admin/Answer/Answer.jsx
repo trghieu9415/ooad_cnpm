@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Content from '../../../Components/Admin/components/Content'
 import { getAllAnswer } from '../../../apis/Admin/adminAnswer.api'
 import Pagination from '../../../Components/Pagination'
-import { getMemberById } from '../../../apis/admin/adminMember.api'
 import { formatRegistrationTime } from '../../../helpers/formatRegistrationTime'
 import config from '../../../config/routePath'
 import { Link } from 'react-router-dom'
+import { getMemberById } from '../../../apis/Admin/adminMember.api'
 const Answer = () => {
   const darkMode = useSelector((state) => state.theme.darkMode)
   const columns = ['Answer content', 'Author', 'Date up', 'Flag', 'Question']
