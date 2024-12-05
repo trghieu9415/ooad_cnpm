@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import Profile from '../../../Components/Admin/Profile/Profile'
-import { FaSearch } from 'react-icons/fa'
+import { FaRegTrashAlt, FaSearch } from 'react-icons/fa'
 import Content from '../../../Components/Admin/components/Content'
 import { useEffect, useState } from 'react'
 import { getAllQuestion, handleStatusChange } from '../../../apis/Admin/adminQuestion.api'
@@ -58,18 +58,26 @@ export default function Question() {
   const currentQuestion = filteredQuestions.slice(indexOfFirstQuestion, indexOfLastQuestion)
 
   const columns = ['Title question', 'Status', 'Date up', 'Actions']
-  const handleStatus = async (question_id, currentStatus) => {
+  const handleStatus = async (question_id, action) => {
     try {
-      const newStatus = currentStatus === 'Open' ? 'Close' : 'Open'
-      await handleStatusChange(question_id, { status: newStatus, closing_remark: null })
+      let newStatus = ''
+      if (action === 'Delete') {
+        newStatus = 'Delete'
+      } else {
+        newStatus = action === 'Open' ? 'Close' : 'Open'
+      }
+      await handleStatusChange(question_id, { status: newStatus })
       setQuestions((prevQuestions) =>
         prevQuestions.map((question) => (question.id === question_id ? { ...question, status: newStatus } : question))
       )
       setStatus('success')
-      setMessage(`Trạng thái câu hỏi đã được thay đổi thành ${newStatus}.`)
+      setMessage(
+        newStatus === 'Delete'
+          ? 'Câu hỏi đã được chuyển sang trạng thái xóa.'
+          : `Trạng thái câu hỏi đã được thay đổi thành ${newStatus}.`
+      )
     } catch (error) {
       console.error('Error changing status:', error)
-      // Cập nhật thông điệp lỗi
       setStatus('Error')
       setMessage('Đã xảy ra lỗi khi thay đổi trạng thái câu hỏi.')
     }
@@ -152,26 +160,39 @@ export default function Question() {
                         <td className='px-4 py-3 text-sm'>{formatRegistrationTime(question.creation_time)}</td>
                         <td className='px-4 py-3'>
                           <div className='flex items-center space-x-4 text-sm'>
-                            <Link
-                              to={`${config.routes.adminQuestionDetail}?id=${question.id}`}
-                              className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                              aria-label='View Detail'
-                            >
-                              <AiOutlineExclamationCircle className='size-6' />
-                            </Link>
-                            <button
-                              onClick={() => {
-                                handleStatus(question.id, question.status)
-                              }}
-                              className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
-                              aria-label='Delete'
-                            >
-                              {question.status === 'Close' ? (
-                                <CiUnlock className='size-6' />
-                              ) : (
-                                <CiLock className='size-6' />
-                              )}
-                            </button>
+                            {question.status !== 'Delete' ? (
+                              <Link
+                                to={`${config.routes.adminQuestionDetail}?id=${question.id}`}
+                                className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                aria-label='View Detail'
+                              >
+                                <AiOutlineExclamationCircle className='size-6' />
+                              </Link>
+                            ) : (
+                              <span className='text-gray-400'>Deleted</span>
+                            )}
+                            {question.status !== 'Delete' && (
+                              <button
+                                onClick={() => handleStatus(question.id, question.status)}
+                                className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                aria-label={question.status === 'Close' ? 'Open' : 'Close'}
+                              >
+                                {question.status === 'Close' ? (
+                                  <CiUnlock className='size-6' />
+                                ) : (
+                                  <CiLock className='size-6' />
+                                )}
+                              </button>
+                            )}
+                            {question.status !== 'Delete' && (
+                              <button
+                                onClick={() => handleStatus(question.id, 'Delete')}
+                                className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
+                                aria-label='Delete'
+                              >
+                                <FaRegTrashAlt className='size-5' />
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>

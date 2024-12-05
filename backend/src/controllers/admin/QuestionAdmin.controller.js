@@ -9,12 +9,11 @@ const getAllQuestions = async (req, res) => {
   }
 }
 
-const handleStatusChange = async (req, res) => {
-  const { status, closing_remark } = req.body // Assuming you're sending status and question_id in the request body
-  const { id } = req.params
-
+const handleQuestionStatus = async (req, res) => {
   try {
-    const result = await Question.handleStatus(id, status, closing_remark)
+    const question_id = req.params.id
+    const status = req.body.status
+    const result = await Question.handleStatus(question_id, status)
     res.status(result.status).json(result.data)
   } catch (error) {
     res.status(500).json(error)
@@ -32,6 +31,6 @@ const getQuestionById = async (req, res) => {
 
 module.exports = {
   getAllQuestions,
-  handleStatusChange,
+  handleQuestionStatus,
   getQuestionById
 }
