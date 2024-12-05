@@ -4,29 +4,29 @@ const authenticateAccount = require('@middlewares/authMiddleware')
 
 const router = express.Router()
 
-const setTypeisQuestion = (req, res, next) => {
-  req.related_type = 'Question'
-  next()
-}
-const setTypeisComment = (req, res, next) => {
-  req.related_type = 'Comment'
-  next()
-}
-
-const setTypeisAnswer = (req, res, next) => {
-  req.related_type = 'Answer'
-  next()
+const setType = (type) => {
+  return (req, res, next) => {
+    if (['Question', 'Comment', 'Answer'].includes(type)) {
+      req.related_type = type
+      next()
+    } else {
+      res.status(500).json({ error: 'Error from server: Invalid Type' })
+    }
+  }
 }
 
 router.get('/self', authenticateAccount, Member.getCurrentMember)
 router.get('/all', Member.getAllMember)
-router.get('/:id', Member.getMemberById)
+router.get('/id', Member.getMemberById)
 router.put('/update', authenticateAccount, Member.updateMember)
 router.post('/save/:question_id', authenticateAccount, Member.saveQuestion)
-router.post('/flag/question/:id', authenticateAccount, setTypeisQuestion, Member.flag)
-router.post('/flag/comment/:id', authenticateAccount, setTypeisComment, Member.flag)
-router.post('/flag/answer/:id', authenticateAccount, setTypeisAnswer, Member.flag)
-router.post('/vote/question/:id', authenticateAccount, setTypeisQuestion, Member.vote)
-router.post('/vote/answer/:id', authenticateAccount, setTypeisAnswer, Member.vote)
+router.get('/saved', authenticateAccount, Member.getSavedQuestion)
+router.post('/flag/question/:id', authenticateAccount, setType('Question'), Member.flag)
+router.post('/flag/comment/:id', authenticateAccount, setType('Comment'), Member.flag)
+router.post('/flag/answer/:id', authenticateAccount, setType('Answer'), Member.flag)
+router.post('/vote/question/:id', authenticateAccount, setType('Question'), Member.vote)
+router.post('/vote/answer/:id', authenticateAccount, setType('Answer'), Member.vote)
+router.get('/id=:id', Member.getMemberById)
+
 
 module.exports = router

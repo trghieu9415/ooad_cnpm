@@ -1,4 +1,4 @@
-const { Bounty } = require('@models/_index')
+const { Bounty, Member } = require('@models/_index')
 const createResData = require('@utils/resMaker')
 const { Op } = require('sequelize')
 
@@ -85,6 +85,32 @@ const deleteBounty = async (id) => {
     }
   } catch (error) {
     return createResData(500, error)
+  }
+}
+
+const createQuestionBounty = async (question_id, reputation_point) => {
+  try {
+    const currentBounty = await getCurrentBountyByQuestionId(question_id)
+    if (currentBounty.success) {
+      await deleteBounty(currentBounty.data.id)
+    }
+    const newBounty = await createBounty(question_id, reputation_point, new Date(Date.now() + 99 * 24 * 60 * 60 * 1000))
+    return createResData(201, newBounty.data)
+  } catch (error) {
+    return createResData(500, error.message)
+  }
+}
+
+const awardBounty = async (question_id, member_id) => {
+  try {
+    const currentBounty = await getCurrentBountyByQuestionId(question_id)
+    if (currentBounty.success) {
+      await deleteBounty(currentBounty.data.id)
+    }
+    const newBounty = await createBounty(question_id, reputation_point, new Date(Date.now() + 99 * 24 * 60 * 60 * 1000))
+    return createResData(201, newBounty.data)
+  } catch (error) {
+    return createResData(500, error.message)
   }
 }
 

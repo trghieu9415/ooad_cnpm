@@ -1,4 +1,4 @@
-const { Question } = require('@entities/_index')
+const { Question, Bounty } = require('@entities/_index')
 const logger = require('@root/utils/logger')
 
 const getQuestionById = async (req, res) => {
@@ -53,6 +53,38 @@ const createQuestion = async (req, res) => {
   }
 }
 
+const getBountyById = async (req, res) => {
+  try {
+    const question_id = req.params.id
+    const result = await Bounty.getCurrentBountyByQuestionId(question_id)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+const createBounty = async (req, res) => {
+  try {
+    const question_id = req.params.id
+    const reputation = req.body.reputation
+    const result = await Bounty.createQuestionBounty(question_id, reputation)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+const awardBounty = async (req, res) => {
+  try {
+    const question_id = req.params.id
+    const member_id = req.body.member_id
+    const result = await Bounty.awardBounty(question_id, member_id)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 const addQuestionEdit = async (req, res) => {}
 
 const closeQuestion = async (req, res) => {}
@@ -64,5 +96,8 @@ module.exports = {
   addQuestionEdit,
   closeQuestion,
   getQuestionsByMember,
-  getQuestionsByTag
+  getQuestionsByTag,
+  createBounty,
+  awardBounty,
+  getBountyById
 }
