@@ -50,7 +50,7 @@ const AllQuestions = () => {
         description: question.question_text,
         tags: question.Tags.map((tag) => tag.name),
         votes: question.voteCount,
-        answers: question.flagCount,
+        answers: question.answerCount,
         status: question.status,
         createdAt: new Date(question.creation_time).toLocaleDateString()
       }))

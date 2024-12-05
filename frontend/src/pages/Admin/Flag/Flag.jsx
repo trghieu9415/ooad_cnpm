@@ -72,7 +72,7 @@ const Flag = () => {
     onSuccess: (data, account_id) => {
       setFlagData((prevFlags) =>
         prevFlags.map((flag) =>
-          flag.comment.member.account_id === account_id
+          flag.comment?.member.account_id === account_id
             ? { ...flag, accountStatus: flag.accountStatus === 'Banned' ? 'Active' : 'Banned' }
             : flag
         )
