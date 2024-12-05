@@ -42,14 +42,34 @@ const publicRoutes = [
     layout: null
   },
   {
-    path: config.routes.adminHome,
-    component: AdminHome,
-    layout: AdminLayout
-  },
-  {
     path: config.routes.adminLogin,
     component: AdminLogin,
     layout: null
+  }
+]
+
+const authRoutes = [
+  {
+    path: config.routes.register,
+    component: Register,
+    layout: null
+  },
+  {
+    path: config.routes.login,
+    component: Login,
+    layout: null
+  }
+]
+
+const privateRoutes = [
+  {
+    path: config.routes.users,
+    component: Users
+  },
+  {
+    path: config.routes.adminHome,
+    component: AdminHome,
+    layout: AdminLayout
   },
   {
     path: config.routes.adminMember,
@@ -83,24 +103,5 @@ const publicRoutes = [
   }
 ]
 
-const authRoutes = [
-  {
-    path: config.routes.register,
-    component: Register,
-    layout: null
-  },
-  {
-    path: config.routes.login,
-    component: Login,
-    layout: null
-  }
-]
-
-const privateRoutes = [
-  {
-    path: config.routes.users,
-    component: Users
-  }
-]
 
 export { publicRoutes, privateRoutes, authRoutes }

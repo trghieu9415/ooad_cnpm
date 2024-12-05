@@ -3,7 +3,7 @@ import { getRulesLogin } from '../../utils/rules'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '../../apis/account.api'
-import { isAxiosUnauthorizedError } from '../../utils/util'
+import { isAccountBanned, isAxiosUnauthorizedError } from '../../utils/util'
 import { useEffect, useRef, useState } from 'react'
 import Toast from '../../Components/Toast'
 import { memberSelf } from '../../apis/member.api'
@@ -73,6 +73,9 @@ const Login = () => {
               type: 'error'
             })
           }
+        } else if (isAccountBanned(error)) {
+          setStatus('error')
+          setMessage('Tài khoản của bạn đã bị khóa')
         }
       }
     })
