@@ -1,4 +1,4 @@
-const { Member, Badge, Account, MemberView, MemberFlag, MemberVote } = require('@models/_index')
+const { Member, Badge, Account, MemberView, MemberFlag, MemberVote, Question } = require('@models/_index')
 const createResData = require('@utils/resMaker')
 const { Op } = require('sequelize')
 
@@ -263,6 +263,32 @@ const saveQuestion = async (id, question_id, type) => {
   }
 }
 
+const getSavedQuestion = async (memberId) => {
+  try {
+    const memberViews = await MemberView.findAll({
+      where: { member_id: memberId },
+      include: [
+        {
+          model: Question,
+          required: true
+        }
+      ]
+    })
+
+    if (memberViews.length === 0) {
+      return createResData(404, 'No questions found for this member')
+    }
+
+    return createResData(
+      200,
+      memberViews.map((view) => view.Question)
+    )
+  } catch (error) {
+    console.error('Error fetching questions:', error)
+    return createResData(500, 'Internal server error')
+  }
+}
+
 module.exports = {
   getAllMembers,
   getMemberById,
@@ -276,5 +302,6 @@ module.exports = {
   viewQuestion,
   saveQuestion,
   isEmailExisted,
-  isPhoneExisted
+  isPhoneExisted,
+  getSavedQuestion
 }

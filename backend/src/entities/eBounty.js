@@ -1,4 +1,4 @@
-const { Bounty } = require('@models/_index')
+const { Bounty, Member } = require('@models/_index')
 const createResData = require('@utils/resMaker')
 const { Op } = require('sequelize')
 
@@ -88,11 +88,54 @@ const deleteBounty = async (id) => {
   }
 }
 
+const createQuestionBounty = async (question_id, reputation_point) => {
+  try {
+    const currentBounty = await getCurrentBountyByQuestionId(question_id)
+    if (currentBounty.success) {
+      await deleteBounty(currentBounty.data.id)
+    }
+    const newBounty = await createBounty(question_id, reputation_point, new Date(Date.now() + 99 * 24 * 60 * 60 * 1000))
+    return createResData(201, newBounty.data)
+  } catch (error) {
+    return createResData(500, error.message)
+  }
+}
+
+const awardBounty = async (question_id, member_id) => {
+  try {
+    const currentBounty = await getCurrentBountyByQuestionId(question_id)
+
+    if (currentBounty.success) {
+      const member = await Member.findByPk(member_id)
+      if (!member) {
+        return createResData(404, 'Member not found')
+      }
+
+      const bounty = await Bounty.findByPk(currentBounty.data.id)
+      if (!bounty) {
+        return createResData(404, 'Bounty not found')
+      }
+
+      await bounty.update({ ended: true })
+
+      const updatedReputation = member.reputation + bounty.reputation
+      await member.update({ reputation: updatedReputation })
+
+      return createResData(201, {
+        message: 'Awarded bounty successfully',
+        memberId: member.id,
+        updatedReputation
+      })
+    } else {
+      return createResData(400, 'No valid bounty available for this question')
+    }
+  } catch (error) {
+    return createResData(500, error.message)
+  }
+}
+
 module.exports = {
-  getAllBounties,
-  getBountyById,
   getCurrentBountyByQuestionId,
-  createBounty,
-  updateBounty,
-  deleteBounty
+  createQuestionBounty,
+  awardBounty
 }

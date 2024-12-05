@@ -16,6 +16,13 @@ const getAllQuestions = async () => {
         question.dataValues.viewCount = countedValue.viewCount
         question.dataValues.voteCount = countedValue.voteCount
         question.dataValues.flagCount = countedValue.flagCount
+
+        // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+        if (question.status === 'Delete') {
+          question.dataValues.title = '[HIDDEN]'
+          question.dataValues.question_text = '[HIDDEN]'
+        }
+
         return question
       })
     )
@@ -39,6 +46,13 @@ const getQuestionById = async (id) => {
       question.dataValues.viewCount = countedValue.viewCount
       question.dataValues.voteCount = countedValue.voteCount
       question.dataValues.flagCount = countedValue.flagCount
+
+      // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+      if (question.status === 'Delete') {
+        question.dataValues.title = '[HIDDEN]'
+        question.dataValues.question_text = '[HIDDEN]'
+      }
+
       return createResData(200, question)
     } else {
       return createResData(404, { message: 'Question not found' })
@@ -121,6 +135,13 @@ const getQuestionByTag = async (tag_id) => {
         question.dataValues.viewCount = countedValue.viewCount
         question.dataValues.voteCount = countedValue.voteCount
         question.dataValues.flagCount = countedValue.flagCount
+
+        // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+        if (question.status === 'Delete') {
+          question.dataValues.title = '[HIDDEN]'
+          question.dataValues.question_text = '[HIDDEN]'
+        }
+
         return question
       })
     )
@@ -146,6 +167,13 @@ const getQuestionByMember = async (member_id) => {
         question.dataValues.viewCount = countedValue.viewCount
         question.dataValues.voteCount = countedValue.voteCount
         question.dataValues.flagCount = countedValue.flagCount
+
+        // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+        if (question.status === 'Delete') {
+          question.dataValues.title = '[HIDDEN]'
+          question.dataValues.question_text = '[HIDDEN]'
+        }
+
         return question
       })
     )

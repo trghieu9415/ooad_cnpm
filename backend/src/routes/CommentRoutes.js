@@ -8,5 +8,7 @@ router.get('/all', Comment.getComments)
 router.get('/:id', Comment.getCommentById)
 router.get('/question/:question_id', Comment.getCommentByQuestion)
 router.post('/question/:question_id/create', authenticateAccount, Comment.createComment)
+router.put('/hide/:id', Comment.hideComment)
+router.put('/show/:id', Comment.showComment)
 
 module.exports = router

@@ -42,9 +42,31 @@ const createComment = async (req, res) => {
   }
 }
 
+const hideComment = async (req, res) => {
+  try {
+    const comment_id = req.params.id
+    const result = await Comment.hideComment(comment_id)
+    res.status(result.status).json(result.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const showComment = async (req, res) => {
+  try {
+    const comment_id = req.params.id
+    const result = await Comment.showComment(comment_id)
+    res.status(result.status).json(result.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 module.exports = {
   getComments,
   getCommentById,
   getCommentByQuestion,
-  createComment
+  createComment,
+  hideComment,
+  showComment
 }
