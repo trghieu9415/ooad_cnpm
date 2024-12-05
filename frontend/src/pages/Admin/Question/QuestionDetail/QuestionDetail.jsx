@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Content from '../../../../Components/Admin/components/Content'
 import Button from '../../../../Components/Admin/components/Button'

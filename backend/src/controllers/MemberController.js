@@ -78,6 +78,16 @@ const saveQuestion = async (req, res) => {
   }
 }
 
+const getSavedQuestion = async (req, res) => {
+  try {
+    const member_id = req.member_id
+    const result = await Member.getSavedQuestion(member_id)
+    res.status(result.status).json(result.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 const viewQuestion = async (req, res) => {
   try {
     const member_id = req.member_id
@@ -101,5 +111,6 @@ module.exports = {
   flag,
   updateMember,
   viewQuestion,
-  saveQuestion
+  saveQuestion,
+  getSavedQuestion
 }

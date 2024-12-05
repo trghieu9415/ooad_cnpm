@@ -6,6 +6,7 @@ const Member = require('./eMember')
 const Photo = require('./ePhoto')
 const Question = require('./eQuestion')
 const Tag = require('./eTag')
+const Bounty = require('./eBounty')
 const Notification = require('./eNotification')
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   Photo,
   Question,
   Tag,
-  Notification
+  Notification,
+  Bounty
 }

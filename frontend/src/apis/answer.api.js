@@ -9,3 +9,16 @@ export const createAnswerQuestionById = async (id, token, body) => {
   })
   return response
 }
+
+export const BestAnswer = async (id, token) => {
+  const response = await http.put(
+    `/answer/${id}/correct`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+  return response
+}

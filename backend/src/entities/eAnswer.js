@@ -7,8 +7,15 @@ const getAllAnswers = async () => {
     const answersWithVotes = await Promise.all(
       answers.map(async (answer) => {
         const [voteCount, flagCount] = await getVoteFlagById(answer.dataValues.id)
+
+        // Kiểm tra nếu answer_text bắt đầu bằng $
+        answer.dataValues.answer_text = answer.dataValues.answer_text.startsWith('$')
+          ? '[HIDDEN ANSWER]'
+          : answer.dataValues.answer_text
+
         answer.dataValues.voteCount = voteCount
         answer.dataValues.flagCount = flagCount
+
         return answer
       })
     )
@@ -23,6 +30,12 @@ const getAnswerById = async (id) => {
     const answer = await Answer.findByPk(id)
     if (answer) {
       const [voteCount, flagCount] = await getVoteFlagById(answer.dataValues.id)
+
+      // Kiểm tra nếu answer_text bắt đầu bằng $
+      answer.dataValues.answer_text = answer.dataValues.answer_text.startsWith('$')
+        ? '[HIDDEN ANSWER]'
+        : answer.dataValues.answer_text
+
       answer.dataValues.voteCount = voteCount
       answer.dataValues.flagCount = flagCount
       return createResData(200, answer)
@@ -98,8 +111,15 @@ const getAnswerByQuestion = async (question_id) => {
     const answersWithVotes = await Promise.all(
       answers.map(async (answer) => {
         const [voteCount, flagCount] = await getVoteFlagById(answer.dataValues.id)
+
+        // Kiểm tra nếu answer_text bắt đầu bằng $
+        answer.dataValues.answer_text = answer.dataValues.answer_text.startsWith('$')
+          ? '[HIDDEN ANSWER]'
+          : answer.dataValues.answer_text
+
         answer.dataValues.voteCount = voteCount
         answer.dataValues.flagCount = flagCount
+
         return answer
       })
     )
@@ -141,6 +161,36 @@ const setCorrectAnswer = async (id, accepter_id) => {
   }
 }
 
+const hideAnswer = async (id) => {
+  try {
+    const answer = await Answer.findByPk(id)
+    if (!answer) {
+      return createResData(404, { message: 'Answer not found' })
+    }
+    // Thêm ký tự `$` để đánh dấu ẩn câu trả lời
+    await answer.update({ answer_text: `$${answer.dataValues.answer_text}` })
+    return createResData(200, { ...answer.dataValues, answer_text: 'Answer is hidden' })
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
+const showAnswer = async (id) => {
+  try {
+    const answer = await Answer.findByPk(id)
+    if (!answer) {
+      return createResData(404, { message: 'Answer not found' })
+    }
+    if (answer.dataValues.answer_text.startsWith('$')) {
+      // Bỏ ký tự `$` để hiển thị lại câu trả lời
+      await answer.update({ answer_text: answer.dataValues.answer_text.slice(1) })
+    }
+    return createResData(200, { ...answer.dataValues, answer_text: answer.dataValues.answer_text.slice(1) })
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
 module.exports = {
   getAllAnswers,
   getAnswerById,
@@ -148,5 +198,7 @@ module.exports = {
   updateAnswer,
   deleteAnswer,
   getAnswerByQuestion,
-  setCorrectAnswer
+  setCorrectAnswer,
+  showAnswer,
+  hideAnswer
 }

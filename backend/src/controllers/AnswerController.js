@@ -27,9 +27,31 @@ const setCorrectAnswer = async (req, res) => {
   res.status(result.status).json(result.data)
 }
 
+const hideAnswer = async (req, res) => {
+  try {
+    const answer_id = req.params.id
+    const result = await Answer.hideAnswer(answer_id)
+    res.status(result.status).json(result.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
+const showAnswer = async (req, res) => {
+  try {
+    const answer_id = req.params.id
+    const result = await Answer.showAnswer(answer_id)
+    res.status(result.status).json(result.data)
+  } catch (err) {
+    res.status(500).json(err)
+  }
+}
+
 module.exports = {
   getAnswerById,
   getAnswerByQuestion,
   createAnswer,
-  setCorrectAnswer
+  setCorrectAnswer,
+  showAnswer,
+  hideAnswer
 }
