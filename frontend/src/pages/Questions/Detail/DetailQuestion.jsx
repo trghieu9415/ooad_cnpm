@@ -435,7 +435,7 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
-        {!(bestAnswer?.id || questionDetails.status !== 'Close') && (
+        {(!bestAnswer?.id || questionDetails.status !== 'Close') && (
           <div className='mb-6 sm:mb-8'>
             <textarea
               className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
