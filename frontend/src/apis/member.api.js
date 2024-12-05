@@ -22,14 +22,48 @@ export const memberUpdate = async (body, token) => {
 
 export const memberById = (id) => http.get(`/member/${id}`)
 
-export const memberSave = (id) => http.post(`/member/save/${id}}`)
+export const memberSave = (id, token) =>
+  http.post(
+    `/member/save/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
 
-export const memberFlagComment = (body) => http.post('/admin/account/login', body)
+export const memberFlagComment = (id, body, token) =>
+  http.post(`/member/flag/comment/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 
-export const memberFlagQuestion = (body) => http.post('/account/login', body)
+export const memberFlagQuestion = (id, body, token) =>
+  http.post(`/member/flag/question/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 
-export const memberFlagAnswer = (body) => http.post('/admin/account/login', body)
+export const memberFlagAnswer = (id, body, token) =>
+  http.post(`/member/flag/answer/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 
-export const memberVoteQuestion = (body) => http.post('/account/login', body)
+export const memberVoteQuestion = (id, body, token) =>
+  http.post(`/member/vote/question/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 
-export const memberVoteAnswer = (body) => http.post('/admin/account/login', body)
+export const memberVoteAnswer = (id, body, token) =>
+  http.post(`/member/vote/answer/${id}`, body, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })

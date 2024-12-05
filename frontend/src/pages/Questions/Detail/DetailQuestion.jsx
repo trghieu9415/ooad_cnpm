@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react'
 import { detailQuestion } from '../../../apis/question.api'
 import { commentQuestionById, createCommentQuestionById } from '../../../apis/comment.api'
-import { answerQuestionById, createAnswerQuestionById } from '../../../apis/answer.api'
-import { memberById } from '../../../apis/member.api'
+import { answerQuestionById, BestAnswer, createAnswerQuestionById } from '../../../apis/answer.api'
+import {
+  memberById,
+  memberFlagAnswer,
+  memberFlagComment,
+  memberFlagQuestion,
+  memberSave,
+  memberVoteAnswer,
+  memberVoteQuestion
+} from '../../../apis/member.api'
 import { useSelector } from 'react-redux'
 import { AiOutlineCheck } from 'react-icons/ai'
-import { FaBookmark, FaBullseye, FaFlag, FaPenSquare, FaTimes, FaTrash } from 'react-icons/fa'
+import { FaBookmark, FaBullseye, FaFlag, FaTimes, FaTrash } from 'react-icons/fa'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
@@ -17,6 +25,10 @@ const DetailQuestion = ({ id }) => {
   const [newAnswer, setNewAnswer] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [bountyAmount, setBountyAmount] = useState('')
+  const [isModalFlag, setIsModalFlag] = useState(false)
+  const [flaggingTarget, setFlaggingTarget] = useState(null)
+  const [commentId, setCommentId] = useState(null)
+  const [answerId, setAnswerId] = useState(null)
   const currentUser = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -95,8 +107,22 @@ const DetailQuestion = ({ id }) => {
     }
   }
 
-  const handleBestAnswerToggle = (answerId) => {
-    setBestAnswerId((prev) => (prev === answerId ? null : answerId))
+  const handleBestAnswerToggle = async (answerId) => {
+    const token = localStorage.getItem('UserToken')
+
+    if (bestAnswerId === answerId) {
+      setBestAnswerId(null)
+      return
+    }
+
+    try {
+      await BestAnswer(answerId, token)
+      setBestAnswerId(answerId)
+      alert('Best answer set successfully!')
+    } catch (error) {
+      console.error('Failed to set best answer:', error)
+      alert('Failed to set best answer, please try again later.')
+    }
   }
 
   const openModal = () => {
@@ -107,12 +133,97 @@ const DetailQuestion = ({ id }) => {
     setIsModalOpen(false)
   }
 
+  const openModalFlag = (target, id) => {
+    setFlaggingTarget(target)
+    if (target == 'comment') {
+      setCommentId(id)
+    }
+    if (target == 'answer') {
+      setAnswerId(id)
+    }
+    setIsModalFlag(true)
+  }
+
+  const closeModalFlag = () => {
+    setIsModalFlag(false)
+    setFlaggingTarget(null)
+    setAnswerId(null)
+    setCommentId(null)
+  }
+
+  const handleFlag = async (targetId) => {
+    const token = localStorage.getItem('UserToken')
+    const body = { flag_type: true }
+    try {
+      if (flaggingTarget === 'question') {
+        await memberFlagQuestion(targetId, body, token)
+        alert('Question flagged successfully')
+      } else if (flaggingTarget === 'comment') {
+        await memberFlagComment(targetId, body, token)
+        alert('Comment flagged successfully')
+      } else if (flaggingTarget === 'answer') {
+        await memberFlagAnswer(targetId, body, token)
+        alert('Answer flagged successfully')
+      }
+    } catch (error) {
+      console.error('Failed to flag:', error)
+      alert('Failed to flag the item, please try again later.')
+    }
+    closeModalFlag()
+  }
+
   const handleBountyChange = (e) => {
     setBountyAmount(e.target.value)
   }
 
   const handleAddBounty = () => {
-    alert('abc')
+    alert('Thêm mức Bounty thành công')
+  }
+
+  const handleSaveQuestion = async (id, token) => {
+    try {
+      const response = await memberSave(id, token)
+      console.log(response)
+      if (response.status === 200) {
+        alert('Lưu câu hỏi thành công')
+      } else {
+        alert('Đã xảy ra lỗi khi cập nhật câu hỏi')
+      }
+    } catch (error) {
+      console.error('Error saving question:', error)
+      alert('Đã xảy ra lỗi, vui lòng thử lại sau')
+    }
+  }
+
+  const handleVoteQuestion = async (voteType) => {
+    const token = localStorage.getItem('UserToken')
+    const body = { vote_type: voteType === 'up' ? 'Upvote' : 'Downvote' }
+    try {
+      await memberVoteQuestion(questionDetails.id, body, token)
+      setQuestionDetails((prevDetails) => ({
+        ...prevDetails,
+        voteCount: voteType === 'up' ? prevDetails.voteCount + 1 : prevDetails.voteCount - 1
+      }))
+    } catch (error) {
+      console.error('Failed to vote on question:', error)
+    }
+  }
+
+  const handleVoteAnswer = async (answerId, voteType) => {
+    const token = localStorage.getItem('UserToken')
+    const body = { vote_type: voteType === 'up' ? 'Upvote' : 'Downvote' }
+    try {
+      await memberVoteAnswer(answerId, body, token)
+      setAnswers((prevAnswers) =>
+        prevAnswers.map((answer) =>
+          answer.id === answerId
+            ? { ...answer, voteCount: voteType === 'up' ? answer.voteCount + 1 : answer.voteCount - 1 }
+            : answer
+        )
+      )
+    } catch (error) {
+      console.error('Failed to vote on answer:', error)
+    }
   }
 
   if (!questionDetails) {
@@ -127,11 +238,6 @@ const DetailQuestion = ({ id }) => {
             <button onClick={openModal} className='p-2 text-black'>
               <FaBullseye />
             </button>
-
-            <button className='py-2 text-black'>
-              <FaPenSquare />
-            </button>
-
             <button className='p-2 text-black'>
               <FaTimes />
             </button>
@@ -170,13 +276,57 @@ const DetailQuestion = ({ id }) => {
           </div>
         )}
 
+        {isModalFlag && (
+          <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+            <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
+              <h2 className='text-xl font-semibold text-gray-800 mb-4'>Lí do</h2>
+              <select className='w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-blue-500'>
+                <option value='' disabled>
+                  Select a reason
+                </option>
+                <option value='bug_report'>Bug Report</option>
+                <option value='feature_request'>Feature Request</option>
+                <option value='security_issue'>Security Issue</option>
+                <option value='other'>Other</option>
+              </select>
+
+              <div className='flex justify-end space-x-2'>
+                <button
+                  onClick={closeModalFlag}
+                  className='px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold'
+                >
+                  Hủy
+                </button>
+                <button
+                  onClick={() =>
+                    handleFlag(
+                      flaggingTarget === 'question'
+                        ? questionDetails.id
+                        : flaggingTarget === 'comment'
+                          ? commentId
+                          : answerId
+                    )
+                  }
+                  className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+                >
+                  Thêm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className='flex flex-col sm:flex-row'>
           <div className='flex flex-col items-center sm:mr-6 mb-4 sm:mb-0'>
-            <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
+            <button className='text-gray-400 hover:text-blue-500 transition' onClick={() => handleVoteQuestion('up')}>
+              ▲
+            </button>
             <span className='text-lg sm:text-2xl font-semibold text-gray-600 my-1 sm:my-2'>
               {questionDetails.voteCount}
             </span>
-            <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
+            <button className='text-gray-400 hover:text-blue-500 transition' onClick={() => handleVoteQuestion('down')}>
+              ▼
+            </button>
           </div>
 
           <div className='flex-1'>
@@ -197,10 +347,15 @@ const DetailQuestion = ({ id }) => {
             </p>
             {/* icon */}
             <div className='flex space-x-4 py-2'>
-              <button className='p-2 text-black'>
+              <button
+                className='p-2 text-black'
+                onClick={() => {
+                  handleSaveQuestion(questionDetails.id, localStorage.getItem('UserToken'))
+                }}
+              >
                 <FaBookmark />
               </button>
-              <button className='p-2 text-black'>
+              <button className='p-2 text-black' onClick={() => openModalFlag('question')}>
                 <FaFlag />
               </button>
             </div>
@@ -215,14 +370,11 @@ const DetailQuestion = ({ id }) => {
               </p>
               {/* icon */}
               <div className='flex items-center space-x-2 mt-1'>
-                <button className='p-1 text-black text-sm'>
+                <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
                   <FaFlag className='w-4 h-4' />
                 </button>
                 {currentUser.id === comment.member_id && (
                   <div className='flex items-center space-x-2'>
-                    <button className='p-1 text-black text-sm'>
-                      <FaPenSquare className='w-4 h-4' />
-                    </button>
                     <button className='p-1 text-black text-sm'>
                       <FaTrash className='w-4 h-4' />
                     </button>
@@ -251,12 +403,25 @@ const DetailQuestion = ({ id }) => {
         <div className='mt-8 sm:mt-10'>
           <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
           {answers.map((answer) => (
-            <div key={answer.id} className='bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6'>
+            <div
+              key={answer.id}
+              className={`bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6 ${bestAnswerId === answer.id ? 'border-4 border-green-500' : ''}`}
+            >
               <div className='flex'>
                 <div className='flex flex-col items-center mr-4 sm:mr-6'>
-                  <button className='text-gray-400 hover:text-blue-500 transition'>▲</button>
+                  <button
+                    className='text-gray-400 hover:text-blue-500 transition'
+                    onClick={() => handleVoteAnswer(answer.id, 'up')}
+                  >
+                    ▲
+                  </button>
                   <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
-                  <button className='text-gray-400 hover:text-blue-500 transition'>▼</button>
+                  <button
+                    className='text-gray-400 hover:text-blue-500 transition'
+                    onClick={() => handleVoteAnswer(answer.id, 'down')}
+                  >
+                    ▼
+                  </button>
                 </div>
                 <div className='flex-1'>
                   <p className='text-gray-700 mb-2 sm:mb-4'>{answer.answer_text}</p>
@@ -273,16 +438,13 @@ const DetailQuestion = ({ id }) => {
                   </button>
                 )}
               </div>
-              {/* icon */}
+              {/* Flagging and deleting buttons */}
               <div className='flex items-center space-x-2 mt-1'>
-                <button className='p-1 text-black text-sm'>
+                <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
                   <FaFlag className='w-4 h-4' />
                 </button>
                 {currentUser.id === answer.member_id && (
                   <div className='flex items-center space-x-2'>
-                    <button className='p-1 text-black text-sm'>
-                      <FaPenSquare className='w-4 h-4' />
-                    </button>
                     <button className='p-1 text-black text-sm'>
                       <FaTrash className='w-4 h-4' />
                     </button>
