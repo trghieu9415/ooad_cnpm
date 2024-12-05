@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Content from '../../../../Components/Admin/components/Content'
 import Button from '../../../../Components/Admin/components/Button'
 import { formatRegistrationTime } from '../../../../helpers/formatRegistrationTime'
 import { getQuestionById } from '../../../../apis/Admin/adminQuestion.api'
-import { getAnswerByQuestion } from '../../../../apis/Admin/adminAnswer.api'
+import { getAnswerById, getAnswerByQuestion, hideAnswer, showAnswer } from '../../../../apis/Admin/adminAnswer.api'
 import { getMemberById } from '../../../../apis/Admin/adminMember.api'
-import { getCommentByQuestion } from '../../../../apis/Admin/adminComment.api'
+import { getCommentById, getCommentByQuestion, hideComment, showComment } from '../../../../apis/Admin/adminComment.api'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 const QuestionDetail = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -16,6 +17,7 @@ const QuestionDetail = () => {
   const [comments, setComments] = useState([])
   const id = new URLSearchParams(location.search).get('id')
   const focusAnswer = new URLSearchParams(location.search).get('answer_id')
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,7 +40,8 @@ const QuestionDetail = () => {
         const answersWithAuthors = await Promise.all(
           answersResponse.data.map(async (answer) => ({
             ...answer,
-            author: (await fetchAuthor(answer.member_id)).name
+            author: (await fetchAuthor(answer.member_id)).name,
+            isHidden: answer.answer_text.includes('[HIDDEN ANSWER]')
           }))
         )
         setAnswers(answersWithAuthors)
@@ -46,7 +49,8 @@ const QuestionDetail = () => {
         const commentsWithAuthors = await Promise.all(
           commentsResponse.data.map(async (comment) => ({
             ...comment,
-            author: (await fetchAuthor(comment.member_id)).name
+            author: (await fetchAuthor(comment.member_id)).name,
+            isHidden: comment.comment_text.includes('[HIDDEN ANSWER]')
           }))
         )
         setComments(commentsWithAuthors)
@@ -62,8 +66,50 @@ const QuestionDetail = () => {
 
   if (isLoading) return <div>Loading...</div>
   if (!question) return <div>No question found.</div>
+  const toggleItemVisibility = async (itemId, isHidden, isComment) => {
+    try {
+      let response
+      if (isHidden) {
+        response = isComment ? await showComment(itemId) : await showAnswer(itemId)
+      } else {
+        response = isComment ? await hideComment(itemId) : await hideAnswer(itemId)
+      }
+      const updatedText = isComment
+        ? (await getCommentById(itemId)).data.comment_text
+        : (await getAnswerById(itemId)).data.answer_text
 
-  const RenderList = ({ items, label }) => (
+      if (isComment) {
+        setComments((prevComments) =>
+          prevComments.map((item) =>
+            item.id === itemId
+              ? {
+                  ...item,
+                  isHidden: !isHidden,
+                  comment_text: updatedText
+                }
+              : item
+          )
+        )
+      } else {
+        setAnswers((prevAnswers) =>
+          prevAnswers.map((item) =>
+            item.id === itemId
+              ? {
+                  ...item,
+                  isHidden: !isHidden,
+                  answer_text: updatedText
+                }
+              : item
+          )
+        )
+      }
+      return response
+    } catch (error) {
+      console.error('Error toggling item visibility:', error)
+    }
+  }
+
+  const RenderList = ({ items, label, isComment = false }) => (
     <div className='p-4 rounded-lg bg-white dark:bg-gray-700'>
       <label className='block text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2'>{label}</label>
       <div className='space-y-4 max-h-60 overflow-y-auto'>
@@ -83,6 +129,13 @@ const QuestionDetail = () => {
               </span>
             </div>
             <p className='mt-2 text-gray-700 dark:text-gray-400'>{item.answer_text || item.comment_text}</p>
+            <Button
+              small
+              right
+              onClick={() => toggleItemVisibility(item.id, item.isHidden, isComment)} // Pass whether it's a comment or answer
+            >
+              {item.isHidden ? <FaEye /> : <FaEyeSlash />}
+            </Button>
           </div>
         ))}
       </div>
@@ -136,16 +189,16 @@ const QuestionDetail = () => {
 
   return (
     <div className='p-4 mt-14 sm:ml-64 flex flex-col lg:flex-row gap-4 bg-gray-100 text-gray-500 dark:bg-gray-800 transition-all duration-300'>
-      <Content>
+      <Content title='Question Detail' description='View question and its details'>
         <h4 className='my-1 text-lg font-semibold text-gray-600 dark:text-gray-300'>Chi tiết câu hỏi</h4>
         <Button left regular onClick={() => navigate(-1)}>
           Back
         </Button>
         <div className='flex flex-col lg:flex-row gap-4'>
-          <div className='flex flex-col gap-4 w-full lg:w-3/4'>
-            <RenderQuestionDetails />
-            <RenderList items={answers} label='Answers' />
-            <RenderList items={comments} label='Comments' />
+          <div className='flex-1'>
+            {RenderQuestionDetails()}
+            {RenderList({ items: answers, label: 'Answers', isComment: false })}
+            {RenderList({ items: comments, label: 'Comments', isComment: true })}
           </div>
           <RenderSidebar />
         </div>

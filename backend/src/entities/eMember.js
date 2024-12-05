@@ -29,7 +29,7 @@ const getMemberById = async (id) => {
       include: [
         {
           model: Account,
-          attributes: ['username']
+          attributes: ['username', 'Status']
         },
         {
           model: Badge,

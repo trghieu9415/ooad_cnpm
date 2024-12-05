@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.get('/', QuestionAdmin.getAllQuestions)
 router.get('/:id', QuestionAdmin.getQuestionById)
-router.put('/status/:id', QuestionAdmin.handleStatusChange)
+router.put('/:id', QuestionAdmin.handleQuestionStatus)
 
 module.exports = router
