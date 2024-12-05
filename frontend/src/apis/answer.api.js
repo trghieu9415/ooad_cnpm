@@ -10,6 +10,19 @@ export const createAnswerQuestionById = async (id, token, body) => {
   return response
 }
 
+export const HideAnswer = async (id, token) => {
+  const response = await http.put(
+    `/answer/hide/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+  return response
+}
+
 export const BestAnswer = async (id, token) => {
   const response = await http.put(
     `/answer/${id}/correct`,
@@ -20,5 +33,10 @@ export const BestAnswer = async (id, token) => {
       }
     }
   )
+  return response
+}
+
+export const BestAnswerByQuestion = async (id) => {
+  const response = await http.get(`/answer/${id}/accepted-answers`)
   return response
 }
