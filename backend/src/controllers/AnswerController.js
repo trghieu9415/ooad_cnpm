@@ -47,11 +47,28 @@ const showAnswer = async (req, res) => {
   }
 }
 
+const getAcceptedAnswersByQuestionIdController = async (req, res) => {
+  const { questionId } = req.params // Lấy questionId từ URL parameters
+
+  try {
+    const acceptedAnswers = await Answer.getAcceptedAnswersByQuestionId(questionId) // Gọi service
+
+    if (acceptedAnswers.length > 0) {
+      res.status(200).json(acceptedAnswers) // Trả về dữ liệu nếu tìm thấy
+    } else {
+      res.status(404).json({ message: 'Không có câu trả lời nào được chấp nhận cho câu hỏi này' }) // Thông báo nếu không tìm thấy
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Không thể lấy dữ liệu từ bảng Answer' }) // Xử lý lỗi từ service
+  }
+}
+
 module.exports = {
   getAnswerById,
   getAnswerByQuestion,
   createAnswer,
   setCorrectAnswer,
   showAnswer,
-  hideAnswer
+  hideAnswer,
+  getAcceptedAnswersByQuestionIdController
 }
