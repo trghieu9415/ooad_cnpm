@@ -14,5 +14,6 @@ router.get('/:id/bounty', authenticateAccount, Question.getBountyById)
 router.post('/:id/bounty', authenticateAccount, Question.createBounty)
 router.post('/:id/award', authenticateAccount, Question.awardBounty)
 
+router.put('/:id/update-status', Question.handleQuestionStatus)
 
 module.exports = router

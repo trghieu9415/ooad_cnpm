@@ -87,14 +87,23 @@ const awardBounty = async (req, res) => {
 
 const addQuestionEdit = async (req, res) => {}
 
-const closeQuestion = async (req, res) => {}
+const handleQuestionStatus = async (req, res) => {
+  try {
+    const question_id = req.params.id
+    const status = req.body.status
+    const result = await Question.handleStatus(question_id, status)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 module.exports = {
   getQuestionById,
   getQuestions,
   createQuestion,
   addQuestionEdit,
-  closeQuestion,
+  handleQuestionStatus,
   getQuestionsByMember,
   getQuestionsByTag,
   createBounty,
