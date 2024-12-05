@@ -266,7 +266,7 @@ const saveQuestion = async (id, question_id, type) => {
 const getSavedQuestion = async (memberId) => {
   try {
     const memberViews = await MemberView.findAll({
-      where: { member_id: memberId },
+      where: { member_id: memberId, saved: true },
       include: [
         {
           model: Question,
