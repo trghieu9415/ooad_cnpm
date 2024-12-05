@@ -1,4 +1,4 @@
-const { MemberFlag, Comment, Answer, Question } = require('@models/_index')
+const { MemberFlag, Comment, Answer, Question, Member } = require('@models/_index')
 
 const getAllMemberFlags = async (req, res) => {
   try {
@@ -7,19 +7,30 @@ const getAllMemberFlags = async (req, res) => {
       include: [
         {
           model: Comment,
-          as: 'comment'
+          as: 'comment',
+          include: {
+            model: Member,
+            as: 'member' // Giả sử bảng Comment có liên kết với Member qua `member_id`
+          }
         },
         {
           model: Answer,
-          as: 'answer'
+          as: 'answer',
+          include: {
+            model: Member,
+            as: 'member' // Liên kết tương tự với Answer
+          }
         },
         {
           model: Question,
-          as: 'question'
+          as: 'question',
+          include: {
+            model: Member,
+            as: 'member' // Liên kết tương tự với Question
+          }
         }
       ]
     })
-
     // Lọc dữ liệu để chỉ trả về comment, answer, question nếu chúng không phải là null
     const filteredMemberFlags = memberFlags.map((flag) => {
       const filteredFlag = flag.toJSON() // Chuyển đối tượng Sequelize thành JSON
