@@ -9,3 +9,16 @@ export const createCommentQuestionById = async (id, token, body) => {
   })
   return response
 }
+
+export const HideComment = async (id, token) => {
+  const response = await http.put(
+    `/comment/hide/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+  return response
+}

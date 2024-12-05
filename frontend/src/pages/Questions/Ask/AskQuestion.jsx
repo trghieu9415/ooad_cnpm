@@ -9,7 +9,6 @@ import Toast from '../../../Components/Toast'
 const AskQuestion = () => {
   const [title, setTitle] = useState('')
   const [questionText, setQuestionText] = useState('')
-  // const [attemptedSolutions, setAttemptedSolutions] = useState('')
   const [selectedTags, setSelectedTags] = useState([])
   const [tags, setTags] = useState([])
   const [isTagModalOpen, setIsTagModalOpen] = useState(false)

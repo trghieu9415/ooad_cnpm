@@ -33,6 +33,13 @@ export const memberSave = (id, token) =>
     }
   )
 
+export const memberSaveByUser = (token) =>
+  http.get(`/member/saved`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+
 export const memberFlagComment = (id, body, token) =>
   http.post(`/member/flag/comment/${id}`, body, {
     headers: {
