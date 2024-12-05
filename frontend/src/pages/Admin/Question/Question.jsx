@@ -62,14 +62,19 @@ export default function Question() {
     try {
       let newStatus = ''
       if (action === 'Delete') {
+        const confirmed = window.confirm('Xóa câu hỏi là xóa vĩnh viễn bạn có muốn xóa?')
+        if (!confirmed) return
         newStatus = 'Delete'
       } else {
         newStatus = action === 'Open' ? 'Close' : 'Open'
       }
+
       await handleStatusChange(question_id, { status: newStatus })
+
       setQuestions((prevQuestions) =>
         prevQuestions.map((question) => (question.id === question_id ? { ...question, status: newStatus } : question))
       )
+
       setStatus('success')
       setMessage(
         newStatus === 'Delete'
