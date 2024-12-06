@@ -448,9 +448,11 @@ const DetailQuestion = ({ id }) => {
                   <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
                 </p>
                 <div className='flex items-center space-x-2 mt-1'>
-                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
-                    <FaFlag className='w-4 h-4' />
-                  </button>
+                  {!comment.comment_text.includes('[HIDDEN COMMENT]') && (
+                    <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
+                      <FaFlag className='w-4 h-4' />
+                    </button>
+                  )}
                   {currentUser.id === comment.member_id && (
                     <div className='flex items-center space-x-2'>
                       {comment.comment_text !== '[HIDDEN COMMENT]' && (
@@ -528,9 +530,11 @@ const DetailQuestion = ({ id }) => {
                   )}
                 </div>
                 <div className='flex items-center space-x-2 mt-1'>
-                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
-                    <FaFlag className='w-4 h-4' />
-                  </button>
+                  {!answer.answer_text.includes('[HIDDEN ANSWER]') && (
+                    <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
+                      <FaFlag className='w-4 h-4' />
+                    </button>
+                  )}
                   {currentUser.id === answer.member_id && (
                     <div className='flex items-center space-x-2'>
                       {answer.answer_text !== '[HIDDEN ANSWER]' && (
