@@ -65,7 +65,8 @@ const DetailQuestion = ({ id }) => {
             }
           })
         )
-        setComments(commentsWithNames)
+        const sortedComments = commentsWithNames.sort((a, b) => new Date(b.creation_time) - new Date(a.creation_time))
+        setComments(sortedComments)
       })
       .catch((error) => console.error('Failed to fetch comments:', error))
 
@@ -80,7 +81,8 @@ const DetailQuestion = ({ id }) => {
             }
           })
         )
-        setAnswers(answersWithNames)
+        const sortedAnswers = answersWithNames.sort((a, b) => new Date(b.creation_time) - new Date(a.creation_time))
+        setAnswers(sortedAnswers)
       })
       .catch((error) => console.error('Failed to fetch answers:', error))
 
@@ -309,9 +311,9 @@ const DetailQuestion = ({ id }) => {
       <div className='w-full max-w-2xl lg:max-w-4xl bg-white shadow-lg rounded-lg p-6 sm:p-8'>
         {currentUser.id === questionDetails.member_id && (
           <div className='float-right flex items-center space-x-2'>
-            <button onClick={openModal} className='p-2 text-black'>
+            {/* <button onClick={openModal} className='p-2 text-black'>
               <FaBullseye />
-            </button>
+            </button> */}
             <button className='p-2 text-black' onClick={handleCloseQuestion}>
               <FaTimes />
             </button>
