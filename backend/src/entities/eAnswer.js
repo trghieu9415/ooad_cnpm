@@ -191,6 +191,42 @@ const showAnswer = async (id) => {
   }
 }
 
+const getVoteList = async (question_id, member_id) => {
+  try {
+    // Sử dụng await để giải quyết Promise của Answer.findAll
+    const answers = await Answer.findAll({
+      where: { question_id },
+      attributes: ['id'] // Chỉ lấy id
+    })
+
+    // Kiểm tra xem member đã vote cho câu hỏi chưa
+    const questionVote = await MemberVote.findOne({
+      where: { question_id, member_id }
+    })
+
+    // Kiểm tra vote của member trên từng câu trả lời
+    const answerVotes = await Promise.all(
+      answers.map(async (answer) => {
+        const answerVote = await MemberVote.findOne({
+          where: { answer_id: answer.id, member_id }
+        })
+        return {
+          answer_id: answer.id,
+          vote_type: answerVote ? answerVote.vote_type : null // null nếu chưa vote
+        }
+      })
+    )
+
+    // Tạo kết quả trả về
+    return createResData(200, {
+      questionVote: questionVote ? { question_id, vote_type: questionVote.vote_type } : null,
+      answerVotes
+    })
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
+
 module.exports = {
   getAllAnswers,
   getAnswerById,
@@ -200,5 +236,6 @@ module.exports = {
   getAnswerByQuestion,
   setCorrectAnswer,
   showAnswer,
-  hideAnswer
+  hideAnswer,
+  getVoteList
 }

@@ -12,6 +12,15 @@ const getAnswerByQuestion = async (req, res) => {
   res.status(result.status).json(result.data)
 }
 
+const getVoteResult = async (req, res) => {
+  const question_id = req.params.question_id
+  const member_id = req.member_id
+
+  const result = await Answer.getVoteList(question_id, member_id)
+  res.status(result.status).json(result.data)
+
+}
+
 const createAnswer = async (req, res) => {
   const member_id = req.member_id
   const question_id = req.params.question_id
@@ -53,5 +62,6 @@ module.exports = {
   createAnswer,
   setCorrectAnswer,
   showAnswer,
-  hideAnswer
+  hideAnswer,
+  getVoteResult
 }

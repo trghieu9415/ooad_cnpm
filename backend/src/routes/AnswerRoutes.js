@@ -11,4 +11,6 @@ router.put('/hide/:id', Answer.hideAnswer)
 router.put('/show/:id', Answer.showAnswer)
 router.put('/:id/correct', authenticateAccount, Answer.setCorrectAnswer)
 
+router.get('/vote-result/question_id=:question_id', authenticateAccount, Answer.getVoteResult)
+
 module.exports = router
