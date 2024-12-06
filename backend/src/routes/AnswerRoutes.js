@@ -12,4 +12,5 @@ router.put('/show/:id', Answer.showAnswer)
 router.put('/:id/correct', authenticateAccount, Answer.setCorrectAnswer)
 
 router.get('/:questionId/accepted-answers', Answer.getAcceptedAnswersByQuestionIdController) // Định nghĩa route với tham số questionId
+router.get('/vote-result/question_id=:question_id', authenticateAccount, Answer.getVoteResult)
 module.exports = router

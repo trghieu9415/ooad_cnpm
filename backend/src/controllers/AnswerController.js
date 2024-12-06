@@ -63,6 +63,14 @@ const getAcceptedAnswersByQuestionIdController = async (req, res) => {
   }
 }
 
+const getVoteResult = async (req, res) => {
+  const question_id = req.params.question_id
+  const member_id = req.member_id
+
+  const result = await Answer.getVoteList(question_id, member_id)
+  res.status(result.status).json(result.data)
+}
+
 module.exports = {
   getAnswerById,
   getAnswerByQuestion,
@@ -70,5 +78,6 @@ module.exports = {
   setCorrectAnswer,
   showAnswer,
   hideAnswer,
-  getAcceptedAnswersByQuestionIdController
+  getAcceptedAnswersByQuestionIdController,
+  getVoteResult
 }
