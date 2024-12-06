@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { resetUser } from '../redux/slides/userSlide'
 import InboxPopup from './InboxPopup'
 import useDebounce from '../hooks/useDebounce'
-
+import logoStackOverFlow from '../assets/logo-stackOverFlow.png'
 const Navbar = () => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
@@ -58,7 +58,7 @@ const Navbar = () => {
         <NavLink to='/'>
           <img
             className='w-[100px] h-[30px] lg:w-[150px] lg:h-[42px] object-cover'
-            src='./img/iconStackOverflow.png'
+            src={logoStackOverFlow}
             alt='Stack Overflow Icon'
           />
         </NavLink>
