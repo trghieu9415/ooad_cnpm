@@ -9,6 +9,9 @@ const getAllQuestions = async () => {
         attributes: ['id', 'name', 'description'],
         required: false
       },
+      where: {
+        status: ['Open', 'Close']
+      },
       order: [['creation_time', 'DESC']]
     })
     const questionsWithTags = await Promise.all(
@@ -32,7 +35,37 @@ const getAllQuestions = async () => {
     return createResData(500, error)
   }
 }
+const getAllQuestionsAdmin = async () => {
+  try {
+    const questions = await Question.findAll({
+      include: {
+        model: Tag,
+        attributes: ['id', 'name', 'description'],
+        required: false
+      },
+      order: [['creation_time', 'DESC']]
+    })
+    const questionsWithTags = await Promise.all(
+      questions.map(async (question) => {
+        const countedValue = await getViewVoteFlagById(question.dataValues.id)
+        question.dataValues.viewCount = countedValue.viewCount
+        question.dataValues.voteCount = countedValue.voteCount
+        question.dataValues.flagCount = countedValue.flagCount
+        question.dataValues.answerCount = countedValue.answerCount
+        // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+        if (question.status === 'Delete') {
+          question.dataValues.title = '[HIDDEN]'
+          question.dataValues.question_text = '[HIDDEN]'
+        }
 
+        return question
+      })
+    )
+    return createResData(200, questionsWithTags)
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
 const getQuestionById = async (id) => {
   try {
     const question = await Question.findByPk(id, {
@@ -273,5 +306,6 @@ module.exports = {
   getQuestionByMember,
   updateQuestionTags,
   handleStatus,
-  getQuestionsByTag
+  getQuestionsByTag,
+  getAllQuestionsAdmin
 }

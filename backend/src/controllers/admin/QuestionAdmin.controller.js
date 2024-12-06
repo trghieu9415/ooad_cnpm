@@ -2,7 +2,7 @@ const { Question } = require('@entities/_index')
 
 const getAllQuestions = async (req, res) => {
   try {
-    const result = await Question.getAllQuestions()
+    const result = await Question.getAllQuestionsAdmin()
     res.status(result.status).json(result.data)
   } catch (error) {
     res.status(500).json(error)
