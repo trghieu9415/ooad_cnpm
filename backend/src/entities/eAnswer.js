@@ -252,5 +252,6 @@ module.exports = {
   setCorrectAnswer,
   showAnswer,
   hideAnswer,
-  getAcceptedAnswersByQuestionId
+  getAcceptedAnswersByQuestionId,
+  getVoteList
 }

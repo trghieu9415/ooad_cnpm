@@ -40,3 +40,12 @@ export const BestAnswerByQuestion = async (id) => {
   const response = await http.get(`/answer/${id}/accepted-answers`)
   return response
 }
+
+export const VoteResult = async (id, token) => {
+  const response = await http.get(`/answer/vote-result/question_id=${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  return response
+}
