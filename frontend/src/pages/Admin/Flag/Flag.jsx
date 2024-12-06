@@ -174,7 +174,22 @@ const Flag = () => {
                             <FaTimes className='text-xl' />
                           </button>
                           <button
-                            onClick={() => handleStatus(flag.comment.member.account_id, flag.accountStatus)}
+                            onClick={() => {
+                              let account_id
+                              if (flag.related_type === 'Question') {
+                                account_id = flag.question.member.account_id
+                              } else if (flag.related_type === 'Answer') {
+                                account_id = flag.answer.member.account_id
+                              } else if (flag.related_type === 'Comment') {
+                                account_id = flag.comment.member.account_id
+                              }
+
+                              if (account_id) {
+                                handleStatus(account_id, flag.accountStatus)
+                              } else {
+                                console.error('Không tìm thấy đối tượng hợp lệ trong flag.')
+                              }
+                            }}
                             className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                             aria-label='Delete'
                           >
