@@ -32,7 +32,8 @@ const Answer = () => {
             author: (await fetchAuthor(answer.member_id)).name
           }))
         )
-        setAnswers(answersWithAuthors)
+        const sortedAnswers = answersWithAuthors.sort((a, b) => new Date(b.creation_time) - new Date(a.creation_time))
+        setAnswers(sortedAnswers)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
