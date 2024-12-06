@@ -194,14 +194,18 @@ const QuestionDetail = () => {
         <Button left regular onClick={() => navigate(-1)}>
           Back
         </Button>
-        <div className='flex flex-col lg:flex-row gap-4'>
-          <div className='flex-1'>
-            {RenderQuestionDetails()}
-            {RenderList({ items: answers, label: 'Answers', isComment: false })}
-            {RenderList({ items: comments, label: 'Comments', isComment: true })}
+        {question.status === 'Delete' ? (
+          <div className='flex flex-col lg:flex-row gap-4'>CÂU HỎI ĐÃ XÓA </div>
+        ) : (
+          <div className='flex flex-col lg:flex-row gap-4'>
+            <div className='flex-1'>
+              {RenderQuestionDetails()}
+              {RenderList({ items: answers, label: 'Answers', isComment: false })}
+              {RenderList({ items: comments, label: 'Comments', isComment: true })}
+            </div>
+            <RenderSidebar />
           </div>
-          <RenderSidebar />
-        </div>
+        )}
       </Content>
     </div>
   )

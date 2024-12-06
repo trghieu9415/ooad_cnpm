@@ -36,7 +36,10 @@ export default function Question() {
             return { ...question, answer_length: answers.data.length }
           })
         )
-        setQuestions(questionWithAnswerLength)
+        const sortedQuestions = questionWithAnswerLength.sort(
+          (a, b) => new Date(b.creation_time) - new Date(a.creation_time)
+        )
+        setQuestions(sortedQuestions)
         setTags(tagsRes.data)
       } catch (error) {
         console.error('Error fetching data:', error)
