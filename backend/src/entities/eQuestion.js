@@ -152,6 +152,24 @@ const getQuestionByTag = async (tag_id) => {
   }
 }
 
+const getQuestionsByTag = async (tag_id) => {
+  try {
+    // Tìm tất cả các Question liên quan đến Tag
+    const questions = await QuestionTag.findAll({
+      where: { tag_id }
+    })
+
+    if (!questions.length) {
+      return createResData(404, { message: 'No questions found for this tag.' })
+    }
+
+    return createResData(200, questions)
+  } catch (error) {
+    console.error('Error fetching questions by tag:', error)
+    return createResData(500, { message: 'Internal Server Error' })
+  }
+}
+
 const getQuestionByMember = async (member_id) => {
   try {
     const questions = await Question.findAll({
@@ -254,5 +272,6 @@ module.exports = {
   getQuestionByTag,
   getQuestionByMember,
   updateQuestionTags,
-  handleStatus
+  handleStatus,
+  getQuestionsByTag
 }

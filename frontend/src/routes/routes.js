@@ -103,5 +103,4 @@ const privateRoutes = [
   }
 ]
 
-
 export { publicRoutes, privateRoutes, authRoutes }

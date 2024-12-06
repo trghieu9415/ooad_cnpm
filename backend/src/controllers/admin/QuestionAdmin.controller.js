@@ -28,9 +28,19 @@ const getQuestionById = async (req, res) => {
     res.status(500).json(error)
   }
 }
+const getQuestionsByTag = async (req, res) => {
+  try {
+    const tag_id = req.params.tag_id
+    const result = await Question.getQuestionsByTag(tag_id)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 module.exports = {
   getAllQuestions,
   handleQuestionStatus,
-  getQuestionById
+  getQuestionById,
+  getQuestionsByTag
 }

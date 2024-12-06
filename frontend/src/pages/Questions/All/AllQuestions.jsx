@@ -13,7 +13,7 @@ const AllQuestions = () => {
   const [filteredQuestions, setFilteredQuestions] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedTab, setSelectedTab] = useState('All')
-  const buttonItems = ['All', 'Open', 'Bountied', 'Unanswered']
+  const buttonItems = ['All', 'Open', 'Unanswered']
   const location = useLocation()
   const [tagsData, setTagsData] = useState([])
   const navigate = useNavigate()

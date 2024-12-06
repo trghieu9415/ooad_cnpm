@@ -1,10 +1,12 @@
 import Content from '../../../Components/Admin/components/Content'
 import { useSelector } from 'react-redux'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getAllTags } from '../../../apis/Admin/adminTag.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteTag, getAllTags } from '../../../apis/Admin/adminTag.api'
 import { useState } from 'react'
 import ActionTag from './ActionTag'
 import Pagination from '../../../Components/Pagination'
+import { toast } from 'react-toastify'
+import { getQuestionsByTag } from '../../../apis/Admin/adminQuestion.api'
 
 const Tag = () => {
   const queryClient = useQueryClient()
@@ -19,9 +21,11 @@ const Tag = () => {
 
   const { data } = useQuery({
     queryKey: ['tags'],
-    queryFn: getAllTags,
-    keepPreviousData: true,
-    staleTime: 5 * 1000
+    queryFn: getAllTags
+  })
+
+  const deleteTagMutation = useMutation({
+    mutationFn: (id) => deleteTag(id)
   })
 
   const totalTag = data?.data.length || 0
@@ -41,6 +45,39 @@ const Tag = () => {
     setAction('edit')
     setIsClose(!isClose)
     queryClient.invalidateQueries('tags')
+  }
+  // Hàm kiểm tra xem tag có câu hỏi nào sử dụng không
+  const checkTagHasQuestions = async (idTag) => {
+    try {
+      const { data: questions } = await getQuestionsByTag(idTag)
+      return questions.length > 0
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi kiểm tra câu hỏi!')
+      return false
+    }
+  }
+  console.log(checkTagHasQuestions('e069d464-efe5-4596-8dcc-170be32830fc'))
+
+  const handleDelete = async (idTag) => {
+    const hasQuestions = await checkTagHasQuestions(idTag)
+
+    if (hasQuestions) {
+      alert('Không thể xóa tag vì có câu hỏi đang sử dụng tag này!')
+    } else {
+      if (window.confirm('Bạn có chắc chắn muốn xóa Tag này?')) {
+        // Thực hiện xóa tag
+        deleteTagMutation.mutate(idTag, {
+          onSuccess: () => {
+            // Sau khi xóa thành công, làm mới danh sách tags
+            alert('Xóa gắn thẻ thành công')
+            queryClient.invalidateQueries('tags') // Invalidate dữ liệu để refetch lại
+          },
+          onError: () => {
+            toast.error('Có lỗi xảy ra khi xóa gắn thẻ!')
+          }
+        })
+      }
+    }
   }
 
   return (
@@ -96,7 +133,8 @@ const Tag = () => {
                                 <path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
                               </svg>
                             </button>
-                            {/* <button
+                            <button
+                              onClick={() => handleDelete(tag.id)}
                               className='flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray'
                               aria-label='Delete'
                             >
@@ -107,7 +145,7 @@ const Tag = () => {
                                   clipRule='evenodd'
                                 ></path>
                               </svg>
-                            </button> */}
+                            </button>
                           </div>
                         </td>
                       </tr>
