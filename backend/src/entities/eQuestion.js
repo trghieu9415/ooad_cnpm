@@ -1,4 +1,4 @@
-const { Question, Tag, QuestionTag, MemberView, MemberVote, MemberFlag } = require('@models/_index')
+const { Question, Tag, QuestionTag, MemberView, MemberVote, MemberFlag, Answer } = require('@models/_index')
 const createResData = require('@utils/resMaker')
 
 const getAllQuestions = async () => {
@@ -16,7 +16,7 @@ const getAllQuestions = async () => {
         question.dataValues.viewCount = countedValue.viewCount
         question.dataValues.voteCount = countedValue.voteCount
         question.dataValues.flagCount = countedValue.flagCount
-
+        question.dataValues.answerCount = countedValue.answerCount
         // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
         if (question.status === 'Delete') {
           question.dataValues.title = '[HIDDEN]'
@@ -185,15 +185,16 @@ const getQuestionByMember = async (member_id) => {
 
 const getViewVoteFlagById = async (id) => {
   try {
-    const [viewCount, upvote, downvote, flagCount] = await Promise.all([
+    const [viewCount, upvote, downvote, flagCount, answerCount] = await Promise.all([
       MemberView.count({ where: { question_id: id } }),
       MemberVote.count({ where: { question_id: id, vote_type: 'Upvote' } }),
       MemberVote.count({ where: { question_id: id, vote_type: 'Downvote' } }),
-      MemberFlag.count({ where: { question_id: id } })
+      MemberFlag.count({ where: { question_id: id } }),
+      Answer.count({ where: { question_id: id } })
     ])
 
     const voteCount = upvote - downvote
-    return { viewCount, voteCount, flagCount }
+    return { viewCount, voteCount, flagCount, answerCount }
   } catch (error) {
     throw error
   }

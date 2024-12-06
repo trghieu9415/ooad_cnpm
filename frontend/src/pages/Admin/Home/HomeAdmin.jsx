@@ -60,33 +60,33 @@ export default function HomeAdmin() {
     })
 
     // Khởi tạo biểu đồ Line
-    const ctxLine = document.getElementById('line').getContext('2d')
-    const lineChart = new Chart(ctxLine, {
-      type: 'line',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-            label: 'Questions',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            borderColor: '#38B2AC',
-            fill: false
-          },
-          {
-            label: 'Answers',
-            data: [28, 48, 40, 19, 86, 27, 90],
-            borderColor: '#805AD5',
-            fill: false
-          }
-        ]
-      },
-      options: {
-        maintainAspectRatio: false
-      }
-    })
+    // const ctxLine = document.getElementById('line').getContext('2d')
+    // const lineChart = new Chart(ctxLine, {
+    //   type: 'line',
+    //   data: {
+    //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    //     datasets: [
+    //       {
+    //         label: 'Questions',
+    //         data: [65, 59, 80, 81, 56, 55, 40],
+    //         borderColor: '#38B2AC',
+    //         fill: false
+    //       },
+    //       {
+    //         label: 'Answers',
+    //         data: [28, 48, 40, 19, 86, 27, 90],
+    //         borderColor: '#805AD5',
+    //         fill: false
+    //       }
+    //     ]
+    //   },
+    //   options: {
+    //     maintainAspectRatio: false
+    //   }
+    // })
     return () => {
       pieChart.destroy()
-      lineChart.destroy()
+      // lineChart.destroy()
     }
   }, [members, questions, answers])
   const totalMember = members?.length || 0
@@ -234,10 +234,11 @@ export default function HomeAdmin() {
               </div>
 
               <h2 className='my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200'>Charts</h2>
-              <div className='grid gap-6 mb-8 md:grid-cols-2'>
+              {/* <div className='grid gap-6 mb-8 md:grid-cols-2'>  */}
+              <div className='grid gap-6 mb-8 '>
                 <div className='min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800'>
                   <h4 className='mb-4 font-semibold text-gray-800 dark:text-gray-300'>Pie</h4>
-                  <div className='w-auto h-40'>
+                  <div className='w-auto h-80'>
                     <canvas id='pie'></canvas>
                   </div>
                   <div className='flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400'>
@@ -255,7 +256,7 @@ export default function HomeAdmin() {
                     </div>
                   </div>
                 </div>
-                <div className='min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800'>
+                {/* <div className='min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800'>
                   <h4 className='mb-4 font-semibold text-gray-800 dark:text-gray-300'>Line</h4>
                   <div className='w-auto h-40'>
                     <canvas id='line'></canvas>
@@ -270,7 +271,7 @@ export default function HomeAdmin() {
                       <span>Answers</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </main>

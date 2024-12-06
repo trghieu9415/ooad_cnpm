@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
-import { detailQuestion } from '../../../apis/question.api'
-import { commentQuestionById, createCommentQuestionById } from '../../../apis/comment.api'
-import { answerQuestionById, BestAnswer, createAnswerQuestionById } from '../../../apis/answer.api'
+import { detailQuestion, statusQuestion } from '../../../apis/question.api'
+import { commentQuestionById, createCommentQuestionById, HideComment } from '../../../apis/comment.api'
+import {
+  answerQuestionById,
+  BestAnswer,
+  BestAnswerByQuestion,
+  createAnswerQuestionById,
+  HideAnswer
+} from '../../../apis/answer.api'
 import {
   memberById,
   memberFlagAnswer,
@@ -14,6 +20,8 @@ import {
 import { useSelector } from 'react-redux'
 import { AiOutlineCheck } from 'react-icons/ai'
 import { FaBookmark, FaBullseye, FaFlag, FaTimes, FaTrash } from 'react-icons/fa'
+import { toast } from 'react-toastify'
+// import { getAllMemberFlag } from '../../../apis/flag.api'
 
 const DetailQuestion = ({ id }) => {
   const [questionDetails, setQuestionDetails] = useState(null)
@@ -29,6 +37,7 @@ const DetailQuestion = ({ id }) => {
   const [flaggingTarget, setFlaggingTarget] = useState(null)
   const [commentId, setCommentId] = useState(null)
   const [answerId, setAnswerId] = useState(null)
+  const [bestAnswer, setBestAnswer] = useState(null)
   const currentUser = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -71,6 +80,15 @@ const DetailQuestion = ({ id }) => {
         setAnswers(answersWithNames)
       })
       .catch((error) => console.error('Failed to fetch answers:', error))
+
+    BestAnswerByQuestion(id)
+      .then((data) => {
+        const combinedObject = data.data.reduce((acc, curr) => ({ ...acc, ...curr }), {})
+        setBestAnswer(combinedObject)
+      })
+      .catch((error) => {
+        console.error('Error fetching best answer:', error)
+      })
   }, [id])
 
   const handleAddComment = async () => {
@@ -133,6 +151,26 @@ const DetailQuestion = ({ id }) => {
     setIsModalOpen(false)
   }
 
+  const handleHideComment = async (id) => {
+    const token = localStorage.getItem('UserToken')
+    try {
+      await HideComment(id, token)
+      console.log(456)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleHideAnswer = async (id) => {
+    const token = localStorage.getItem('UserToken')
+    try {
+      await HideAnswer(id, token)
+      console.log(123)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const openModalFlag = (target, id) => {
     setFlaggingTarget(target)
     if (target == 'comment') {
@@ -172,6 +210,18 @@ const DetailQuestion = ({ id }) => {
     closeModalFlag()
   }
 
+  const handleCloseQuestion = async () => {
+    const token = localStorage.getItem('UserToken')
+    const body = { status: 'Close' }
+    try {
+      await statusQuestion(questionDetails.id, body, token)
+      alert('Câu hỏi đã đóng')
+    } catch (error) {
+      console.error('Failed to flag:', error)
+      alert('Failed to flag the item, please try again later.')
+    }
+  }
+
   const handleBountyChange = (e) => {
     setBountyAmount(e.target.value)
   }
@@ -185,6 +235,7 @@ const DetailQuestion = ({ id }) => {
       const response = await memberSave(id, token)
       console.log(response)
       if (response.status === 200) {
+        toast.success('Lưu câu hỏi thành công')
         alert('Lưu câu hỏi thành công')
       } else {
         alert('Đã xảy ra lỗi khi cập nhật câu hỏi')
@@ -238,7 +289,7 @@ const DetailQuestion = ({ id }) => {
             <button onClick={openModal} className='p-2 text-black'>
               <FaBullseye />
             </button>
-            <button className='p-2 text-black'>
+            <button className='p-2 text-black' onClick={handleCloseQuestion}>
               <FaTimes />
             </button>
           </div>
@@ -246,7 +297,6 @@ const DetailQuestion = ({ id }) => {
         <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 leading-snug break-words'>
           {questionDetails.title}
         </h1>
-
         {isModalOpen && (
           <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
             <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
@@ -275,7 +325,6 @@ const DetailQuestion = ({ id }) => {
             </div>
           </div>
         )}
-
         {isModalFlag && (
           <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
             <div className='bg-white p-6 rounded-lg shadow-lg w-96'>
@@ -315,7 +364,6 @@ const DetailQuestion = ({ id }) => {
             </div>
           </div>
         )}
-
         <div className='flex flex-col sm:flex-row'>
           <div className='flex flex-col items-center sm:mr-6 mb-4 sm:mb-0'>
             <button className='text-gray-400 hover:text-blue-500 transition' onClick={() => handleVoteQuestion('up')}>
@@ -328,7 +376,6 @@ const DetailQuestion = ({ id }) => {
               ▼
             </button>
           </div>
-
           <div className='flex-1'>
             <p className='text-gray-700 mb-4 sm:mb-6'>{questionDetails.question_text}</p>
             <div className='flex flex-wrap gap-2 mb-4 sm:mb-6'>
@@ -345,7 +392,6 @@ const DetailQuestion = ({ id }) => {
               Asked by <span className='font-semibold text-gray-700'>{askedByUser}</span> on{' '}
               {new Date(questionDetails.update_time || questionDetails.creation_time).toLocaleDateString()}
             </p>
-            {/* icon */}
             <div className='flex space-x-4 py-2'>
               <button
                 className='p-2 text-black'
@@ -361,115 +407,132 @@ const DetailQuestion = ({ id }) => {
             </div>
           </div>
         </div>
-
         <div className='bg-gray-100 p-3 sm:p-4 rounded-lg shadow-inner mb-6 sm:mb-8'>
-          {comments.map((comment) => (
-            <div key={comment.id} className='py-2'>
-              <p className='text-sm text-gray-700'>
-                <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
-              </p>
-              {/* icon */}
-              <div className='flex items-center space-x-2 mt-1'>
-                <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
-                  <FaFlag className='w-4 h-4' />
-                </button>
-                {currentUser.id === comment.member_id && (
-                  <div className='flex items-center space-x-2'>
-                    <button className='p-1 text-black text-sm'>
-                      <FaTrash className='w-4 h-4' />
-                    </button>
-                  </div>
-                )}
+          {comments.map((comment) => {
+            return (
+              <div key={comment.id} className='py-2'>
+                <p className='text-sm text-gray-700'>
+                  <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
+                </p>
+                <div className='flex items-center space-x-2 mt-1'>
+                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
+                    <FaFlag className='w-4 h-4' />
+                  </button>
+                  {currentUser.id === comment.member_id && (
+                    <div className='flex items-center space-x-2'>
+                      {comment.comment_text !== '[HIDDEN COMMENT]' && (
+                        <button
+                          className='p-1 text-black text-sm'
+                          onClick={() => {
+                            handleHideComment(comment.id)
+                          }}
+                        >
+                          <FaTrash className='w-4 h-4' />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
-
-        <div className='mb-6 sm:mb-8'>
-          <textarea
-            className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
-            placeholder='Add a comment...'
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          />
-          <button
-            className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
-            onClick={handleAddComment}
-          >
-            Post Comment
-          </button>
-        </div>
-
+        {(!bestAnswer?.id || questionDetails.status !== 'Close') && (
+          <div className='mb-6 sm:mb-8'>
+            <textarea
+              className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
+              placeholder='Add a comment...'
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <button
+              className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+              onClick={handleAddComment}
+            >
+              Post Comment
+            </button>
+          </div>
+        )}
         <div className='mt-8 sm:mt-10'>
           <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
-          {answers.map((answer) => (
-            <div
-              key={answer.id}
-              className={`bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6 ${bestAnswerId === answer.id ? 'border-4 border-green-500' : ''}`}
-            >
-              <div className='flex'>
-                <div className='flex flex-col items-center mr-4 sm:mr-6'>
-                  <button
-                    className='text-gray-400 hover:text-blue-500 transition'
-                    onClick={() => handleVoteAnswer(answer.id, 'up')}
-                  >
-                    ▲
-                  </button>
-                  <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
-                  <button
-                    className='text-gray-400 hover:text-blue-500 transition'
-                    onClick={() => handleVoteAnswer(answer.id, 'down')}
-                  >
-                    ▼
-                  </button>
-                </div>
-                <div className='flex-1'>
-                  <p className='text-gray-700 mb-2 sm:mb-4'>{answer.answer_text}</p>
-                  <p className='text-sm text-gray-500'>
-                    Answered by <span className='font-semibold text-gray-700'>{answer.memberName}</span> on{' '}
-                    {new Date(answer.creation_time).toLocaleDateString()}
-                  </p>
-                </div>
-                {currentUser.id === questionDetails.member_id && (
-                  <button onClick={() => handleBestAnswerToggle(answer.id)}>
-                    <AiOutlineCheck
-                      className={`text-2xl transition ${bestAnswerId === answer.id ? 'text-green-500' : 'text-gray-400'}`}
-                    />
-                  </button>
-                )}
-              </div>
-              {/* Flagging and deleting buttons */}
-              <div className='flex items-center space-x-2 mt-1'>
-                <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
-                  <FaFlag className='w-4 h-4' />
-                </button>
-                {currentUser.id === answer.member_id && (
-                  <div className='flex items-center space-x-2'>
-                    <button className='p-1 text-black text-sm'>
-                      <FaTrash className='w-4 h-4' />
+          {answers.map((answer) => {
+            return (
+              <div
+                key={answer.id}
+                className={`bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md mb-4 sm:mb-6 ${bestAnswerId === answer.id ? 'border-4 border-green-500' : ''}`}
+              >
+                <div className='flex'>
+                  <div className='flex flex-col items-center mr-4 sm:mr-6'>
+                    <button
+                      className='text-gray-400 hover:text-blue-500 transition'
+                      onClick={() => handleVoteAnswer(answer.id, 'up')}
+                    >
+                      ▲
+                    </button>
+                    <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
+                    <button
+                      className='text-gray-400 hover:text-blue-500 transition'
+                      onClick={() => handleVoteAnswer(answer.id, 'down')}
+                    >
+                      ▼
                     </button>
                   </div>
-                )}
+                  <div className='flex-1'>
+                    <p className='text-gray-700 mb-2 sm:mb-4'>{answer.answer_text}</p>
+                    <p className='text-sm text-gray-500'>
+                      Answered by <span className='font-semibold text-gray-700'>{answer.memberName}</span> on{' '}
+                      {new Date(answer.creation_time).toLocaleDateString()}
+                    </p>
+                  </div>
+                  {currentUser.id === questionDetails.member_id && (
+                    <button onClick={() => handleBestAnswerToggle(answer.id)}>
+                      <AiOutlineCheck
+                        className={`text-2xl transition ${bestAnswer?.id === answer.id ? 'text-green-500 border border-green-500 rounded-xl' : 'text-gray-400'}`}
+                      />
+                    </button>
+                  )}
+                </div>
+                <div className='flex items-center space-x-2 mt-1'>
+                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
+                    <FaFlag className='w-4 h-4' />
+                  </button>
+                  {currentUser.id === answer.member_id && (
+                    <div className='flex items-center space-x-2'>
+                      {answer.answer_text !== '[HIDDEN ANSWER]' && (
+                        <button
+                          className='p-1 text-black text-sm'
+                          onClick={() => {
+                            handleHideAnswer(answer.id)
+                          }}
+                        >
+                          <FaTrash className='w-4 h-4' />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
-        <div className='mt-6 sm:mt-10'>
-          <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
-          <textarea
-            className='w-full h-32 sm:h-40 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 sm:mb-4 focus:outline-none focus:border-blue-500 transition'
-            placeholder='Write your answer here...'
-            value={newAnswer}
-            onChange={(e) => setNewAnswer(e.target.value)}
-          />
-          <button
-            className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
-            onClick={handleAddAnswer}
-          >
-            Post Your Answer
-          </button>
-        </div>
+        {(!bestAnswer?.id || questionDetails.status !== 'Close') && (
+          <div className='mt-6 sm:mt-10'>
+            <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
+            <textarea
+              className='w-full h-32 sm:h-40 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 sm:mb-4 focus:outline-none focus:border-blue-500 transition'
+              placeholder='Write your answer here...'
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+            />
+            <button
+              className='px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold'
+              onClick={handleAddAnswer}
+            >
+              Post Your Answer
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

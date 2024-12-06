@@ -50,7 +50,7 @@ const QuestionDetail = () => {
           commentsResponse.data.map(async (comment) => ({
             ...comment,
             author: (await fetchAuthor(comment.member_id)).name,
-            isHidden: comment.comment_text.includes('[HIDDEN ANSWER]')
+            isHidden: comment.comment_text.includes('[HIDDEN COMMENT]')
           }))
         )
         setComments(commentsWithAuthors)

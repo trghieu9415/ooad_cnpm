@@ -27,5 +27,6 @@ router.post('/vote/question/:id', authenticateAccount, setType('Question'), Memb
 router.post('/vote/answer/:id', authenticateAccount, setType('Answer'), Member.vote)
 router.get('/:id', Member.getMemberById)
 
+router.put('/un-save/:memberViewId', Member.updateSavedStatusController)
 
 module.exports = router

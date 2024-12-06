@@ -266,7 +266,7 @@ const saveQuestion = async (id, question_id, type) => {
 const getSavedQuestion = async (memberId) => {
   try {
     const memberViews = await MemberView.findAll({
-      where: { member_id: memberId, saved: true },
+      where: { member_id: memberId, saved: 1 },
       include: [
         {
           model: Question,
@@ -279,13 +279,23 @@ const getSavedQuestion = async (memberId) => {
       return createResData(404, 'No questions found for this member')
     }
 
-    return createResData(
-      200,
-      memberViews.map((view) => view.Question)
-    )
+    return createResData(200, memberViews)
   } catch (error) {
     console.error('Error fetching questions:', error)
     return createResData(500, 'Internal server error')
+  }
+}
+
+const updateSavedStatus = async (id) => {
+  try {
+    const [updatedRows] = await MemberView.update(
+      { saved: false }, // Trường cần cập nhật
+      { where: { id } } // Điều kiện tìm kiếm bản ghi cần cập nhật
+    )
+
+    return updatedRows // Trả về số bản ghi được cập nhật
+  } catch (error) {
+    throw error // Trả lỗi để xử lý ở controller
   }
 }
 
@@ -303,5 +313,6 @@ module.exports = {
   saveQuestion,
   isEmailExisted,
   isPhoneExisted,
-  getSavedQuestion
+  getSavedQuestion,
+  updateSavedStatus
 }
