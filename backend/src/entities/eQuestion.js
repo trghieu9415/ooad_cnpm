@@ -8,7 +8,8 @@ const getAllQuestions = async () => {
         model: Tag,
         attributes: ['id', 'name', 'description'],
         required: false
-      }
+      },
+      order: [['creation_time', 'DESC']]
     })
     const questionsWithTags = await Promise.all(
       questions.map(async (question) => {
