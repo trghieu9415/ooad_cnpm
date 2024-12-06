@@ -92,7 +92,7 @@ const DetailQuestion = ({ id }) => {
         setBestAnswer(combinedObject)
       })
       .catch((error) => {
-        console.error('Error fetching best answer:', error)
+        // console.error('Error fetching best answer:', error)
       })
 
     VoteResult(id, localStorage.getItem('UserToken'))
@@ -314,9 +314,11 @@ const DetailQuestion = ({ id }) => {
             {/* <button onClick={openModal} className='p-2 text-black'>
               <FaBullseye />
             </button> */}
-            <button className='p-2 text-black' onClick={handleCloseQuestion}>
-              <FaTimes />
-            </button>
+            {questionDetails.status !== 'Close' && (
+              <button className='p-2 text-black' onClick={handleCloseQuestion}>
+                <FaTimes />
+              </button>
+            )}
           </div>
         )}
         <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 leading-snug break-words'>
