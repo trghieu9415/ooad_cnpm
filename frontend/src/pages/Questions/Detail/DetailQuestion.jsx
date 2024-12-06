@@ -468,7 +468,7 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
-        {(!bestAnswer?.id || questionDetails.status !== 'Close') && (
+        {questionDetails.status !== 'Close' && (
           <div className='mb-6 sm:mb-8'>
             <textarea
               className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
@@ -485,7 +485,8 @@ const DetailQuestion = ({ id }) => {
           </div>
         )}
         <div className='mt-8 sm:mt-10'>
-          <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
+          {questionDetails.status !== 'Close' ||
+            (answers.length > 0 && <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>)}
           {answers.map((answer) => {
             const voteAnswer = answerVote.filter((item) => item.answer_id === answer.id)
             return (
@@ -548,7 +549,7 @@ const DetailQuestion = ({ id }) => {
           })}
         </div>
 
-        {(!bestAnswer?.id || questionDetails.status !== 'Close') && (
+        {questionDetails.status !== 'Close' && (
           <div className='mt-6 sm:mt-10'>
             <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
             <textarea
