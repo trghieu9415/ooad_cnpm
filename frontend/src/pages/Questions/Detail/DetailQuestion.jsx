@@ -6,7 +6,8 @@ import {
   BestAnswer,
   BestAnswerByQuestion,
   createAnswerQuestionById,
-  HideAnswer
+  HideAnswer,
+  VoteResult
 } from '../../../apis/answer.api'
 import {
   memberById,
@@ -38,6 +39,8 @@ const DetailQuestion = ({ id }) => {
   const [commentId, setCommentId] = useState(null)
   const [answerId, setAnswerId] = useState(null)
   const [bestAnswer, setBestAnswer] = useState(null)
+  const [questionVote, setQuestionVote] = useState(null)
+  const [answerVote, setAnswerVote] = useState([])
   const currentUser = useSelector((state) => state.user)
 
   useEffect(() => {
@@ -85,6 +88,15 @@ const DetailQuestion = ({ id }) => {
       .then((data) => {
         const combinedObject = data.data.reduce((acc, curr) => ({ ...acc, ...curr }), {})
         setBestAnswer(combinedObject)
+      })
+      .catch((error) => {
+        console.error('Error fetching best answer:', error)
+      })
+
+    VoteResult(id, localStorage.getItem('UserToken'))
+      .then((data) => {
+        setQuestionVote(data.data.questionVote)
+        setAnswerVote(data.data.answerVotes)
       })
       .catch((error) => {
         console.error('Error fetching best answer:', error)
@@ -248,13 +260,19 @@ const DetailQuestion = ({ id }) => {
 
   const handleVoteQuestion = async (voteType) => {
     const token = localStorage.getItem('UserToken')
-    const body = { vote_type: voteType === 'up' ? 'Upvote' : 'Downvote' }
+    const body = {
+      vote_type:
+        voteType === 'up'
+          ? questionVote === 'Upvote'
+            ? 'Unvote'
+            : 'Upvote'
+          : questionVote === 'Downvote'
+            ? 'Unvote'
+            : 'Downvote'
+    }
     try {
-      await memberVoteQuestion(questionDetails.id, body, token)
-      setQuestionDetails((prevDetails) => ({
-        ...prevDetails,
-        voteCount: voteType === 'up' ? prevDetails.voteCount + 1 : prevDetails.voteCount - 1
-      }))
+      await memberVoteQuestion(id, body, token)
+      window.location.reload()
     } catch (error) {
       console.error('Failed to vote on question:', error)
     }
@@ -262,16 +280,21 @@ const DetailQuestion = ({ id }) => {
 
   const handleVoteAnswer = async (answerId, voteType) => {
     const token = localStorage.getItem('UserToken')
-    const body = { vote_type: voteType === 'up' ? 'Upvote' : 'Downvote' }
     try {
+      const idAns = answerVote.filter((item) => item.answer_id === answerId)
+      console.log(idAns)
+      const body = {
+        vote_type:
+          voteType === 'up'
+            ? idAns[0].vote_type === 'Upvote'
+              ? 'Unvote'
+              : 'Upvote'
+            : idAns[0].vote_type === 'Downvote'
+              ? 'Unvote'
+              : 'Downvote'
+      }
       await memberVoteAnswer(answerId, body, token)
-      setAnswers((prevAnswers) =>
-        prevAnswers.map((answer) =>
-          answer.id === answerId
-            ? { ...answer, voteCount: voteType === 'up' ? answer.voteCount + 1 : answer.voteCount - 1 }
-            : answer
-        )
-      )
+      window.location.reload()
     } catch (error) {
       console.error('Failed to vote on answer:', error)
     }
@@ -366,13 +389,19 @@ const DetailQuestion = ({ id }) => {
         )}
         <div className='flex flex-col sm:flex-row'>
           <div className='flex flex-col items-center sm:mr-6 mb-4 sm:mb-0'>
-            <button className='text-gray-400 hover:text-blue-500 transition' onClick={() => handleVoteQuestion('up')}>
+            <button
+              className={`${questionVote === 'Upvote' ? 'text-green-500' : 'text-gray-400'} hover:text-blue-500 transition`}
+              onClick={() => handleVoteQuestion('up')}
+            >
               ▲
             </button>
             <span className='text-lg sm:text-2xl font-semibold text-gray-600 my-1 sm:my-2'>
               {questionDetails.voteCount}
             </span>
-            <button className='text-gray-400 hover:text-blue-500 transition' onClick={() => handleVoteQuestion('down')}>
+            <button
+              className={`${questionVote === 'Downvote' ? 'text-red-500' : 'text-gray-400'} hover:text-blue-500 transition`}
+              onClick={() => handleVoteQuestion('down')}
+            >
               ▼
             </button>
           </div>
@@ -456,6 +485,7 @@ const DetailQuestion = ({ id }) => {
         <div className='mt-8 sm:mt-10'>
           <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
           {answers.map((answer) => {
+            const voteAnswer = answerVote.filter((item) => item.answer_id === answer.id)
             return (
               <div
                 key={answer.id}
@@ -464,14 +494,14 @@ const DetailQuestion = ({ id }) => {
                 <div className='flex'>
                   <div className='flex flex-col items-center mr-4 sm:mr-6'>
                     <button
-                      className='text-gray-400 hover:text-blue-500 transition'
+                      className={`${voteAnswer && voteAnswer.length > 0 && voteAnswer[0].vote_type === 'Upvote' ? 'text-green-500' : 'text-gray-400'} hover:text-blue-500 transition`}
                       onClick={() => handleVoteAnswer(answer.id, 'up')}
                     >
                       ▲
                     </button>
                     <span className='text-lg font-semibold text-gray-600 my-1 sm:my-2'>{answer.voteCount}</span>
                     <button
-                      className='text-gray-400 hover:text-blue-500 transition'
+                      className={`${voteAnswer && voteAnswer.length > 0 && voteAnswer[0].vote_type === 'Downvote' ? 'text-red-500' : 'text-gray-400'} hover:text-blue-500 transition`}
                       onClick={() => handleVoteAnswer(answer.id, 'down')}
                     >
                       ▼
