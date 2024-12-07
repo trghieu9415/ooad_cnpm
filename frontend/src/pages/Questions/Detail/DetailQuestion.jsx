@@ -43,6 +43,8 @@ const DetailQuestion = ({ id }) => {
   const [answerVote, setAnswerVote] = useState([])
   const currentUser = useSelector((state) => state.user)
 
+  const userToken = localStorage.getItem('UserToken')
+
   useEffect(() => {
     detailQuestion(id)
       .then((response) => {
@@ -472,7 +474,7 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
-        {questionDetails.status !== 'Close' && (
+        {questionDetails.status !== 'Close' && userToken && (
           <div className='mb-6 sm:mb-8'>
             <textarea
               className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
@@ -555,7 +557,7 @@ const DetailQuestion = ({ id }) => {
           })}
         </div>
 
-        {questionDetails.status !== 'Close' && (
+        {questionDetails.status !== 'Close' && userToken && (
           <div className='mt-6 sm:mt-10'>
             <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
             <textarea

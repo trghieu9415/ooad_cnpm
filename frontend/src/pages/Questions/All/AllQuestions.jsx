@@ -25,6 +25,8 @@ const AllQuestions = () => {
   const isTagsFetched = useRef(false)
   const isQuestionsFetched = useRef(false)
 
+  const userToken = localStorage.getItem('UserToken')
+
   useEffect(() => {
     if (!isTagsFetched.current) {
       const fetchTags = async () => {
@@ -133,12 +135,14 @@ const AllQuestions = () => {
           <div className='border border-gray-300 rounded-lg p-4'>
             <div className='flex justify-between items-center mb-6'>
               <h1 className='text-2xl md:text-3xl font-semibold'>All Questions</h1>
-              <button
-                onClick={() => (window.location.href = '/questions/ask')}
-                className='bg-blue-600 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-blue-700 transition duration-200 text-sm md:text-base'
-              >
-                Ask Question
-              </button>
+              {userToken && (
+                <button
+                  onClick={() => (window.location.href = '/questions/ask')}
+                  className='bg-blue-600 text-white py-2 px-3 md:px-4 rounded-lg hover:bg-blue-700 transition duration-200 text-sm md:text-base'
+                >
+                  Ask Question
+                </button>
+              )}
             </div>
 
             <div className='flex flex-col justify-between items-center lg:flex-row'>
