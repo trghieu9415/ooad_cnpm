@@ -29,5 +29,20 @@ const updateTag = async (req, res) => {
     res.status(500).json(err)
   }
 }
+const deleteTagController = async (req, res) => {
+  const { id } = req.params // Lấy id từ URL params
 
-module.exports = { getTags, createTag, updateTag }
+  try {
+    // Gọi hàm deleteTag từ service
+    const result = await Tag.deleteTag(id)
+
+    // Trả về phản hồi cho client dựa trên kết quả từ service
+    res.status(result.status).json({ message: result.data })
+  } catch (error) {
+    console.error('Error in deleteTagController:', error)
+    // Xử lý lỗi không mong muốn
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+module.exports = { getTags, createTag, updateTag, deleteTagController }

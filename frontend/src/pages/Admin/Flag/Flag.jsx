@@ -72,7 +72,9 @@ const Flag = () => {
     onSuccess: (data, account_id) => {
       setFlagData((prevFlags) =>
         prevFlags.map((flag) =>
-          flag.comment?.member.account_id === account_id
+          flag.comment?.member.account_id === account_id ||
+          flag.question?.member.account_id === account_id ||
+          flag.answer?.member.account_id === account_id
             ? { ...flag, accountStatus: flag.accountStatus === 'Banned' ? 'Active' : 'Banned' }
             : flag
         )
@@ -117,7 +119,7 @@ const Flag = () => {
       alert('Đã xảy ra lỗi, vui lòng thử lại.')
     }
   }
-
+  console.log(currentFlag)
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
       <div className='text-gray-500 bg-gray-100 p-4 sm:ml-64 flex gap-2 flex-col lg:flex-row translate-all duration-300 mt-14 dark:bg-gray-800'>

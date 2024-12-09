@@ -54,14 +54,19 @@ const updateTag = async (id, name, description) => {
 // CHỈ SỬ DỤNG HÀM NÀY KHI CHẮC CHẮN CÓ THỂ XÓA MÀ KHÔNG ẢNH HƯỞNG ĐẾN BẢNG KHÁC!!!
 const deleteTag = async (id) => {
   try {
-    const deleted = await Tag.destroy({ where: { id: id } })
+    const deleted = await Tag.destroy({ where: { id } }) // Xóa tag theo id
+
     if (deleted) {
-      return createResData(204, 'Tag deleted')
+      // Xóa thành công
+      return createResData(200, 'Tag deleted successfully')
     } else {
+      // Không tìm thấy tag
       return createResData(404, 'Tag not found')
     }
   } catch (error) {
-    return createResData(500, error)
+    console.error('Error deleting tag:', error) // Log lỗi để dễ debug
+    // Lỗi hệ thống
+    return createResData(500, 'Internal server error')
   }
 }
 

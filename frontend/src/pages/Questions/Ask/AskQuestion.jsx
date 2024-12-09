@@ -17,6 +17,7 @@ const AskQuestion = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    // lấy danh sách tag
     const fetchTags = async () => {
       try {
         const response = await AllTag()
@@ -29,6 +30,7 @@ const AskQuestion = () => {
     fetchTags()
   }, [])
 
+  // gọi api Đăng câu hỏi
   const mutation = useMutation({
     mutationFn: async (questionData) => {
       const token = localStorage.getItem('UserToken')

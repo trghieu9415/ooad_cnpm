@@ -56,7 +56,7 @@ const getAcceptedAnswersByQuestionIdController = async (req, res) => {
     if (acceptedAnswers.length > 0) {
       res.status(200).json(acceptedAnswers) // Trả về dữ liệu nếu tìm thấy
     } else {
-      res.status(404).json({ message: 'Không có câu trả lời nào được chấp nhận cho câu hỏi này' }) // Thông báo nếu không tìm thấy
+      res.status(200).json({ message: 'Không có câu trả lời đúng cho câu hỏi này' }) // Thông báo nếu không tìm thấy
     }
   } catch (error) {
     res.status(500).json({ error: 'Không thể lấy dữ liệu từ bảng Answer' }) // Xử lý lỗi từ service

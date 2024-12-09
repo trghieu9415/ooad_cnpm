@@ -35,7 +35,7 @@ const Login = () => {
       dispatch(updateUser({ ...userDetails.data }))
       setMessage('Đăng nhập thành công!')
       setStatus('success')
-      timeoutRef.current = setTimeout(() => navigate('/'), 3000)
+      timeoutRef.current = setTimeout(() => navigate('/'), 500)
     },
     onError: () => {
       setMessage('Đăng nhập thành công, nhưng không thể tải chi tiết người dùng.')

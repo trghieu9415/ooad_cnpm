@@ -8,7 +8,11 @@ const getAllQuestions = async () => {
         model: Tag,
         attributes: ['id', 'name', 'description'],
         required: false
-      }
+      },
+      where: {
+        status: ['Open', 'Close']
+      },
+      order: [['creation_time', 'DESC']]
     })
     const questionsWithTags = await Promise.all(
       questions.map(async (question) => {
@@ -31,7 +35,37 @@ const getAllQuestions = async () => {
     return createResData(500, error)
   }
 }
+const getAllQuestionsAdmin = async () => {
+  try {
+    const questions = await Question.findAll({
+      include: {
+        model: Tag,
+        attributes: ['id', 'name', 'description'],
+        required: false
+      },
+      order: [['creation_time', 'DESC']]
+    })
+    const questionsWithTags = await Promise.all(
+      questions.map(async (question) => {
+        const countedValue = await getViewVoteFlagById(question.dataValues.id)
+        question.dataValues.viewCount = countedValue.viewCount
+        question.dataValues.voteCount = countedValue.voteCount
+        question.dataValues.flagCount = countedValue.flagCount
+        question.dataValues.answerCount = countedValue.answerCount
+        // Kiểm tra nếu câu hỏi bị xóa (status là 'Delete')
+        if (question.status === 'Delete') {
+          question.dataValues.title = '[HIDDEN]'
+          question.dataValues.question_text = '[HIDDEN]'
+        }
 
+        return question
+      })
+    )
+    return createResData(200, questionsWithTags)
+  } catch (error) {
+    return createResData(500, error)
+  }
+}
 const getQuestionById = async (id) => {
   try {
     const question = await Question.findByPk(id, {
@@ -151,6 +185,24 @@ const getQuestionByTag = async (tag_id) => {
   }
 }
 
+const getQuestionsByTag = async (tag_id) => {
+  try {
+    // Tìm tất cả các Question liên quan đến Tag
+    const questions = await QuestionTag.findAll({
+      where: { tag_id }
+    })
+
+    if (!questions.length) {
+      return createResData(404, { message: 'No questions found for this tag.' })
+    }
+
+    return createResData(200, questions)
+  } catch (error) {
+    console.error('Error fetching questions by tag:', error)
+    return createResData(500, { message: 'Internal Server Error' })
+  }
+}
+
 const getQuestionByMember = async (member_id) => {
   try {
     const questions = await Question.findAll({
@@ -253,5 +305,7 @@ module.exports = {
   getQuestionByTag,
   getQuestionByMember,
   updateQuestionTags,
-  handleStatus
+  handleStatus,
+  getQuestionsByTag,
+  getAllQuestionsAdmin
 }

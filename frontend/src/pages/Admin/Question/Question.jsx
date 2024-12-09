@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux'
-import Profile from '../../../Components/Admin/Profile/Profile'
 import { FaRegTrashAlt, FaSearch } from 'react-icons/fa'
 import Content from '../../../Components/Admin/components/Content'
 import { useEffect, useState } from 'react'

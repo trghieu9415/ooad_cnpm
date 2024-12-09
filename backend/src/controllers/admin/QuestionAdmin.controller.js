@@ -2,7 +2,7 @@ const { Question } = require('@entities/_index')
 
 const getAllQuestions = async (req, res) => {
   try {
-    const result = await Question.getAllQuestions()
+    const result = await Question.getAllQuestionsAdmin()
     res.status(result.status).json(result.data)
   } catch (error) {
     res.status(500).json(error)
@@ -28,9 +28,19 @@ const getQuestionById = async (req, res) => {
     res.status(500).json(error)
   }
 }
+const getQuestionsByTag = async (req, res) => {
+  try {
+    const tag_id = req.params.tag_id
+    const result = await Question.getQuestionsByTag(tag_id)
+    res.status(result.status).json(result.data)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 module.exports = {
   getAllQuestions,
   handleQuestionStatus,
-  getQuestionById
+  getQuestionById,
+  getQuestionsByTag
 }

@@ -43,6 +43,8 @@ const DetailQuestion = ({ id }) => {
   const [answerVote, setAnswerVote] = useState([])
   const currentUser = useSelector((state) => state.user)
 
+  const userToken = localStorage.getItem('UserToken')
+
   useEffect(() => {
     detailQuestion(id)
       .then((response) => {
@@ -65,7 +67,8 @@ const DetailQuestion = ({ id }) => {
             }
           })
         )
-        setComments(commentsWithNames)
+        const sortedComments = commentsWithNames.sort((a, b) => new Date(b.creation_time) - new Date(a.creation_time))
+        setComments(sortedComments)
       })
       .catch((error) => console.error('Failed to fetch comments:', error))
 
@@ -80,7 +83,8 @@ const DetailQuestion = ({ id }) => {
             }
           })
         )
-        setAnswers(answersWithNames)
+        const sortedAnswers = answersWithNames.sort((a, b) => new Date(b.creation_time) - new Date(a.creation_time))
+        setAnswers(sortedAnswers)
       })
       .catch((error) => console.error('Failed to fetch answers:', error))
 
@@ -90,7 +94,7 @@ const DetailQuestion = ({ id }) => {
         setBestAnswer(combinedObject)
       })
       .catch((error) => {
-        console.error('Error fetching best answer:', error)
+        // console.error('Error fetching best answer:', error)
       })
 
     VoteResult(id, localStorage.getItem('UserToken'))
@@ -319,12 +323,14 @@ const DetailQuestion = ({ id }) => {
       <div className='w-full max-w-2xl lg:max-w-4xl bg-white shadow-lg rounded-lg p-6 sm:p-8'>
         {currentUser.id === questionDetails.member_id && (
           <div className='float-right flex items-center space-x-2'>
-            <button onClick={openModal} className='p-2 text-black'>
+            {/* <button onClick={openModal} className='p-2 text-black'>
               <FaBullseye />
-            </button>
-            <button className='p-2 text-black' onClick={handleCloseQuestion}>
-              <FaTimes />
-            </button>
+            </button> */}
+            {questionDetails.status !== 'Close' && (
+              <button className='p-2 text-black' onClick={handleCloseQuestion}>
+                <FaTimes />
+              </button>
+            )}
           </div>
         )}
         <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 leading-snug break-words'>
@@ -454,9 +460,11 @@ const DetailQuestion = ({ id }) => {
                   <span className='font-semibold text-gray-800'>{comment.memberName}</span> - {comment.comment_text}
                 </p>
                 <div className='flex items-center space-x-2 mt-1'>
-                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
-                    <FaFlag className='w-4 h-4' />
-                  </button>
+                  {!comment.comment_text.includes('[HIDDEN COMMENT]') && (
+                    <button className='p-1 text-black text-sm' onClick={() => openModalFlag('comment', comment.id)}>
+                      <FaFlag className='w-4 h-4' />
+                    </button>
+                  )}
                   {currentUser.id === comment.member_id && (
                     <div className='flex items-center space-x-2'>
                       {comment.comment_text !== '[HIDDEN COMMENT]' && (
@@ -477,6 +485,7 @@ const DetailQuestion = ({ id }) => {
           })}
         </div>
         {!bestAnswer?.id && questionDetails.status !== 'Close' && (
+
           <div className='mb-6 sm:mb-8'>
             <textarea
               className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
@@ -493,7 +502,8 @@ const DetailQuestion = ({ id }) => {
           </div>
         )}
         <div className='mt-8 sm:mt-10'>
-          <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>
+          {questionDetails.status !== 'Close' ||
+            (answers.length > 0 && <h2 className='text-xl sm:text-2xl font-semibold text-gray-800'>Answers</h2>)}
           {answers.map((answer) => {
             const voteAnswer = answerVote.filter((item) => item.answer_id === answer.id)
             return (
@@ -533,9 +543,11 @@ const DetailQuestion = ({ id }) => {
                   )}
                 </div>
                 <div className='flex items-center space-x-2 mt-1'>
-                  <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
-                    <FaFlag className='w-4 h-4' />
-                  </button>
+                  {!answer.answer_text.includes('[HIDDEN ANSWER]') && (
+                    <button className='p-1 text-black text-sm' onClick={() => openModalFlag('answer', answer.id)}>
+                      <FaFlag className='w-4 h-4' />
+                    </button>
+                  )}
                   {currentUser.id === answer.member_id && (
                     <div className='flex items-center space-x-2'>
                       {answer.answer_text !== '[HIDDEN ANSWER]' && (
@@ -555,8 +567,8 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
-
         {!bestAnswer?.id && questionDetails.status !== 'Close' && (
+
           <div className='mt-6 sm:mt-10'>
             <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
             <textarea
