@@ -57,8 +57,8 @@ const Navbar = () => {
       <div className='flex items-center'>
         <NavLink to='/'>
           <img
-            className='w-[100px] h-[30px] lg:w-[150px] lg:h-[42px] object-cover'
-            src={logoStackOverFlow}
+            className='w-[100px] h-[50px] lg:w-[150px] lg:h-[60px] object-cover'
+            src='https://cdn2.fptshop.com.vn/unsafe/Uploads/images/tin-tuc/175627/Originals/Stack%20Overflow-la-gi-1.jpg'
             alt='Stack Overflow Icon'
           />
         </NavLink>

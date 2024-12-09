@@ -142,6 +142,8 @@ const DetailQuestion = ({ id }) => {
   }
 
   const handleBestAnswerToggle = async (answerId) => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
     const token = localStorage.getItem('UserToken')
 
     if (bestAnswerId === answerId) {
@@ -168,20 +170,22 @@ const DetailQuestion = ({ id }) => {
   }
 
   const handleHideComment = async (id) => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
     const token = localStorage.getItem('UserToken')
     try {
       await HideComment(id, token)
-      console.log(456)
     } catch (error) {
       console.log(error)
     }
   }
 
   const handleHideAnswer = async (id) => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
     const token = localStorage.getItem('UserToken')
     try {
       await HideAnswer(id, token)
-      console.log(123)
     } catch (error) {
       console.log(error)
     }
@@ -211,30 +215,34 @@ const DetailQuestion = ({ id }) => {
     try {
       if (flaggingTarget === 'question') {
         await memberFlagQuestion(targetId, body, token)
-        alert('Question flagged successfully')
+        alert('Đã gắn cờ câu hỏi thành công')
       } else if (flaggingTarget === 'comment') {
         await memberFlagComment(targetId, body, token)
-        alert('Comment flagged successfully')
+        alert('Đã gắn cờ bình luận thành công')
       } else if (flaggingTarget === 'answer') {
         await memberFlagAnswer(targetId, body, token)
-        alert('Answer flagged successfully')
+        alert('Đã gắn cờ câu trả lời thành công')
       }
     } catch (error) {
       console.error('Failed to flag:', error)
-      alert('Failed to flag the item, please try again later.')
+      alert('Không thể gắn cờ mục này, vui lòng thử lại sau.')
     }
     closeModalFlag()
   }
 
   const handleCloseQuestion = async () => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
+
     const token = localStorage.getItem('UserToken')
     const body = { status: 'Close' }
+
     try {
       await statusQuestion(questionDetails.id, body, token)
       alert('Câu hỏi đã đóng')
     } catch (error) {
-      console.error('Failed to flag:', error)
-      alert('Failed to flag the item, please try again later.')
+      console.error('Failed to close:', error)
+      alert('Đóng câu hỏi thất bại, vui lòng thử lại sau.')
     }
   }
 
@@ -247,6 +255,8 @@ const DetailQuestion = ({ id }) => {
   }
 
   const handleSaveQuestion = async (id, token) => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
     try {
       const response = await memberSave(id, token)
       console.log(response)
@@ -474,7 +484,8 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
-        {questionDetails.status !== 'Close' && userToken && (
+        {!bestAnswer?.id && questionDetails.status !== 'Close' && (
+
           <div className='mb-6 sm:mb-8'>
             <textarea
               className='w-full h-20 p-3 sm:p-4 border border-gray-300 rounded-lg mb-3 focus:outline-none focus:border-blue-500 transition'
@@ -556,8 +567,8 @@ const DetailQuestion = ({ id }) => {
             )
           })}
         </div>
+        {!bestAnswer?.id && questionDetails.status !== 'Close' && (
 
-        {questionDetails.status !== 'Close' && userToken && (
           <div className='mt-6 sm:mt-10'>
             <h3 className='text-lg sm:text-xl font-semibold text-gray-800 mb-3 sm:mb-4'>Your Answer</h3>
             <textarea
