@@ -138,6 +138,8 @@ const DetailQuestion = ({ id }) => {
   }
 
   const handleBestAnswerToggle = async (answerId) => {
+    const confirmClose = window.confirm('Bạn có chắc chắn muốn đóng câu hỏi này không?')
+    if (!confirmClose) return
     const token = localStorage.getItem('UserToken')
 
     if (bestAnswerId === answerId) {
